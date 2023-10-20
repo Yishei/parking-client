@@ -1,38 +1,84 @@
-.App {
+/* this is for the AppBody */
+.app-div-container {
+  top: 75px;
+  position: relative;
+}
+
+.ant-layout-footer {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* this is for the AppHeader */
+
+.app-head-div {
+  padding: 0px;
+  background-color: rgb(29, 113, 185);
+  height: 75px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+.user-Avatar {
+  margin: 20px 20px 20px 10px;
+  background-color: #52c41a;
+  float: right;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.user-Avatar:hover {
+  cursor: pointer;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.app-head-popover-div {
+  width: 150px;
+  padding: 0px;
 }
 
-.App-link {
-  color: #61dafb;
+/* this is for the table icons */
+
+.setting-icon {
+  transition: transform 0.3s ease-in-out;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.setting-icon:hover {
+  transform: rotate(60deg);
+}
+
+.unit-icon,
+.save-icon,
+.concel-icon,
+.lot-icon,
+.car-icon,
+.user-icon,
+.camera-icon {
+  transition: transform 0.3s ease-in-out;
+}
+
+.unit-icon:hover,
+.save-icon:hover,
+.cancel-icon:hover,
+.lot-icon:hover,
+.car-icon:hover,
+.user-icon:hover,
+.camera-icon:hover {
+  transform: scale(1.4);
+}
+
+.edit-icon:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.lot-icon:hover,
+.save-icon:hover,
+.cancel-icon:hover,
+.camera-icon:hover,
+.unit-icon:hover {
+  cursor: pointer;
+}
+
+/* this is for the lot table */
+.locked-row {
+  background-color: #7678856e;
 }

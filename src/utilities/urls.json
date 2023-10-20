@@ -1,0 +1,8 @@
+{
+  "getCondosForAdmin": "http://localhost:5050/condoAdmin/get/condos",
+  "getLotsForCondo": "http://localhost:5050/condoAdmin/get/lots/",
+  "getCamerasForLot": "http://localhost:5050/condoAdmin/get/cameras/",
+  "getUsersForCondo": "http://localhost:5050/condoAdmin/get/users/",
+  "getTowingForCondo": "http://localhost:5050/condoAdmin/get/towing/",
+  "getUnitsForCondo": "http://localhost:5050/condoAdmin/get/units/"
+}
