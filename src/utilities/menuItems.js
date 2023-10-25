@@ -11,12 +11,12 @@ export const CameraTableSelection = [
 
 export const LotsTableSelection = [
   {
-    value: "1",
-    label: "1 (test)",
+    value: 1,
+    label: "14 mounen",
   },
   {
-    value: "2",
-    label: "2 (test)",
+    value: 2,
+    label: "77 forest rd",
   },
 ];
 

@@ -1,10 +1,10 @@
-import { Form, Table, Button, InputNumber, Select } from "antd";
+import { Form, Table, Button, InputNumber } from "antd";
 import { useParams, useLoaderData } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
-import { AppContext } from "../Context/AppContext";
-import { CameraInfoBredcrumb } from "../utilities/HeaderBreadcrumbs";
-import { CameraColumns } from "../utilities/TableColumns";
-import { CameraTableSelection } from "../utilities/menuItems";
+import { AppContext } from "../../Context/AppContext";
+import { CameraInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
+import { CameraColumns } from "../../utilities/TableColumns";
+import { getCameras, updateCamera } from "../../utilities/fetchData";
 
 const TableCamera = () => {
   const { setAppInnerHeadContent } = useContext(AppContext);
@@ -38,12 +38,28 @@ const TableCamera = () => {
     form
       .validateFields()
       .then((row) => {
-        console.log("row", row);
-        cancel();
+        saveUpdate();
       })
       .catch((errInfo) => {
         console.log("Validate Failed:", errInfo);
+        cancel();
       });
+  };
+
+  const saveUpdate = async () => {
+    const record = form.getFieldsValue();
+    const res = await updateCamera(editingId, record);
+    if (res === "success") {
+      fetchData();
+    } else {
+      console.log("res", res);
+    }
+    cancel();
+  };
+
+  const fetchData = async () => {
+    const res = await getCameras(lotId);
+    setData(res);
   };
 
   const EditableCell = ({
@@ -51,23 +67,10 @@ const TableCamera = () => {
     dataIndex,
     title,
     record,
-    inputType,
-    selectItems,
     index,
     children,
     ...restProps
   }) => {
-    const inputNode =
-      inputType === "number" ? (
-        <InputNumber
-          controls={false}
-          step={1}
-          style={{ width: "75%" }}
-          maxLength={15}
-        />
-      ) : (
-        <Select options={selectItems} />
-      );
     return (
       <td {...restProps}>
         {editing ? (
@@ -83,7 +86,11 @@ const TableCamera = () => {
               },
             ]}
           >
-            {inputNode}
+            <InputNumber
+              maxLength={15}
+              controls={false}
+              style={{ width: "100%" }}
+            />
           </Form.Item>
         ) : (
           children
@@ -92,14 +99,7 @@ const TableCamera = () => {
     );
   };
 
-  const columns = CameraColumns(
-    isEditing,
-    editingId,
-    edit,
-    cancel,
-    save,
-    CameraTableSelection
-  );
+  const columns = CameraColumns(isEditing, editingId, edit, cancel, save);
 
   return (
     <>

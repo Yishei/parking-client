@@ -1,10 +1,10 @@
-import { Space, Tooltip, Typography } from "antd";
+import { Space, Tooltip } from "antd";
+import urls from "../utilities/urls.json";
 import {
   SettingTwoTone,
   UsergroupAddOutlined,
   VideoCameraTwoTone,
   CameraTwoTone,
-  EditTwoTone,
   DeleteTwoTone,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -15,8 +15,9 @@ import { FaUser } from "react-icons/fa";
 import { RiCommunityLine } from "react-icons/ri";
 import { FcCancel } from "react-icons/fc";
 import { AiTwotoneSave } from "react-icons/ai";
-import { FaRoadBarrier } from "react-icons/fa6";
 import { FcDataSheet } from "react-icons/fc";
+import { PiHouseLight } from "react-icons/pi";
+import { FaWarehouse } from "react-icons/fa";
 
 export const CondoColumns = (handleDroawer) => {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ export const CondoColumns = (handleDroawer) => {
           style={{ justifyContent: "center", width: "100%" }}
         >
           <Tooltip title="Lots" color="#52c41a" placement="top">
-            <FaRoadBarrier
+            <FaWarehouse
               color={"rgb(22, 119, 255)"}
               style={{ fontSize: "17px", marginRight: 5 }}
               onClick={() => {
@@ -153,7 +154,7 @@ export const CameraColumns = (
       dataIndex: "lot_id",
       key: "lot_id",
       width: "25%",
-      editable: true,
+      editable: false,
     },
     {
       title: "OpenOLPR Id",
@@ -195,10 +196,11 @@ export const CameraColumns = (
             style={{ justifyContent: "center", width: "100%" }}
           >
             <Tooltip title="Edit" color="#52c41a" placement="top">
-              <EditTwoTone
+              <FiEdit
+                color={"rgb(22, 119, 255)"}
                 style={{ fontSize: "17px" }}
-                disabled={editingId !== ""}
                 onClick={() => edit(record)}
+                disabled={editingId !== ""}
                 className="edit-icon"
               />
             </Tooltip>
@@ -224,8 +226,6 @@ export const CameraColumns = (
       ...col,
       onCell: (record) => ({
         record,
-        inputType: col.dataIndex === "lot_id" ? "select" : "number",
-        selectItems: selections,
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
@@ -245,7 +245,12 @@ export const LotsColumns = (
   const navigate = useNavigate();
   const columns = [
     {
-      render: () => <FaRoadBarrier style={{ fontSize: 25 }} />,
+      render: (_, record) => (
+        <FaWarehouse
+          color={record.locked ? "red" : "rgb(82, 196, 26)"}
+          style={{ fontSize: 25, color: record.locked ? "red" : "" }}
+        />
+      ),
     },
     {
       title: "Lot Id",
@@ -258,6 +263,7 @@ export const LotsColumns = (
       title: "Condo Id",
       dataIndex: "condo_id",
       key: "condo_id",
+      width: "20%",
       editable: true,
     },
     {
@@ -278,7 +284,7 @@ export const LotsColumns = (
       title: "Camera Count",
       dataIndex: "camera_count",
       key: "camera_count",
-      width: "20%",
+      width: "10%",
       editable: false,
     },
     {
@@ -334,7 +340,7 @@ export const LotsColumns = (
             <Tooltip title="Camera Logs" color="#52c41a" placement="top">
               <FcDataSheet
                 style={{ fontSize: "17px" }}
-                onClick={() => alert("camera logs is not implemented yet")}
+                onClick={() => navigate(`/app/logs/${record.lot_id}`)}
                 className="camera-icon"
               />
             </Tooltip>
@@ -374,7 +380,7 @@ export const LotsColumns = (
             ? "select"
             : col.dataIndex === "locked"
             ? "boolean"
-            : "number",
+            : "text",
         selectItems: selections,
         dataIndex: col.dataIndex,
         title: col.title,
@@ -384,10 +390,15 @@ export const LotsColumns = (
   });
 };
 
-export const UserColumns = (setOpen) => {
+export const UserColumns = (handleSettingsOpen) => {
   return [
     {
-      render: () => <FaUser style={{ fontSize: 25 }} />,
+      render: (_, record) => (
+        <FaUser
+          color={record.is_active ? "rgb(82, 196, 26)" : "red"}
+          style={{ fontSize: 25 }}
+        />
+      ),
     },
     {
       title: "User Id",
@@ -446,7 +457,7 @@ export const UserColumns = (setOpen) => {
             <TbListDetails
               color={"rgb(22, 119, 255)"}
               style={{ fontSize: "17px" }}
-              onClick={() => setOpen(record)}
+              onClick={() => handleSettingsOpen(record)}
               className="edit-icon"
             />
           </Tooltip>
@@ -466,6 +477,9 @@ export const UserColumns = (setOpen) => {
 
 export const UnitColumns = (handleDroawer) => {
   return [
+    {
+      render: () => <PiHouseLight style={{ fontSize: 25 }} />,
+    },
     {
       title: "Unit Id",
       dataIndex: "unit_id",
@@ -524,6 +538,67 @@ export const UnitColumns = (handleDroawer) => {
           </Tooltip>
         </Space>
       ),
+    },
+  ];
+};
+
+export const LogsColumns = () => {
+  const renderPlateNumber = (text, record) => {
+    const imgUrl = `${urls.get.PicturesForLog}${record.log_id}`;
+    return (
+      <Tooltip
+        title={<img src={imgUrl} alt="plate" width="234px" height="150px" />}
+        placement="right"
+        
+      >
+        <a href={imgUrl} target="_blank" rel="noreferrer">
+          {text}
+        </a>
+      </Tooltip>
+    );
+  };
+
+  return [
+    {
+      title: "Log Id",
+      dataIndex: "log_id",
+      key: "log_id",
+    },
+    {
+      title: "Lot Id",
+      dataIndex: "lot_id",
+      key: "lot_id",
+    },
+    {
+      title: "Log Time",
+      dataIndex: "lot_time",
+      key: "lot_time",
+    },
+    {
+      title: "Plate Number",
+      dataIndex: "plate_number",
+      key: "plate_number",
+      render: renderPlateNumber,
+    },
+    {
+      title: "car_make",
+      dataIndex: "car_make",
+      key: "car_make",
+    },
+    {
+      title: "car_model",
+      dataIndex: "car_model",
+      key: "car_model",
+    },
+    {
+      title: "car_type",
+      dataIndex: "car_type",
+      key: "car_type",
+    },
+    {
+      title: "car_color",
+      dataIndex: "car_color",
+      key: "car_color",
     },
   ];
 };

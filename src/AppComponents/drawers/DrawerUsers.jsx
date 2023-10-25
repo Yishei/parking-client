@@ -11,51 +11,84 @@ import {
   Select,
   Switch,
 } from "antd";
-import { testCarList } from "../utilities/menuItems";
-import CustomLoadingIndecator from "./CustomLoadingIndecator";
+import CustomLoadingIndecator from "../CustomLoadingIndecator";
+import { updateUser } from "../../utilities/fetchData";
 
-const DrawerUser = ({
-  drawerOpen,
-  setDrawerOpen,
-  isEdit,
-  setIsEdit,
-  editRecord,
-  setEditRecord,
-}) => {
+const DrawerUser = (props) => {
+  const { drawerOpen, editRecord, isEdit, cancelDrawer, fetchData } = props;
+
   const [SubmitLoading, setSubmitLoading] = useState(false);
   const [formEnable, setFormEnable] = useState(false);
-  const [carsAllowed, setCarsAllowed] = useState(2);
-  const [cars, setCars] = useState(testCarList);
+  const [userActive, setUserActive] = useState(false);
   const [form] = Form.useForm();
+
   const onClose = () => {
-    setDrawerOpen(false);
+    cancelDrawer();
+    setFormEnable(false);
+    form.resetFields();
+  };
+
+  const onSubmit = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        setSubmitLoading(true);
+        if (isEdit) {
+          handleSubmitEdit();
+        } else {
+          handleSubmitNew();
+        }
+        setSubmitLoading(false);
+      })
+      .catch((info) => {
+        console.log("Validate Failed:", info);
+      });
+  };
+
+  const handleSubmitEdit = async () => {
+    console.log(form.getFieldsValue());
+    const {
+      is_active,
+      username,
+      email,
+      phone_number_main,
+      phone_number_2,
+      user_role,
+    } = form.getFieldsValue();
+    const record = {
+      is_active,
+      username,
+      email,
+      phone_number_main,
+      phone_number_2,
+      user_role,
+    };
+    const res = await updateUser(editRecord.user_id, record);
+    if (res === "success") {
+      fetchData();
+      onClose();
+    }
+
+    return;
+  };
+
+  const handleSubmitNew = async () => {
+    return;
   };
 
   useEffect(() => {
-    if (cars.length < carsAllowed) {
-      const newCars = [...cars];
-      newCars.push({
-        label: `Car ${newCars.length + 1}`,
-        value: null,
-      });
-      setCars(newCars);
+    if (isEdit && drawerOpen) {
+      form.setFieldsValue(editRecord);
+      setUserActive(editRecord.is_active);
     }
-    if (cars.length > carsAllowed) {
-      const newCars = [...cars];
-      newCars.splice(carsAllowed, newCars.length - carsAllowed);
-      setCars(newCars);
-    }
-  }, [cars, carsAllowed]);
+  }, [isEdit, drawerOpen, editRecord, form, setUserActive]);
 
   return (
     <>
       <Drawer
         title="User Settings"
         width={560}
-        onClose={() => {
-          setFormEnable(false);
-          onClose();
-        }}
+        onClose={onClose}
         open={drawerOpen}
         styles={{
           body: {
@@ -85,6 +118,10 @@ const DrawerUser = ({
                   <Switch
                     checkedChildren="Active"
                     unCheckedChildren="Inactive"
+                    checked={userActive}
+                    onChange={(checked) => {
+                      setUserActive(checked);
+                    }}
                   />
                 </Form.Item>
               </Col>
@@ -153,6 +190,7 @@ const DrawerUser = ({
                     addonBefore={<PhoneTwoTone />}
                     placeholder="Enter Phone Number"
                     maxLength={11}
+                    minLength={11}
                   />
                 </Form.Item>
               </Col>
@@ -161,10 +199,6 @@ const DrawerUser = ({
                   name="phone_number_2"
                   label="Phone Number (Secondary)"
                   rules={[
-                    {
-                      required: true,
-                      message: "Please enter a Phone Number",
-                    },
                     {
                       type: "tel",
                       message: "Please enter a valid Phone Number",
@@ -177,6 +211,7 @@ const DrawerUser = ({
                     addonBefore={<PhoneTwoTone />}
                     placeholder="Enter Phone Number"
                     maxLength={11}
+                    minLength={11}
                   />
                 </Form.Item>
               </Col>
@@ -194,10 +229,12 @@ const DrawerUser = ({
                     },
                   ]}
                 >
-                  <Select defaultValue="c_admin">
-                    <Select.Option value="c_admin">Admin</Select.Option>
-                    <Select.Option value="user">User</Select.Option>
-                    <Select.Option value="driver">Driver</Select.Option>
+                  <Select defaultValue="User">
+                    <Select.Option value="Condo_admin">
+                      Condo Admin
+                    </Select.Option>
+                    <Select.Option value="User">User</Select.Option>
+                    <Select.Option value="Towing_driver">Driver</Select.Option>
                   </Select>
                 </Form.Item>
               </Col>
@@ -211,7 +248,6 @@ const DrawerUser = ({
                   <Col span={12}>
                     <Button
                       onClick={() => {
-                        setCarsAllowed(2);
                         form.resetFields();
                         setFormEnable(false);
                       }}
@@ -226,20 +262,7 @@ const DrawerUser = ({
                     <Button
                       loading={SubmitLoading}
                       type="primary"
-                      onClick={() => {
-                        form
-                          .validateFields()
-                          .then((values) => {
-                            setSubmitLoading(true);
-                            setTimeout(() => {
-                              setSubmitLoading(false);
-                              setFormEnable(false);
-                            }, 2000);
-                          })
-                          .catch((info) => {
-                            console.log("Validate Failed:", info);
-                          });
-                      }}
+                      onClick={onSubmit}
                       style={{
                         width: "100%",
                       }}

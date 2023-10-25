@@ -1,17 +1,17 @@
-import { Table, Button } from "antd";
-import { useLoaderData, useParams } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
-import { AppContext } from "../Context/AppContext";
-import { UnitInfoBredcrumb } from "../utilities/HeaderBreadcrumbs";
-import { UnitColumns } from "../utilities/TableColumns";
-import DrawerUnit from "./DrawerUnit";
+import { Button, Table } from "antd";
+import { AppContext } from "../../Context/AppContext";
+import { HomeBreadcrumb } from "../../utilities/HeaderBreadcrumbs";
+import DrawerCondos from "../drawers/DrawerCondos";
+import { CondoColumns } from "../../utilities/TableColumns";
+import { useLoaderData } from "react-router-dom";
+import { getCondos } from "../../utilities/fetchData";
 
-const TableUnits = () => {
+const TableCondos = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [data, setData] = useState(useLoaderData());
   const [editRecord, setEditRecord] = useState(null);
-  const { condoId } = useParams();
+  const [data, setData] = useState(useLoaderData());
   const { setAppInnerHeadContent } = useContext(AppContext);
 
   const handleSettingsOpen = (record) => {
@@ -20,42 +20,45 @@ const TableUnits = () => {
     setDrawerOpen(true);
   };
 
-  const handleNewUnit = () => {
-    setData([]);
+  const handleNewCondoOpen = () => {
     setIsEdit(false);
     setEditRecord(null);
     setDrawerOpen(true);
   };
 
+  const fetchData = async () => {
+    const data = await getCondos();
+    setData(data);
+  };
+
   useEffect(() => {
-    const headInfo = UnitInfoBredcrumb({ id: condoId });
+    const headInfo = HomeBreadcrumb();
     setAppInnerHeadContent(headInfo);
-  }, [setAppInnerHeadContent, condoId]);
+  }, [setAppInnerHeadContent]);
 
   return (
     <>
       <Button
         type="primary"
-        onClick={() => handleNewUnit()}
+        onClick={handleNewCondoOpen}
         style={{ marginBlock: 16, width: "100%", backgroundColor: "#52c41a" }}
       >
-        Add New Unit
+        Add New Condo
       </Button>
-      <DrawerUnit
+      <DrawerCondos
         drawerOpen={drawerOpen}
         setDrawerOpen={setDrawerOpen}
         editRecord={editRecord}
-        setEditRecord={setEditRecord}
         isEdit={isEdit}
-        setIsEdit={setIsEdit}
+        fetchData={fetchData}
       />
       <Table
-        columns={UnitColumns(handleSettingsOpen)}
+        columns={CondoColumns(handleSettingsOpen)}
         dataSource={data}
-        rowKey={(record) => record.unit_id}
+        rowKey={(record) => record.condo_id}
         pagination={false}
       />
     </>
   );
 };
-export default TableUnits;
+export default TableCondos;

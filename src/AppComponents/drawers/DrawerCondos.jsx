@@ -11,32 +11,114 @@ import {
   Row,
   Select,
 } from "antd";
-import CustomLoadingIndecator from "./CustomLoadingIndecator";
-import { getTowings } from "../utilities/fetchData";
+import CustomLoadingIndecator from "../CustomLoadingIndecator";
+import {
+  createCondo,
+  getUsersOptions,
+  updateCondo,
+} from "../../utilities/fetchData";
 
-const DrawerCondos = ({
-  drawerOpen,
-  setDrawerOpen,
-  isEdit,
-  setIsEdit,
-  editRecord,
-  setEditRecord,
-}) => {
+const DrawerCondos = (props) => {
+  const { drawerOpen, setDrawerOpen, editRecord, isEdit, fetchData } = props;
+
   const [SubmitLoading, setSubmitLoading] = useState(false);
+  const [submitEnable, setSubmitEnable] = useState(false);
   const [TowingDriverSelection, setTowingDriverSelection] = useState([]);
+
   const [form] = Form.useForm();
   const onClose = () => {
     setDrawerOpen(false);
+    form.resetFields();
+    setSubmitEnable(false);
+  };
+
+  const onSubmit = () => {
+    form
+      .validateFields()
+      .then((values) => {
+        setSubmitLoading(true);
+        console.log(isEdit, "isEdit");
+        if (isEdit) {
+          handleSubmitEdit();
+        } else {
+          handleSubmitNew();
+        }
+        setSubmitLoading(false);
+      })
+
+      .catch((info) => {
+        setSubmitLoading(false);
+        console.log("Validate Failed:", info);
+      });
+    setDrawerOpen(false);
+  };
+
+  const handleSubmitNew = async () => {
+    const {
+      condo_admin_id,
+      towing_driver_id,
+      condo_address,
+      city,
+      state,
+      zip_code,
+      max_cars,
+    } = form.getFieldsValue();
+    const record = {
+      condo_admin_id,
+      towing_driver_id:
+        TowingDriverSelection.find((item) => item.label === towing_driver_id)
+          ?.value ?? towing_driver_id,
+      condo_address,
+      city,
+      state,
+      zip_code,
+      max_cars,
+    };
+    const res = await createCondo(record);
+    if (res === "success") {
+      fetchData();
+    } else {
+      console.log("error");
+    }
+  };
+
+  const handleSubmitEdit = async () => {
+    const {
+      condo_admin_id,
+      towing_driver_id,
+      condo_address,
+      city,
+      state,
+      zip_code,
+      max_cars,
+    } = form.getFieldsValue();
+    const record = {
+      condo_admin_id,
+      towing_driver_id:
+        TowingDriverSelection.find((item) => item.label === towing_driver_id)
+          ?.value ?? towing_driver_id,
+      condo_address,
+      city,
+      state,
+      zip_code,
+      max_cars,
+    };
+    const res = await updateCondo(editRecord.condo_id, record);
+    if (res === "success") {
+      fetchData();
+    } else {
+      console.log("error");
+    }
   };
 
   useEffect(() => {
     if (drawerOpen) {
-      const res = getTowings(editRecord?.condo_id);
+      const res = getUsersOptions();
       res.then((data) => {
         setTowingDriverSelection(data);
       });
     }
-  }, [editRecord, drawerOpen]);
+  }, [drawerOpen]);
 
   useEffect(() => {
     if (isEdit && drawerOpen) {
@@ -79,11 +161,23 @@ const DrawerCondos = ({
         }}
       >
         <CustomLoadingIndecator loading={SubmitLoading}>
-          <Form form={form} layout="vertical" requiredMark={false}>
+          <Form
+            form={form}
+            layout="vertical"
+            onValuesChange={(changedValues, allValues) => {
+              setSubmitEnable(form.isFieldsTouched());
+            }}
+            requiredMark={false}
+            defaultValue={{
+              condo_id: 1,
+              max_cars: 2,
+            }}
+          >
             <Row gutter={16} key={"1"}>
               <Col span={12}>
                 <Form.Item name="condo_id" label="Condo ID">
                   <Input
+                    defaultValue={1}
                     addonBefore="#"
                     placeholder="This will be auto generated"
                     disabled
@@ -91,7 +185,11 @@ const DrawerCondos = ({
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="condo_admin_id" label="Condo Admin">
+                <Form.Item
+                  name="condo_admin_id"
+                  label="Condo Admin"
+                  initialValue={1}
+                >
                   <Input
                     style={{
                       width: "100%",
@@ -144,6 +242,7 @@ const DrawerCondos = ({
                   label="Address"
                   rules={[
                     {
+                      type: "address",
                       required: true,
                       message: "Please enter The Address",
                     },
@@ -221,6 +320,7 @@ const DrawerCondos = ({
               </Col>
               <Col span={12}>
                 <Form.Item
+                  initialValue={2}
                   name="max_cars"
                   label="Default Max Cars"
                   rules={[
@@ -246,10 +346,7 @@ const DrawerCondos = ({
             <Row gutter={16}>
               <Col span={12}>
                 <Button
-                  onClick={() => {
-                    setIsEdit(false);
-                    setDrawerOpen(false);
-                  }}
+                  onClick={onClose}
                   style={{
                     width: "100%",
                   }}
@@ -260,21 +357,9 @@ const DrawerCondos = ({
               <Col span={12}>
                 <Button
                   loading={SubmitLoading}
+                  disabled={!submitEnable}
                   type="primary"
-                  onClick={() => {
-                    form
-                      .validateFields()
-                      .then((values) => {
-                        setSubmitLoading(true);
-                        setTimeout(() => {
-                          setSubmitLoading(false);
-                          onClose();
-                        }, 2000);
-                      })
-                      .catch((info) => {
-                        console.log("Validate Failed:", info);
-                      });
-                  }}
+                  onClick={onSubmit}
                   style={{
                     width: "100%",
                   }}

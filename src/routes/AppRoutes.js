@@ -4,16 +4,19 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import AppBody from "../AppComponents/AppBody";
-import TableCondos from "../AppComponents/TableCondos";
-import TableLots from "../AppComponents/TableLots";
+import TableCondos from "../AppComponents/tables/TableCondos";
+import TableLots from "../AppComponents/tables/TableLots";
+import TableUnits from "../AppComponents/tables/TableUnits";
+import TableUsers from "../AppComponents/tables/TableUsers";
+import TableCamera from "../AppComponents/tables/TableCamera";
+import TableLogs from "../AppComponents/tables/TableLogs";
 import LoginForm from "../AppComponents/LoginForm";
-import TableUnits from "../AppComponents/TableUnits";
-import TableUsers from "../AppComponents/TableUsers";
-import TableCamera from "../AppComponents/TableCamera";
+import NotFound from "../AppComponents/NotFound";
 //import Settings from "../AppComponents/Settings";
 import {
   getCameras,
   getCondos,
+  getLogs,
   getLots,
   getUnits,
   getUsers,
@@ -44,12 +47,17 @@ const appRoutes = createBrowserRouter(
           element={<TableUsers />}
           loader={(params) => getUsers(params.params.condoId)}
         />
+        <Route
+          path="logs/:lotId"
+          element={<TableLogs />}
+          loader={(params) => getLogs(params.params.lotId)}
+        />
         <Route path="profile" element={<div>profile</div>} />
         <Route path="settings" element={<h1>settings</h1>} />
         <Route path="contact" element={<h1>Contact</h1>} />
         <Route path="login" element={<LoginForm />} />
       </Route>
-      <Route path="*" element={<div>error page</div>} />
+      <Route path="*" element={<NotFound />} />
     </Route>
   )
 );
