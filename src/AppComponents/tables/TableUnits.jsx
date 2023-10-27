@@ -3,7 +3,7 @@ import { useLoaderData, useParams } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../Context/AppContext";
 import { UnitInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
-import { UnitColumns } from "../../utilities/TableColumns";
+import Columns from "../../utilities/TableColumns/UnitsColumns";
 import DrawerUnit from "../drawers/DrawerUnit";
 import { getUnits } from "../../utilities/fetchData";
 
@@ -55,7 +55,7 @@ const TableUnits = () => {
         />
       )}
       <Table
-        columns={UnitColumns(handleSettingsOpen)}
+        columns={Columns(handleSettingsOpen)}
         dataSource={data}
         rowKey={(record) => record.unit_id}
         pagination={

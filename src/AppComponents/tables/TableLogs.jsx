@@ -1,15 +1,23 @@
 import { Table } from "antd";
-import { LogsColumns } from "../../utilities/TableColumns";
-import { useLoaderData } from "react-router-dom";
-import { useState } from "react";
+import Columns from "../../utilities/TableColumns/LogsColumns";
+import { useLoaderData, useParams } from "react-router-dom";
+import { useEffect, useContext } from "react";
+import { AppContext } from "../../Context/AppContext";
+import { LogInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
 
 const TableLogs = () => {
-  const [data, setData] = useState(useLoaderData());
+  const { setAppInnerHeadContent } = useContext(AppContext);
+  const { lotId } = useParams();
+
+  useEffect(() => {
+    const headInfo = LogInfoBredcrumb({ id: lotId });
+    setAppInnerHeadContent(headInfo);
+  }, [setAppInnerHeadContent, lotId]);
   return (
     <>
       <Table
-        columns={LogsColumns()}
-        dataSource={data}
+        columns={Columns()}
+        dataSource={useLoaderData()}
         rowKey={(record) => record.log_id}
         pagination={{ pageSize: 10 }}
       />

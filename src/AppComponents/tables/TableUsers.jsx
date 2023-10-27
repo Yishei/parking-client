@@ -3,7 +3,7 @@ import { useParams, useLoaderData } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../Context/AppContext";
 import { UsersInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
-import { UserColumns } from "../../utilities/TableColumns";
+import Columns from "../../utilities/TableColumns/UsersColumns";
 import DrawerUser from "../drawers/DrawerUsers";
 import { getUsers } from "../../utilities/fetchData";
 
@@ -62,7 +62,7 @@ const TableUsers = () => {
         fetchData={fetchData}
       />
       <Table
-        columns={UserColumns(handleSettingsOpen)}
+        columns={Columns(handleSettingsOpen)}
         dataSource={data}
         rowKey={(record) => record.user_id}
         pagination={false}

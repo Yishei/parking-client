@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { UserOutlined } from "@ant-design/icons";
+import { FiEdit } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import {
   Button,
@@ -10,6 +11,8 @@ import {
   InputNumber,
   Row,
   Select,
+  Space,
+  Tooltip,
 } from "antd";
 import CustomLoadingIndecator from "../CustomLoadingIndecator";
 import {
@@ -20,16 +23,23 @@ import {
 
 const DrawerCondos = (props) => {
   const { drawerOpen, setDrawerOpen, editRecord, isEdit, fetchData } = props;
-
+  const [submitDisabled, setSubmitDisabled] = useState(true);
   const [SubmitLoading, setSubmitLoading] = useState(false);
-  const [submitEnable, setSubmitEnable] = useState(false);
+  const [formDisabled, setFormDisabled] = useState(true);
   const [TowingDriverSelection, setTowingDriverSelection] = useState([]);
 
   const [form] = Form.useForm();
   const onClose = () => {
     setDrawerOpen(false);
     form.resetFields();
-    setSubmitEnable(false);
+    setFormDisabled(true);
+    setSubmitDisabled(true);
+  };
+
+  const onCansel = () => {
+    editRecord ? form.setFieldsValue({ ...editRecord }) : form.resetFields();
+    setSubmitDisabled(true);
+    setFormDisabled(true);
   };
 
   const onSubmit = () => {
@@ -43,14 +53,17 @@ const DrawerCondos = (props) => {
         } else {
           handleSubmitNew();
         }
-        setSubmitLoading(false);
+
+        // setSubmitLoading(false);
+        // setSubmitDisabled(true);
       })
 
       .catch((info) => {
         setSubmitLoading(false);
         console.log("Validate Failed:", info);
       });
-    setDrawerOpen(false);
+    // setFormDisabled(true);
+    //setDrawerOpen(false);
   };
 
   const handleSubmitNew = async () => {
@@ -78,7 +91,7 @@ const DrawerCondos = (props) => {
     if (res === "success") {
       fetchData();
     } else {
-      console.log("error");
+      console.log(res, "error");
     }
   };
 
@@ -104,10 +117,19 @@ const DrawerCondos = (props) => {
       max_cars,
     };
     const res = await updateCondo(editRecord.condo_id, record);
-    if (res === "success") {
-      fetchData();
-    } else {
-      console.log("error");
+    setSubmitLoading(false);
+    switch (res) {
+      case 200:
+        fetchData();
+        setSubmitDisabled(true);
+        setFormDisabled(true);
+        break;
+      case 409:
+        console.log(res);
+        break;
+      default:
+        console.log(res);
+        break;
     }
   };
 
@@ -119,6 +141,12 @@ const DrawerCondos = (props) => {
       });
     }
   }, [drawerOpen]);
+
+  useEffect(() => {
+    if (!isEdit && drawerOpen) {
+      setFormDisabled(false);
+    }
+  }, [isEdit, drawerOpen]);
 
   useEffect(() => {
     if (isEdit && drawerOpen) {
@@ -155,19 +183,59 @@ const DrawerCondos = (props) => {
         onClose={onClose}
         open={drawerOpen}
         styles={{
+          header: {
+            backgroundColor: "#f0f2f5",
+          },
           body: {
-            paddingBottom: 80,
+            border: "2px solid #f0f2f5",
           },
         }}
+        extra={
+          !formDisabled ? (
+            <Space>
+              <Button
+                onClick={onCansel}
+                style={{
+                  width: "100%",
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                loading={SubmitLoading}
+                type="primary"
+                onClick={onSubmit}
+                disabled={submitDisabled}
+                style={{
+                  width: "100%",
+                }}
+              >
+                Submit
+              </Button>
+            </Space>
+          ) : (
+            <Tooltip title="Edit" color="#52c41a" placement="left">
+              <FiEdit
+                color={"rgb(22, 119, 255)"}
+                style={{ fontSize: "20px" }}
+                className="edit-icon"
+                onClick={() => {
+                  setFormDisabled(false);
+                }}
+              />
+            </Tooltip>
+          )
+        }
       >
         <CustomLoadingIndecator loading={SubmitLoading}>
           <Form
             form={form}
             layout="vertical"
-            onValuesChange={(changedValues, allValues) => {
-              setSubmitEnable(form.isFieldsTouched());
-            }}
+            disabled={formDisabled}
             requiredMark={false}
+            onValuesChange={(changedValues, allValues) => {
+              setSubmitDisabled(false);
+            }}
             defaultValue={{
               condo_id: 1,
               max_cars: 2,
@@ -342,33 +410,6 @@ const DrawerCondos = (props) => {
               </Col>
             </Row>
           </Form>
-          <div style={{ paddingTop: 30 }}>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Button
-                  onClick={onClose}
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Col>
-              <Col span={12}>
-                <Button
-                  loading={SubmitLoading}
-                  disabled={!submitEnable}
-                  type="primary"
-                  onClick={onSubmit}
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  Submit
-                </Button>
-              </Col>
-            </Row>
-          </div>
         </CustomLoadingIndecator>
       </Drawer>
     </>

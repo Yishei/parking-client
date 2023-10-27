@@ -48,7 +48,7 @@ const appRoutes = createBrowserRouter(
           loader={(params) => getUsers(params.params.condoId)}
         />
         <Route
-          path="logs/:lotId"
+          path="lots/logs/:lotId"
           element={<TableLogs />}
           loader={(params) => getLogs(params.params.lotId)}
         />

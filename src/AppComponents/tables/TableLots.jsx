@@ -5,7 +5,7 @@ import { AppContext } from "../../Context/AppContext";
 import { LotInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
 import { useParams, useLoaderData } from "react-router-dom";
 import DrawerCondos from "../drawers/DrawerCondos";
-import { LotsColumns } from "../../utilities/TableColumns";
+import Columns  from "../../utilities/TableColumns/LotsColumns";
 import {
   getCondosOptions,
   getLots,
@@ -139,7 +139,7 @@ const TableLots = () => {
     );
   };
 
-  const columns = LotsColumns(
+  const columns = Columns(
     isEditing,
     editingId,
     edit,

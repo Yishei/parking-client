@@ -34,7 +34,7 @@ const DrawerUnit = (props) => {
 
   // this should set the carList and maxCars state for the edit record
   const handleSetCarsAndMaxCarsForEdit = useCallback(() => {
-    const carList = JSON.parse(editRecord.car_list).list;
+    const carList = JSON.parse(editRecord.car_list);
     setCarList(carList);
     setMaxCars(editRecord.max_cars);
   }, [editRecord]);

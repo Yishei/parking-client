@@ -3,7 +3,7 @@ import { useParams, useLoaderData } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../Context/AppContext";
 import { CameraInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
-import { CameraColumns } from "../../utilities/TableColumns";
+import Columns from "../../utilities/TableColumns/CameraColumns";
 import { getCameras, updateCamera } from "../../utilities/fetchData";
 
 const TableCamera = () => {
@@ -99,7 +99,7 @@ const TableCamera = () => {
     );
   };
 
-  const columns = CameraColumns(isEditing, editingId, edit, cancel, save);
+  const columns = Columns(isEditing, editingId, edit, cancel, save);
 
   return (
     <>

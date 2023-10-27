@@ -164,12 +164,10 @@ export const updateCondo = async (condoId, condo) => {
       },
       body: JSON.stringify(condo),
     });
-
-    if (res.status === 200) return "success";
-    else return "fail";
+    return res.status;
   } catch (error) {
     console.error(error);
-    return "fail";
+    return 500;
   }
 };
 

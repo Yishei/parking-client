@@ -5,6 +5,9 @@ import {
   HomeOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { FcDataSheet } from "react-icons/fc";
+import { FaWarehouse } from "react-icons/fa";
+import { BsFillCameraReelsFill } from "react-icons/bs";
 
 export const HomeBreadcrumb = () => {
   return {
@@ -74,7 +77,7 @@ export const UnitInfoBredcrumb = ({ id }) => {
               key: "1",
               label: (
                 <NavLink to={`/app/lots/${id}`}>
-                  <CarTwoTone /> Lots
+                  <FaWarehouse /> Lots
                 </NavLink>
               ),
             },
@@ -143,7 +146,7 @@ export const CameraInfoBredcrumb = ({ id }) => {
         ),
       },
       {
-        title: <NavLink to={`/app/lots/${id}`}>Condo Lots</NavLink>,
+        title: <NavLink to={`/app/lots/${id}`}>Lots</NavLink>,
         menu: {
           items: [
             {
@@ -174,7 +177,82 @@ export const CameraInfoBredcrumb = ({ id }) => {
         },
       },
       {
-        title: "Cameras",
+        title: "Lot Cameras",
+        menu: {
+          items: [
+            {
+              key: "1.1",
+              label: (
+                <NavLink to={`/app/lots/logs/${id}`}>
+                  <FcDataSheet />
+                  Logs
+                </NavLink>
+              ),
+            },
+          ],
+        },
+      },
+    ],
+  };
+};
+
+export const LogInfoBredcrumb = ({ id }) => {
+  return {
+    name: `Lot Logs`,
+    breadcrumbItems: [
+      {
+        title: (
+          <NavLink to="/app/">
+            <HomeOutlined />
+          </NavLink>
+        ),
+      },
+      {
+        title: <NavLink to={`/app/lots/${id}`}>Lots</NavLink>,
+        menu: {
+          items: [
+            {
+              key: "1",
+              label: (
+                <NavLink to={`/app/units/${id}`}>
+                  <HomeTwoTone /> Units
+                </NavLink>
+              ),
+            },
+            {
+              key: "2",
+              label: (
+                <NavLink to={`/app/lots/${id}`}>
+                  <FaWarehouse /> Lots
+                </NavLink>
+              ),
+            },
+            {
+              key: "3",
+              label: (
+                <NavLink to={`/app/users/${id}`}>
+                  <UserOutlined style={{ color: "rgb(22, 119, 255)" }} /> Users
+                </NavLink>
+              ),
+            },
+          ],
+        },
+      },
+      {
+        title: "Camera Logs",
+        menu: {
+          items: [
+            {
+              key: "1.1",
+              label: (
+                <NavLink to={`/app/lots/cameras/${id}`}>
+                  <BsFillCameraReelsFill/>
+                  Lot Cameras
+                </NavLink>
+              ),
+            },
+          ],
+        },
       },
     ],
   };
