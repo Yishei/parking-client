@@ -3,7 +3,7 @@ import { Button, Table } from "antd";
 import { AppContext } from "../../Context/AppContext";
 import { HomeBreadcrumb } from "../../utilities/HeaderBreadcrumbs";
 import DrawerCondos from "../drawers/DrawerCondos";
-import { CondoColumns } from "../../utilities/TableColumns";
+import Columns  from "../../utilities/TableColumns/CondoColumns";
 import { useLoaderData } from "react-router-dom";
 import { getCondos } from "../../utilities/fetchData";
 
@@ -53,7 +53,7 @@ const TableCondos = () => {
         fetchData={fetchData}
       />
       <Table
-        columns={CondoColumns(handleSettingsOpen)}
+        columns={Columns(handleSettingsOpen)}
         dataSource={data}
         rowKey={(record) => record.condo_id}
         pagination={false}
