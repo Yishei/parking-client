@@ -1,9 +1,11 @@
 import urls from "./urls.json";
 
+const baseURL = urls.baseURl;
+
 // ALL GET REQUESTS
 export const getCondos = async () => {
   try {
-    const response = await fetch(urls.get.condosForAdmin, {
+    const response = await fetch(`${baseURL}${urls.get.condosForAdmin}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -19,7 +21,7 @@ export const getCondos = async () => {
 
 export const getLots = async (condoId) => {
   try {
-    const response = await fetch(`${urls.get.lotsForCondo}${condoId}`, {
+    const response = await fetch(`${baseURL}${urls.get.lotsForCondo}${condoId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +38,7 @@ export const getLots = async (condoId) => {
 
 export const getCameras = async (lotId) => {
   try {
-    const response = await fetch(`${urls.get.camerasForLot}${lotId}`, {
+    const response = await fetch(`${baseURL}${urls.get.camerasForLot}${lotId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +55,7 @@ export const getCameras = async (lotId) => {
 
 export const getUsers = async (condoId) => {
   try {
-    const response = await fetch(`${urls.get.usersForCondo}${condoId}`, {
+    const response = await fetch(`${baseURL}${urls.get.usersForCondo}${condoId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +72,7 @@ export const getUsers = async (condoId) => {
 
 export const getUnits = async (condoId) => {
   try {
-    const response = await fetch(`${urls.get.unitsForCondo}${condoId}`, {
+    const response = await fetch(`${baseURL}${urls.get.unitsForCondo}${condoId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -87,7 +89,7 @@ export const getUnits = async (condoId) => {
 
 export const getLogs = async (lotId) => {
   try {
-    const response = await fetch(`${urls.get.logsForLot}${lotId}`, {
+    const response = await fetch(`${baseURL}${urls.get.logsForLot}${lotId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -104,7 +106,7 @@ export const getLogs = async (lotId) => {
 
 export const getUsersOptions = async () => {
   try {
-    const response = await fetch(`${urls.get.towingForCondo}`, {
+    const response = await fetch(`${baseURL}${urls.get.towingForCondo}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -121,7 +123,7 @@ export const getUsersOptions = async () => {
 
 export const getCondosOptions = async () => {
   try {
-    const response = await fetch(urls.get.condosForLotTable, {
+    const response = await fetch(`${baseURL}${urls.get.condosForLotTable}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -139,7 +141,7 @@ export const getCondosOptions = async () => {
 
 export const updateLot = async (lotId, lot) => {
   try {
-    const res = await fetch(`${urls.put.updateLot}${lotId}`, {
+    const res = await fetch(`${baseURL}${urls.put.updateLot}${lotId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -157,7 +159,7 @@ export const updateLot = async (lotId, lot) => {
 
 export const updateCondo = async (condoId, condo) => {
   try {
-    const res = await fetch(`${urls.put.updateCondo}${condoId}`, {
+    const res = await fetch(`${baseURL}${urls.put.updateCondo}${condoId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -173,7 +175,7 @@ export const updateCondo = async (condoId, condo) => {
 
 export const updateCamera = async (cameraId, camera) => {
   try {
-    const res = await fetch(`${urls.put.updateCamera}${cameraId}`, {
+    const res = await fetch(`${baseURL}${urls.put.updateCamera}${cameraId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -191,7 +193,7 @@ export const updateCamera = async (cameraId, camera) => {
 
 export const updateUser = async (userId, user) => {
   try {
-    const res = await fetch(`${urls.put.updateUser}${userId}`, {
+    const res = await fetch(`${baseURL}${urls.put.updateUser}${userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -210,7 +212,7 @@ export const updateUser = async (userId, user) => {
 export const updateUnit = async (unitId, unit) => {
   try {
     delete unit.unit_id;
-    const res = await fetch(`${urls.put.updateUnit}${unitId}`, {
+    const res = await fetch(`${baseURL}${urls.put.updateUnit}${unitId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -229,7 +231,7 @@ export const updateUnit = async (unitId, unit) => {
 
 export const createCondo = async (condo) => {
   try {
-    const res = await fetch(urls.post.createCondo, {
+    const res = await fetch(`${baseURL}${urls.post.createCondo}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

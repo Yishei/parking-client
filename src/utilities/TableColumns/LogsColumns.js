@@ -4,7 +4,7 @@ import urls from "../../utilities/urls.json";
 
 const LogsColumns = () => {
   const renderPlateNumber = (text, record) => {
-    const imgUrl = `${urls.get.PicturesForLog}${record.log_id}`;
+    const imgUrl = `${urls.baseURl}${urls.get.PicturesForLog}${record.log_id}`;
     return (
       <Tooltip
         title={<img src={imgUrl} alt="plate" width="234px" height="150px" />}

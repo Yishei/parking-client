@@ -1,23 +1,24 @@
 {
+  "baseURl": "http://localhost:5050/condoAdmin/",
   "get": {
-    "condosForAdmin": "http://localhost:5050/condoAdmin/get/condos",
-    "lotsForCondo": "http://localhost:5050/condoAdmin/get/lots/",
-    "camerasForLot": "http://localhost:5050/condoAdmin/get/cameras/",
-    "usersForCondo": "http://localhost:5050/condoAdmin/get/users/",
-    "towingForCondo": "http://localhost:5050/condoAdmin/get/towing",
-    "condosForLotTable": "http://localhost:5050/condoAdmin/get/condo/options",
-    "unitsForCondo": "http://localhost:5050/condoAdmin/get/units/",
-    "logsForLot": "http://localhost:5050/condoAdmin/get/logs/",
-    "PicturesForLog": "http://localhost:5050/condoAdmin/get/log/img/"
+    "condosForAdmin": "get/condos",
+    "lotsForCondo": "get/lots/",
+    "camerasForLot": "get/cameras/",
+    "usersForCondo": "get/users/",
+    "towingForCondo": "get/towing",
+    "condosForLotTable": "get/condo/options",
+    "unitsForCondo": "get/units/",
+    "logsForLot": "get/logs/",
+    "PicturesForLog": "get/log/img/"
   },
   "put": {
-    "updateLot": "http://localhost:5050/condoAdmin/update/lot/",
-    "updateCondo": "http://localhost:5050/condoAdmin/update/condo/",
-    "updateCamera": "http://localhost:5050/condoAdmin/update/camera/",
-    "updateUser": "http://localhost:5050/condoAdmin/update/user/",
-    "updateUnit": "http://localhost:5050/condoAdmin/update/unit/"
+    "updateLot": "update/lot/",
+    "updateCondo": "update/condo/",
+    "updateCamera": "update/camera/",
+    "updateUser": "update/user/",
+    "updateUnit": "update/unit/"
   },
   "post": {
-    "createCondo": "http://localhost:5050/condoAdmin/create/condo"
+    "createCondo": "create/condo"
   }
 }
