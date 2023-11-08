@@ -21,12 +21,15 @@ export const getCondos = async () => {
 
 export const getLots = async (condoId) => {
   try {
-    const response = await fetch(`${baseURL}${urls.get.lotsForCondo}${condoId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${baseURL}${urls.get.lotsForCondo}${condoId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await response.json();
     console.log(data);
     return data;
@@ -38,12 +41,15 @@ export const getLots = async (condoId) => {
 
 export const getCameras = async (lotId) => {
   try {
-    const response = await fetch(`${baseURL}${urls.get.camerasForLot}${lotId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${baseURL}${urls.get.camerasForLot}${lotId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await response.json();
     console.log(data);
     return data;
@@ -55,12 +61,15 @@ export const getCameras = async (lotId) => {
 
 export const getUsers = async (condoId) => {
   try {
-    const response = await fetch(`${baseURL}${urls.get.usersForCondo}${condoId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${baseURL}${urls.get.usersForCondo}${condoId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await response.json();
     console.log(data);
     return data;
@@ -72,12 +81,15 @@ export const getUsers = async (condoId) => {
 
 export const getUnits = async (condoId) => {
   try {
-    const response = await fetch(`${baseURL}${urls.get.unitsForCondo}${condoId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${baseURL}${urls.get.unitsForCondo}${condoId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await response.json();
     console.log(data);
     return data;
@@ -137,6 +149,25 @@ export const getCondosOptions = async () => {
   }
 };
 
+export const seeIfCameraExists = async (camId, uptRcId) => {
+  try {
+    let url = `${baseURL}${urls.get.seeIfCamaeraExists}?camId=${camId}`;
+
+    if (uptRcId !== undefined) url += `&uptRcId=${uptRcId}`;
+    
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const exists = await res.json();
+    return exists;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 // ALL PUT REQUESTS
 
 export const updateLot = async (lotId, lot) => {
@@ -166,10 +197,11 @@ export const updateCondo = async (condoId, condo) => {
       },
       body: JSON.stringify(condo),
     });
-    return res.status;
+    if (res.status === 200) return "success";
+    else return "fail";
   } catch (error) {
     console.error(error);
-    return 500;
+    return "fail";
   }
 };
 
@@ -239,6 +271,62 @@ export const createCondo = async (condo) => {
       body: JSON.stringify(condo),
     });
 
+    const response = await res.json();
+    if (res.status === 200) return response;
+    else return "fail";
+  } catch (error) {
+    console.error(error);
+    return "fail";
+  }
+};
+
+export const createLot = async (lot) => {
+  console.log(lot);
+  try {
+    const res = await fetch(`${baseURL}${urls.post.createLot}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(lot),
+    });
+
+    const response = await res.json();
+    if (res.status === 200) return response;
+    else return "fail";
+  } catch (error) {
+    console.error(error);
+    return "fail";
+  }
+};
+// ALL DELETE REQUESTS
+
+export const deleteCondo = async (condoId) => {
+  try {
+    const res = await fetch(`${baseURL}${urls.delete.deleteCondo}${condoId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(res);
+    if (res.status === 200) return "success";
+    else return "fail";
+  } catch (error) {
+    console.error(error);
+    return "fail";
+  }
+};
+
+export const deleteLot = async (lotId) => {
+  try {
+    const res = await fetch(`${baseURL}${urls.delete.deleteLot}${lotId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(res);
     if (res.status === 200) return "success";
     else return "fail";
   } catch (error) {

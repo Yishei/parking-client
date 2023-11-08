@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { UserOutlined } from "@ant-design/icons";
+import React, { useEffect, useState, useContext } from "react";
+import { MessageContext } from "../../Context/MessageContext";
+import {
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
 import { FiEdit } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import {
@@ -13,12 +17,13 @@ import {
   Select,
   Space,
   Tooltip,
+  Modal,
 } from "antd";
-import CustomLoadingIndecator from "../CustomLoadingIndecator";
 import {
   createCondo,
   getUsersOptions,
   updateCondo,
+  deleteCondo,
 } from "../../utilities/fetchData";
 
 const DrawerCondos = (props) => {
@@ -26,20 +31,66 @@ const DrawerCondos = (props) => {
   const [submitDisabled, setSubmitDisabled] = useState(true);
   const [SubmitLoading, setSubmitLoading] = useState(false);
   const [formDisabled, setFormDisabled] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
   const [TowingDriverSelection, setTowingDriverSelection] = useState([]);
-
+  const { msg } = useContext(MessageContext);
   const [form] = Form.useForm();
+  const { confirm } = Modal;
+
+  const showConfirm = () => {
+    confirm({
+      title: "Do you Want to delete this condo?",
+      icon: <ExclamationCircleOutlined />,
+      content: (
+        <div>
+          This action cannot be undone this condo has:
+          <br />
+          {editRecord?.lot_count} Lots.
+          <br />
+          {editRecord?.unit_count} Units.
+          <br />
+          All associated data will be deleted.
+          <br />
+        </div>
+      ),
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      async onOk() {
+        const res = await deleteCondo(editRecord.condo_id);
+        if (res === "success") {
+          msg("success", "Condo Deleted");
+          setSubmitted(true);
+          onClose();
+        } else {
+          msg("error", "Error Deleting Condo");
+        }
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
+  };
+
   const onClose = () => {
     setDrawerOpen(false);
     form.resetFields();
     setFormDisabled(true);
     setSubmitDisabled(true);
+    if (submitted) {
+      fetchData();
+      setSubmitted(false);
+    }
   };
 
   const onCansel = () => {
-    editRecord ? form.setFieldsValue({ ...editRecord }) : form.resetFields();
-    setSubmitDisabled(true);
-    setFormDisabled(true);
+    if (isEdit) {
+      editRecord ? form.setFieldsValue({ ...editRecord }) : form.resetFields();
+      setSubmitDisabled(true);
+      setFormDisabled(true);
+    } else {
+      onClose();
+    }
   };
 
   const onSubmit = () => {
@@ -47,55 +98,48 @@ const DrawerCondos = (props) => {
       .validateFields()
       .then((values) => {
         setSubmitLoading(true);
-        console.log(isEdit, "isEdit");
+        msg("loading", "Submitting Data");
         if (isEdit) {
           handleSubmitEdit();
         } else {
           handleSubmitNew();
         }
-
-        // setSubmitLoading(false);
-        // setSubmitDisabled(true);
       })
-
       .catch((info) => {
-        setSubmitLoading(false);
         console.log("Validate Failed:", info);
       });
-    // setFormDisabled(true);
-    //setDrawerOpen(false);
   };
 
   const handleSubmitNew = async () => {
-    const {
-      condo_admin_id,
-      towing_driver_id,
-      condo_address,
-      city,
-      state,
-      zip_code,
-      max_cars,
-    } = form.getFieldsValue();
-    const record = {
-      condo_admin_id,
-      towing_driver_id:
-        TowingDriverSelection.find((item) => item.label === towing_driver_id)
-          ?.value ?? towing_driver_id,
-      condo_address,
-      city,
-      state,
-      zip_code,
-      max_cars,
-    };
+    const record = getNeededFormValues();
     const res = await createCondo(record);
-    if (res === "success") {
-      fetchData();
+    setSubmitLoading(false);
+    if (res !== "fail") {
+      form.setFieldValue("condo_id", res);
+      setSubmitDisabled(true);
+      setFormDisabled(true);
+      setSubmitted(true);
+      msg("success", "New Condo Created");
     } else {
-      console.log(res, "error");
+      msg("error", "Error Creating New Condo");
     }
   };
 
   const handleSubmitEdit = async () => {
+    const record = getNeededFormValues();
+    const res = await updateCondo(editRecord.condo_id, record);
+    setSubmitLoading(false);
+    if (res === "success") {
+      setSubmitDisabled(true);
+      setFormDisabled(true);
+      setSubmitted(true);
+      msg("success", "Condo Updated");
+    } else {
+      msg("error", "Error Updating Condo");
+    }
+  };
+
+  const getNeededFormValues = () => {
     const {
       condo_admin_id,
       towing_driver_id,
@@ -105,32 +149,15 @@ const DrawerCondos = (props) => {
       zip_code,
       max_cars,
     } = form.getFieldsValue();
-    const record = {
+    return {
       condo_admin_id,
-      towing_driver_id:
-        TowingDriverSelection.find((item) => item.label === towing_driver_id)
-          ?.value ?? towing_driver_id,
+      towing_driver_id: towing_driver_id,
       condo_address,
       city,
       state,
       zip_code,
       max_cars,
     };
-    const res = await updateCondo(editRecord.condo_id, record);
-    setSubmitLoading(false);
-    switch (res) {
-      case 200:
-        fetchData();
-        setSubmitDisabled(true);
-        setFormDisabled(true);
-        break;
-      case 409:
-        console.log(res);
-        break;
-      default:
-        console.log(res);
-        break;
-    }
   };
 
   useEffect(() => {
@@ -150,28 +177,7 @@ const DrawerCondos = (props) => {
 
   useEffect(() => {
     if (isEdit && drawerOpen) {
-      const {
-        condo_id,
-        condo_admin_id,
-        city,
-        condo_address,
-        state,
-        zip_code,
-        towing_driver_id,
-        max_cars,
-      } = editRecord;
-      form.setFieldsValue({
-        condo_id: condo_id,
-        condo_admin_id: condo_admin_id,
-        condo_address: condo_address,
-        city: city,
-        state: state,
-        zip_code: zip_code,
-        towing_driver_id: TowingDriverSelection.find(
-          (item) => item.value === towing_driver_id
-        )?.label,
-        max_cars,
-      });
+      form.setFieldsValue({ ...editRecord });
     }
   }, [isEdit, drawerOpen, editRecord, form, TowingDriverSelection]);
 
@@ -187,7 +193,7 @@ const DrawerCondos = (props) => {
             backgroundColor: "#f0f2f5",
           },
           body: {
-            border: "2px solid #f0f2f5",
+            marginTop: 20,
           },
         }}
         extra={
@@ -227,190 +233,208 @@ const DrawerCondos = (props) => {
           )
         }
       >
-        <CustomLoadingIndecator loading={SubmitLoading}>
-          <Form
-            form={form}
-            layout="vertical"
-            disabled={formDisabled}
-            requiredMark={false}
-            onValuesChange={(changedValues, allValues) => {
-              setSubmitDisabled(false);
-            }}
-            defaultValue={{
-              condo_id: 1,
-              max_cars: 2,
-            }}
-          >
-            <Row gutter={16} key={"1"}>
-              <Col span={12}>
-                <Form.Item name="condo_id" label="Condo ID">
-                  <Input
-                    defaultValue={1}
-                    addonBefore="#"
-                    placeholder="This will be auto generated"
-                    disabled
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="condo_admin_id"
-                  label="Condo Admin"
-                  initialValue={1}
+        <Form
+          form={form}
+          layout="vertical"
+          disabled={formDisabled}
+          requiredMark={false}
+          onValuesChange={(changedValues, allValues) => {
+            setSubmitDisabled(false);
+          }}
+          defaultValue={{
+            condo_id: 1,
+            max_cars: 2,
+          }}
+        >
+          <Row gutter={16} key={"1"}>
+            <Col span={12}>
+              <Form.Item name="condo_id" label="Condo ID">
+                <Input
+                  bordered={false}
+                  placeholder="This will be auto generated"
+                  disabled
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="condo_admin_id"
+                label="Condo Admin"
+                initialValue={1}
+              >
+                <Input
+                  style={{
+                    width: "100%",
+                  }}
+                  bordered={false}
+                  placeholder="TODO You"
+                  disabled
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16} key={"2"}>
+            <Col span={24}>
+              <Form.Item
+                name="towing_driver_id"
+                label="Towing Driver"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please choose the Towing Driver",
+                  },
+                ]}
+              >
+                <Select
+                  bordered={!formDisabled}
+                  options={TowingDriverSelection}
+                  optionFilterProp="children"
+                  filterOption={(input, option) =>
+                    (option?.label ?? "")
+                      .toLowerCase()
+                      .includes(input.toLowerCase())
+                  }
+                  notFoundContent={
+                    <div>
+                      Driver Not Fownd{" "}
+                      <NavLink to={`/users/${editRecord?.condo_id}`}>
+                        create one
+                      </NavLink>
+                    </div>
+                  }
+                  showSearch
+                  allowClear
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16} key={"3"}>
+            <Col span={24}>
+              <Form.Item
+                name="condo_address"
+                label="Address"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter The Address",
+                  },
+                ]}
+              >
+                <Input
+                  bordered={!formDisabled}
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder="Enter Address"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16} key={"4"}>
+            <Col span={12}>
+              <Form.Item
+                name="city"
+                label="City"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter The City",
+                  },
+                ]}
+              >
+                <Input
+                  bordered={!formDisabled}
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder="Enter City"
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="state"
+                label="State"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter The State",
+                  },
+                ]}
+              >
+                <Input
+                  bordered={!formDisabled}
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder="Enter State"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16} key={"5"}>
+            <Col span={12}>
+              <Form.Item
+                name="zip_code"
+                label="Zip Code"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter The Zip Code",
+                  },
+                ]}
+              >
+                <Input
+                  bordered={!formDisabled}
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder="Enter Zip Code"
+                  maxLength={5}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                initialValue={2}
+                name="max_cars"
+                label="Default Max Cars"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter a number 1-5",
+                  },
+                ]}
+              >
+                <InputNumber
+                  bordered={!formDisabled}
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder="Enter Max Cars"
+                  min={1}
+                  max={5}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
+        {isEdit && (
+          <Row gutter={16} key={"6"}>
+            <Col span={24}>
+              <Tooltip title="Delete Condo" color="red" placement="top">
+                <Button
+                  danger
+                  style={{ width: "100%", marginTop: "10px" }}
+                  icon={<DeleteOutlined />}
+                  onClick={showConfirm}
                 >
-                  <Input
-                    style={{
-                      width: "100%",
-                    }}
-                    addonBefore={<UserOutlined />}
-                    placeholder="TODO You"
-                    disabled
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16} key={"2"}>
-              <Col span={24}>
-                <Form.Item
-                  name="towing_driver_id"
-                  label="Towing Driver"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please choose the Towing Driver",
-                    },
-                  ]}
-                >
-                  <Select
-                    options={TowingDriverSelection}
-                    optionFilterProp="children"
-                    filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLocaleLowerCase()
-                        .includes(input.toLocaleLowerCase())
-                    }
-                    notFoundContent={
-                      <div>
-                        Driver Not Fownd{" "}
-                        <NavLink to={`/users/${editRecord?.condo_id}`}>
-                          create one
-                        </NavLink>
-                      </div>
-                    }
-                    showSearch
-                    allowClear
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16} key={"3"}>
-              <Col span={24}>
-                <Form.Item
-                  name="condo_address"
-                  label="Address"
-                  rules={[
-                    {
-                      type: "address",
-                      required: true,
-                      message: "Please enter The Address",
-                    },
-                  ]}
-                >
-                  <Input
-                    style={{
-                      width: "100%",
-                    }}
-                    placeholder="Enter Address"
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16} key={"4"}>
-              <Col span={12}>
-                <Form.Item
-                  name="city"
-                  label="City"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter The City",
-                    },
-                  ]}
-                >
-                  <Input
-                    style={{
-                      width: "100%",
-                    }}
-                    placeholder="Enter City"
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="state"
-                  label="State"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter The State",
-                    },
-                  ]}
-                >
-                  <Input
-                    style={{
-                      width: "100%",
-                    }}
-                    placeholder="Enter State"
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16} key={"5"}>
-              <Col span={12}>
-                <Form.Item
-                  name="zip_code"
-                  label="Zip Code"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter The Zip Code",
-                    },
-                  ]}
-                >
-                  <Input
-                    style={{
-                      width: "100%",
-                    }}
-                    placeholder="Enter Zip Code"
-                    maxLength={5}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  initialValue={2}
-                  name="max_cars"
-                  label="Default Max Cars"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please enter a number 1-5",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    style={{
-                      width: "100%",
-                    }}
-                    placeholder="Enter Max Cars"
-                    min={1}
-                    max={5}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </CustomLoadingIndecator>
+                  Delete
+                </Button>
+              </Tooltip>
+            </Col>
+          </Row>
+        )}
       </Drawer>
     </>
   );

@@ -6,10 +6,12 @@
     "camerasForLot": "get/cameras/",
     "usersForCondo": "get/users/",
     "towingForCondo": "get/towing",
+    "seeIfCamaeraExists": "get/exists/camera/",
     "condosForLotTable": "get/condo/options",
     "unitsForCondo": "get/units/",
     "logsForLot": "get/logs/",
-    "PicturesForLog": "get/log/img/"
+    "carPicture": "get/log/img/car/",
+    "platePicture": "get/log/img/plate/"
   },
   "put": {
     "updateLot": "update/lot/",
@@ -19,6 +21,11 @@
     "updateUnit": "update/unit/"
   },
   "post": {
-    "createCondo": "create/condo"
+    "createCondo": "create/condo",
+    "createLot": "create/lot"
+  },
+  "delete": {
+    "deleteCondo": "delete/condo/",
+    "deleteLot": "delete/lot/"
   }
 }

@@ -4,12 +4,18 @@ import { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../Context/AppContext";
 import { CameraInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
 import Columns from "../../utilities/TableColumns/CameraColumns";
-import { getCameras, updateCamera } from "../../utilities/fetchData";
+import {
+  getCameras,
+  updateCamera,
+  seeIfCameraExists,
+} from "../../utilities/fetchData";
+import DrawerCameras from "../drawers/DrawerCameras";
 
 const TableCamera = () => {
+  const [editingId, setEditingId] = useState("");
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const { setAppInnerHeadContent } = useContext(AppContext);
   const [data, setData] = useState(useLoaderData());
-  const [editingId, setEditingId] = useState("");
   const [form] = Form.useForm();
   const { lotId } = useParams();
   const isEditing = (record) => record.camera_id === editingId;
@@ -30,7 +36,7 @@ const TableCamera = () => {
     setEditingId(record.camera_id);
   };
   const cancel = () => {
-    setData([...data]);
+    form.resetFields();
     setEditingId("");
   };
 
@@ -84,6 +90,22 @@ const TableCamera = () => {
                 required: true,
                 message: `Please Input ${title}!`,
               },
+              {
+                validator: async (_, value) => {
+                  if (value) {
+                    const exists = await seeIfCameraExists(
+                      value,
+                      record.camera_id
+                    );
+                    if (exists) {
+                      return Promise.reject(
+                        new Error("This Camera ID Already Exists")
+                      );
+                    }
+                  }
+                  return Promise.resolve();
+                },
+              },
             ]}
           >
             <InputNumber
@@ -105,11 +127,16 @@ const TableCamera = () => {
     <>
       <Button
         type="primary"
+        onClick={() => {
+          setDrawerOpen(true);
+          cancel();
+        }}
         style={{ marginBlock: 16, width: "100%", backgroundColor: "#52c41a" }}
       >
         Add New Camera
       </Button>
       <Form form={form} component={false}>
+        <DrawerCameras drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
         <Table
           components={{
             body: {

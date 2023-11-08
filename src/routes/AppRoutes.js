@@ -28,22 +28,22 @@ const appRoutes = createBrowserRouter(
       <Route path="/app" element={<AppBody />}>
         <Route index element={<TableCondos />} loader={getCondos} />
         <Route
-          path="lots/:condoId?"
+          path="lots/:condoId"
           element={<TableLots />}
           loader={(params) => getLots(params.params.condoId)}
         />
         <Route
-          path="units/:condoId?"
+          path="units/:condoId"
           element={<TableUnits />}
           loader={(params) => getUnits(params.params.condoId)}
         />
         <Route
-          path="lots/cameras/:lotId?"
+          path="lots/cameras/:lotId"
           element={<TableCamera />}
           loader={(params) => getCameras(params.params.lotId)}
         />
         <Route
-          path="users/:condoId?"
+          path="users/:condoId"
           element={<TableUsers />}
           loader={(params) => getUsers(params.params.condoId)}
         />

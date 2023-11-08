@@ -1,7 +1,6 @@
 import { Spin } from "antd";
 import { FaCarSide } from 'react-icons/fa';
 import { LoadingIndecatorStyle } from "../utilities/styleObjects";
-
 const CustomLoadingIndecator = ({ loading, children }) => {
   const { animation, color, divStyle, iconStyle } = LoadingIndecatorStyle;
 

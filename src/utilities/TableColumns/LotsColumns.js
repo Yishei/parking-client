@@ -1,20 +1,68 @@
-import { Space, Tooltip } from "antd";
-import { CameraTwoTone, DeleteTwoTone } from "@ant-design/icons";
+import { Space, Tooltip, Modal } from "antd";
+import {
+  CameraTwoTone,
+  DeleteTwoTone,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
+import { deleteLot } from "../fetchData";
 import { useNavigate } from "react-router-dom";
 import { FiEdit } from "react-icons/fi";
 import { FcCancel } from "react-icons/fc";
 import { AiTwotoneSave } from "react-icons/ai";
 import { FcDataSheet } from "react-icons/fc";
 import { FaWarehouse } from "react-icons/fa";
+const { confirm } = Modal;
 
-const LotsColumns = (isEditing, editingId, edit, cancel, Save, selections) => {
+const LotsColumns = (
+  isEditing,
+  editingId,
+  edit,
+  cancel,
+  Save,
+  selections,
+  handleDeleteSuccess,
+  handleDeleteError
+) => {
   const navigate = useNavigate();
+
+  const showConfirm = (record) => {
+    confirm({
+      title: "Do you Want to delete this condo?",
+      icon: <ExclamationCircleOutlined />,
+      content: (
+        <div>
+          This action cannot be undone this condo has:
+          <br />
+          {record.camera_count} Cameras.
+          <br />
+          All associated data will be deleted.
+          <br />
+        </div>
+      ),
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      async onOk() {
+        const res = await deleteLot(record.lot_id);
+        if (res === "success") {
+          await handleDeleteSuccess();
+        } else {
+          handleDeleteError();
+        }
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
+  };
+
   const columns = [
     {
       render: (_, record) => (
         <FaWarehouse
           color={record.locked ? "red" : "rgb(82, 196, 26)"}
           style={{ fontSize: 25, color: record.locked ? "red" : "" }}
+          width="5%"
         />
       ),
     },
@@ -24,34 +72,37 @@ const LotsColumns = (isEditing, editingId, edit, cancel, Save, selections) => {
       key: "lot_id",
       width: "10%",
       editable: false,
+      sorter: (a, b) => a.lot_id - b.lot_id,
     },
     {
       title: "Condo Id",
       dataIndex: "condo_id",
       key: "condo_id",
-      width: "20%",
+      width: "10%",
       editable: true,
+      sorter: (a, b) => a.condo_id - b.condo_id,
     },
     {
       title: "Address",
       dataIndex: "lot_address",
       key: "city",
-      width: "20%",
+      width: "17%",
       editable: true,
     },
     {
       title: "Lot Name",
       dataIndex: "lot_name",
       key: "state",
-      width: "20%",
+      width: "17%",
       editable: true,
     },
     {
       title: "Camera Count",
       dataIndex: "camera_count",
       key: "camera_count",
-      width: "10%",
+      width: "15%",
       editable: false,
+      sorter: (a, b) => a.camera_count - b.camera_count,
     },
     {
       title: "Lot Locked",
@@ -59,6 +110,7 @@ const LotsColumns = (isEditing, editingId, edit, cancel, Save, selections) => {
       key: "locked",
       width: "10%",
       editable: true,
+      sorter: (a, b) => a.locked - b.locked,
       render: (text) => <span>{text ? "Yes" : "No"}</span>,
     },
     {
@@ -123,7 +175,7 @@ const LotsColumns = (isEditing, editingId, edit, cancel, Save, selections) => {
               <DeleteTwoTone
                 twoToneColor={"#eb2f96"}
                 style={{ fontSize: "17px" }}
-                onClick={() => alert("delete is not implemented yet")}
+                onClick={() => showConfirm(record)}
                 className="edit-icon"
               />
             </Tooltip>

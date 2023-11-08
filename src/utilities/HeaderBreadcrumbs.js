@@ -22,7 +22,7 @@ export const HomeBreadcrumb = () => {
 
 export const LotInfoBredcrumb = ({ id }) => {
   return {
-    name: "Condo Lots",
+    name: `Condo Lots (${id})`,
     breadcrumbItems: [
       {
         title: (
@@ -60,7 +60,7 @@ export const LotInfoBredcrumb = ({ id }) => {
 
 export const UnitInfoBredcrumb = ({ id }) => {
   return {
-    name: "Condo Units",
+    name: `Condo Units (${id})`,
     breadcrumbItems: [
       {
         title: (
@@ -98,7 +98,7 @@ export const UnitInfoBredcrumb = ({ id }) => {
 
 export const UsersInfoBredcrumb = ({ id }) => {
   return {
-    name: "Condo Users",
+    name: `Condo Users (${id})`,
     breadcrumbItems: [
       {
         title: (
@@ -198,7 +198,7 @@ export const CameraInfoBredcrumb = ({ id }) => {
 
 export const LogInfoBredcrumb = ({ id }) => {
   return {
-    name: `Lot Logs`,
+    name: `Lot Logs (${id})`,
     breadcrumbItems: [
       {
         title: (

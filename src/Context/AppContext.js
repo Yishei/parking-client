@@ -4,11 +4,14 @@ import { HomeBreadcrumb } from "../utilities/HeaderBreadcrumbs";
 export const AppContext = createContext({});
 
 export const AppContextProvider = ({ children }) => {
+  const [loading, setLoading] = useState(false);
   const defaultBreadcrumb = HomeBreadcrumb();
   const [appInnerHeadContent, setAppInnerHeadContent] =
     useState(defaultBreadcrumb);
 
   const value = {
+    loading,
+    setLoading,
     appInnerHeadContent,
     setAppInnerHeadContent,
   };
