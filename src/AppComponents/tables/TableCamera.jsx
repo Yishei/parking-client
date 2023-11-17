@@ -2,6 +2,7 @@ import { Form, Table, Button, InputNumber } from "antd";
 import { useParams, useLoaderData } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../Context/AppContext";
+import { MessageContext } from "../../Context/MessageContext";
 import { CameraInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
 import Columns from "../../utilities/TableColumns/CameraColumns";
 import {
@@ -9,21 +10,43 @@ import {
   updateCamera,
   seeIfCameraExists,
 } from "../../utilities/fetchData";
-import DrawerCameras from "../drawers/DrawerCameras";
+import ModalCameras from "../Modals/ModalCameras";
 
 const TableCamera = () => {
   const [editingId, setEditingId] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [tableLoading, setTableLoading] = useState(false);
   const { setAppInnerHeadContent } = useContext(AppContext);
+  const { msg } = useContext(MessageContext);
   const [data, setData] = useState(useLoaderData());
   const [form] = Form.useForm();
   const { lotId } = useParams();
   const isEditing = (record) => record.camera_id === editingId;
 
+  const handleDeleteSuccess = async () => {
+    msg("success", "Camera deleted successfully");
+    await fetchData();
+  };
+
+  const handleDeleteError = () => {
+    msg("error", "Error deleting camera");
+  };
+
   useEffect(() => {
     const headInfo = CameraInfoBredcrumb({ id: lotId });
     setAppInnerHeadContent(headInfo);
   }, [setAppInnerHeadContent, lotId]);
+
+  const fetchData = async () => {
+    setTableLoading(true);
+    const data = await getCameras(lotId);
+    if (data.length > 0) {
+      setData(data);
+    } else {
+      msg("error", "Error Getting Data");
+    }
+    setTableLoading(false);
+  };
 
   const edit = (record) => {
     form.setFieldsValue({
@@ -44,6 +67,7 @@ const TableCamera = () => {
     form
       .validateFields()
       .then((row) => {
+        msg("loading", "Updating Data");
         saveUpdate();
       })
       .catch((errInfo) => {
@@ -55,17 +79,13 @@ const TableCamera = () => {
   const saveUpdate = async () => {
     const record = form.getFieldsValue();
     const res = await updateCamera(editingId, record);
-    if (res === "success") {
-      fetchData();
-    } else {
-      console.log("res", res);
-    }
     cancel();
-  };
-
-  const fetchData = async () => {
-    const res = await getCameras(lotId);
-    setData(res);
+    if (res === "success") {
+      msg("success", "Camera updated successfully");
+      await fetchData();
+    } else {
+      msg("error", "Error Updating Data");
+    }
   };
 
   const EditableCell = ({
@@ -121,7 +141,15 @@ const TableCamera = () => {
     );
   };
 
-  const columns = Columns(isEditing, editingId, edit, cancel, save);
+  const columns = Columns(
+    isEditing,
+    editingId,
+    edit,
+    cancel,
+    save,
+    handleDeleteSuccess,
+    handleDeleteError
+  );
 
   return (
     <>
@@ -136,7 +164,11 @@ const TableCamera = () => {
         Add New Camera
       </Button>
       <Form form={form} component={false}>
-        <DrawerCameras drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+        <ModalCameras
+          drawerOpen={drawerOpen}
+          setDrawerOpen={setDrawerOpen}
+          fetchData={fetchData}
+        />
         <Table
           components={{
             body: {
@@ -147,8 +179,15 @@ const TableCamera = () => {
           dataSource={data}
           rowKey={(record) => record.camera_id}
           pagination={{
-            onChange: cancel,
+            defaultPageSize: 5,
+            showSizeChanger: true,
+            pageSizeOptions: ["5", "10", "15"],
+            position: "bottomCenter",
           }}
+          onChange={() => {
+            cancel();
+          }}
+          loading={tableLoading}
         />
       </Form>
     </>

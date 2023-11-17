@@ -10,7 +10,7 @@ import {
   getLots,
   updateLot,
 } from "../../utilities/fetchData";
-import DrawerLots from "../drawers/DrawerLots";
+import ModalLots from "../Modals/ModalLots";
 
 const TableLots = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -21,7 +21,7 @@ const TableLots = () => {
   const [form] = Form.useForm();
   const { setAppInnerHeadContent } = useContext(AppContext);
   const { condoId } = useParams();
-  const { msg, closeMsg } = useContext(MessageContext);
+  const { msg } = useContext(MessageContext);
   const isEditing = (record) => record.lot_id === editingId;
 
   const filterOption = (input, option) =>
@@ -47,7 +47,7 @@ const TableLots = () => {
   const fetchData = async () => {
     setTableLoading(true);
     const data = await getLots(condoId);
-    if (data) {
+    if (data.length > 0) {
       setData(data);
     } else {
       msg("error", "Error Getting Data");
@@ -82,7 +82,6 @@ const TableLots = () => {
   const saveUpdate = async () => {
     const record = form.getFieldsValue();
     const res = await updateLot(editingId, record);
-    closeMsg();
     cancel();
     if (res === "success") {
       msg("success", "Lot updated successfully");
@@ -172,10 +171,10 @@ const TableLots = () => {
         Add New Lot
       </Button>
       <Form form={form} component={false}>
-        <DrawerLots
-          drawerOpen={drawerOpen}
-          setDrawerOpen={setDrawerOpen}
-          fetchData={fetchData}
+        <ModalLots
+        drawerOpen={drawerOpen}
+        setDrawerOpen={setDrawerOpen}
+        fetchData={fetchData}
         />
         <Table
           components={{

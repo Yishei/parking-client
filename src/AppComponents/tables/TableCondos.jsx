@@ -33,7 +33,7 @@ const TableCondos = () => {
   const fetchData = async () => {
     setTableLoading(true);
     const data = await getCondos();
-    if (data) {
+    if (data.length > 0) {
       setData(data);
     } else {
       msg("error", "Error Getting Data");

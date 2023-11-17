@@ -2,18 +2,31 @@ import { Table, Button } from "antd";
 import { useLoaderData, useParams } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../Context/AppContext";
+import { MessageContext } from "../../Context/MessageContext";
 import { UnitInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
 import Columns from "../../utilities/TableColumns/UnitsColumns";
 import DrawerUnit from "../drawers/DrawerUnit";
-import { getUnits } from "../../utilities/fetchData";
+import { deleteUnit, getUnits } from "../../utilities/fetchData";
 
 const TableUnits = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [data, setData] = useState(useLoaderData());
   const [editRecord, setEditRecord] = useState(null);
+  const [tableLoading, setTableLoading] = useState(false);
   const { condoId } = useParams();
   const { setAppInnerHeadContent } = useContext(AppContext);
+  const { msg } = useContext(MessageContext);
+
+  const handleDelete = async (record) => {
+    const res = await deleteUnit(record.unit_id);
+    if (res === "success") {
+      msg("success", "Unit Deleted");
+      fetchData();
+    } else {
+      msg("error", "Error Deleting Unit");
+    }
+  };
 
   const handleSettingsOpen = (record) => {
     setIsEdit(true);
@@ -27,9 +40,15 @@ const TableUnits = () => {
     setDrawerOpen(true);
   };
 
-  const fetchData = async (condoId) => {
+  const fetchData = async () => {
+    setTableLoading(true);
     const data = await getUnits(condoId);
-    setData(data);
+    if (data.length > 0) {
+      setData(data);
+    } else {
+      msg("error", "Error Getting Data");
+    }
+    setTableLoading(false);
   };
 
   useEffect(() => {
@@ -46,27 +65,24 @@ const TableUnits = () => {
       >
         Add New Unit
       </Button>
-      {drawerOpen && (
-        <DrawerUnit
-          setDrawerOpen={setDrawerOpen}
-          editRecord={editRecord}
-          isEdit={isEdit}
-          fetchData={fetchData}
-        />
-      )}
+      <DrawerUnit
+        drawerOpen={drawerOpen}
+        setDrawerOpen={setDrawerOpen}
+        editRecord={editRecord}
+        isEdit={isEdit}
+        fetchData={fetchData}
+      />
       <Table
-        columns={Columns(handleSettingsOpen)}
+        columns={Columns(handleSettingsOpen, handleDelete)}
         dataSource={data}
         rowKey={(record) => record.unit_id}
-        pagination={
-          data.length > 10
-            ? {
-                pageSize: 10,
-                total: data.length,
-                showSizeChanger: false,
-              }
-            : false
-        }
+        pagination={{
+          defaultPageSize: 5,
+          showSizeChanger: true,
+          pageSizeOptions: ["5", "10", "15"],
+          position: "bottomCenter",
+        }}
+        loading={tableLoading}
       />
     </>
   );

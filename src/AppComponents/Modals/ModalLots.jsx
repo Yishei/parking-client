@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import { MessageContext } from "../../Context/MessageContext";
-import { Button, Col, Drawer, Form, Input, Row } from "antd";
+import { Button, Col, Form, Input, Modal, Row } from "antd";
 import { createLot } from "../../utilities/fetchData";
 import { useParams } from "react-router-dom";
 
-const DrawerLots = (props) => {
+const ModalLots = (props) => {
   const { drawerOpen, setDrawerOpen, fetchData } = props;
   const [submitDisabled, setSubmitDisabled] = useState(true);
   const [formDisabled, setFormDisabled] = useState(false);
@@ -64,20 +64,11 @@ const DrawerLots = (props) => {
 
   return (
     <>
-      <Drawer
+      <Modal
         title="Add New Lot"
-        width={500}
-        onClose={onClose}
-        open={drawerOpen}
-        styles={{
-          header: {
-            backgroundColor: "#f0f2f5",
-            textAlign: "center",
-          },
-          body: {
-            marginTop: 20,
-          },
-        }}
+        visible={drawerOpen}
+        onCancel={onClose}
+        footer={null}
       >
         <Form
           form={form}
@@ -157,8 +148,8 @@ const DrawerLots = (props) => {
             </Button>
           </Col>
         </Row>
-      </Drawer>
+      </Modal>
     </>
   );
 };
-export default DrawerLots;
+export default ModalLots;

@@ -1,31 +1,50 @@
 {
-  "baseURl": "http://localhost:5050/condoAdmin/",
+  "baseURl": "http://localhost:5050/api/",
   "get": {
-    "condosForAdmin": "get/condos",
-    "lotsForCondo": "get/lots/",
-    "camerasForLot": "get/cameras/",
-    "usersForCondo": "get/users/",
-    "towingForCondo": "get/towing",
-    "seeIfCamaeraExists": "get/exists/camera/",
-    "condosForLotTable": "get/condo/options",
-    "unitsForCondo": "get/units/",
-    "logsForLot": "get/logs/",
-    "carPicture": "get/log/img/car/",
-    "platePicture": "get/log/img/plate/"
+    "condosForAdmin": "condoAdmin/get/condos",
+    "lotsForCondo": "condoAdmin/get/lots/",
+    "camerasForLot": "condoAdmin/get/cameras/",
+    "usersForCondo": "condoAdmin/get/users/",
+    "carsForUnit": "condoAdmin/get/cars/",
+    "usersForSelect": "validate/get/users/options",
+    "seeIfCamaeraExists": "validate/camera",
+    "seeIfEmailExists": "validate/email",
+    "seeIfPhoneExists": "validate/phone",
+    "seeIfCarIsLocked": "validate/plateLocked/",
+    "getMaxCars": "condoAdmin/get/condo/maxCars/",
+    "condosForLotTable": "validate/get/condo/options",
+    "unitsForCondo": "condoAdmin/get/units/",
+    "logsForLot": "condoAdmin/get/logs/",
+    "carPicture": "image/log/car/",
+    "platePicture": "image/log/plate/",
+    "otp": "auth/otp"
   },
   "put": {
-    "updateLot": "update/lot/",
-    "updateCondo": "update/condo/",
-    "updateCamera": "update/camera/",
-    "updateUser": "update/user/",
-    "updateUnit": "update/unit/"
+    "updateLot": "condoAdmin/update/lot/",
+    "updateCondo": "condoAdmin/update/condo/",
+    "updateCamera": "condoAdmin/update/camera/",
+    "updateUser": "condoAdmin/update/user/",
+    "updateUnit": "condoAdmin/update/unit/",
+    "updateCar": "condoAdmin/update/car/"
   },
   "post": {
-    "createCondo": "create/condo",
-    "createLot": "create/lot"
+    "createCondo": "condoAdmin/create/condo",
+    "createLot": "condoAdmin/create/lot",
+    "createCamera": "condoAdmin/create/camera",
+    "createUser": "auth/register",
+    "createUnit": "condoAdmin/create/unit",
+    "createCar": "condoAdmin/create/car",
+    "setPassword": "auth/setPassword",
+    "login": "auth/login",
+    "logout": "auth/logout",
+    "otp": "auth/otp"
   },
   "delete": {
-    "deleteCondo": "delete/condo/",
-    "deleteLot": "delete/lot/"
+    "deleteCondo": "condoAdmin/delete/condo/",
+    "deleteLot": "condoAdmin/delete/lot/",
+    "deleteCamera": "condoAdmin/delete/camera/",
+    "deleteUser": "condoAdmin/delete/user/",
+    "deleteUnit": "condoAdmin/delete/unit/",
+    "deleteCar": "condoAdmin/delete/car/"
   }
 }

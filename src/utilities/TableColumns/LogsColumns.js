@@ -9,11 +9,11 @@ const stringCapitalize = (string) => {
 const renderPicDiv = (text, record) => {
   const urlExtensions =
     text === record.plate_number ? urls.get.platePicture : urls.get.carPicture;
-  const imgUrl = `${urls.baseURl}${urlExtensions}${record.log_id}`;
+  const imgUrl = `${urls.baseURl}${urlExtensions}${record.log_id}?w=235&h=150`;
   let string = text.length === 3 ? text.toUpperCase() : stringCapitalize(text);
   return (
     <Tooltip
-      title={<img src={imgUrl} alt="img" width="234px" height="150px" />}
+      title={<img src={imgUrl} alt="img" width="235px" height="150px" />}
       placement="right"
     >
       <a href={imgUrl} target="_blank" rel="noreferrer">
@@ -45,35 +45,40 @@ const LogsColumns = () => {
       title: "Log Id",
       dataIndex: "log_id",
       key: "log_id",
-    },
-    {
-      title: "Lot Id",
-      dataIndex: "lot_id",
-      key: "lot_id",
+      width: "10%",
+      sorter: (a, b) => a.log_id - b.log_id,
     },
     {
       title: "Log Time",
       dataIndex: "log_time",
       key: "log_time",
       render: renderLogTime,
+      width: "15%",
+      sorter: (a, b) => new Date(a.log_time) - new Date(b.log_time),
     },
     {
-      title: "Plate Number",
+      title: "Plate",
       dataIndex: "plate_number",
       key: "plate_number",
       render: renderPicDiv,
+      width: "10%",
+      sorter: (a, b) => a.plate_number.localeCompare(b.plate_number),
     },
     {
       title: "Car Make",
       dataIndex: "car_make",
       key: "car_make",
       render: renderPicDiv,
+      width: "15%",
+      sorter: (a, b) => a.car_make.localeCompare(b.car_make),
     },
     {
       title: "Car Model",
       dataIndex: "car_model",
       key: "car_model",
       render: renderModel,
+      width: "15%",
+      sorter: (a, b) => a.car_model.localeCompare(b.car_model),
     },
     {
       title: "Car Type",

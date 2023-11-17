@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
-import CustomLoadingIndecator from "../CustomLoadingIndecator";
+import { useEffect, useState, useContext } from "react";
+import { MessageContext } from "../../Context/MessageContext";
+import { NavLink, useParams } from "react-router-dom";
 import {
-  getCondosOptions,
   getUsersOptions,
+  getCarsForUnit,
+  getMaxCarsForCondo,
   updateUnit,
+  createUnit,
 } from "../../utilities/fetchData";
-import { CarTwoTone } from "@ant-design/icons";
 import { FiEdit } from "react-icons/fi";
 import {
   Drawer,
@@ -19,218 +20,264 @@ import {
   Button,
   Space,
   Tooltip,
+  Divider,
 } from "antd";
+import UnitCar from "../UnitCar";
+import ModalCar from "../Modals/ModalCar";
 
 const DrawerUnit = (props) => {
-  const { setDrawerOpen, editRecord, isEdit, fetchData } = props;
+  const { drawerOpen, setDrawerOpen, editRecord, isEdit, fetchData } = props;
   // All States...
-  const [formEnable, setFormEnable] = useState(false);
-  const [submitLoading, setSubmitLoading] = useState(false);
-  const [condoSelections, setCondoSelections] = useState([]);
+  const [submitDisabled, setSubmitDisabled] = useState(true);
+  const [SubmitLoading, setSubmitLoading] = useState(false);
+  const [formDisabled, setFormDisabled] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
+
+  // States for the Car Modal...
+  const [carModalOpen, setCarModalOpen] = useState(false);
+  const [isEditCar, setIsEditCar] = useState(false);
+  const [car, setCar] = useState(null);
+  const [unitId, setUnitId] = useState(null);
   const [residentSelections, setResidentSelections] = useState([]);
   const [carList, setCarList] = useState([]);
   const [maxCars, setMaxCars] = useState(2);
+  const { msg } = useContext(MessageContext);
+  const { condoId } = useParams();
   const [form] = Form.useForm();
 
-  // this should set the carList and maxCars state for the edit record
-  const handleSetCarsAndMaxCarsForEdit = useCallback(() => {
-    const carList = JSON.parse(editRecord.car_list);
-    setCarList(carList);
-    setMaxCars(editRecord.max_cars);
-  }, [editRecord]);
+  const fetchCars = async () => {
+    const cars = await getCarsForUnit(editRecord.unit_id);
+    console.log(cars, "cars");
+    if (cars.length > 0) {
+      setCarList(cars);
+    } else {
+      msg("error", "Error Getting Data");
+    }
+  };
 
-  // this should set the form values for the edit record
-  const setFormValuesEdit = useCallback(() => {
-    const { unit_id, condo_id, user_id, max_cars, address } = editRecord;
-    form.setFieldsValue({
-      unit_id,
-      condo_id,
-      user_id,
-      max_cars,
-      address,
-    });
-  }, [editRecord, form]);
+  const onClose = () => {
+    setDrawerOpen(false);
+    form.resetFields();
+    setFormDisabled(true);
+    setSubmitDisabled(true);
+    setCarList([]);
+    setMaxCars(2);
+    if (submitted) {
+      fetchData();
+      setSubmitted(false);
+    }
+  };
 
-  // this should handle the submit button
-  const handleSubmit = async () => {
+  const onCansel = () => {
+    if (isEdit) {
+      editRecord ? form.setFieldsValue({ ...editRecord }) : form.resetFields();
+      setSubmitDisabled(true);
+      setFormDisabled(true);
+      setMaxCars(editRecord?.max_cars);
+    } else {
+      onClose();
+    }
+  };
+
+  const onSubmit = () => {
     form
       .validateFields()
       .then((values) => {
+        setSubmitLoading(true);
+        msg("loading", "Submitting Data");
         if (isEdit) {
-          handleEditSubmit();
+          handleSubmitEdit();
         } else {
-          // handle the new submit
+          handleSubmitNew();
         }
       })
       .catch((info) => {
         console.log("Validate Failed:", info);
       });
-    setFormEnable(false);
   };
 
-  const handleNewSubmit = async () => {
-    // handle the new submit
+  const handleSubmitNew = async () => {
+    const record = getNeededFormValues();
+    const res = await createUnit(record);
+    setSubmitLoading(false);
+    if (res !== "fail") {
+      form.setFieldValue("unit_id", res);
+      setSubmitDisabled(true);
+      setFormDisabled(true);
+      setSubmitted(true);
+      msg("success", "Unit Created Successfully");
+    } else {
+      msg("error", "Something went wrong");
+    }
   };
 
-  const handleEditSubmit = async () => {
-    const res = await updateUnit(editRecord.unit_id, form.getFieldsValue());
+  const handleSubmitEdit = async () => {
+    const record = getNeededFormValues();
+    const res = await updateUnit(editRecord.unit_id, record);
+    setSubmitLoading(false);
     if (res === "success") {
-      fetchData(editRecord.condo_id);
+      setSubmitDisabled(true);
+      setFormDisabled(true);
+      setSubmitted(true);
+      msg("success", "Unit Updated Successfully");
     } else {
-      console.log("error");
+      msg("error", "Something went wrong");
     }
   };
 
-  // this should handle the cancel button
-  const handleCancel = () => {
-    if (isEdit) {
-      handleSetCarsAndMaxCarsForEdit();
-      setFormValuesEdit();
-      setFormEnable(false);
-    } else {
-      handleClose();
-    }
+  const getNeededFormValues = () => {
+    console.log(form.getFieldsValue(), "form.getFieldsValue()");
+    const { max_cars, user_id, address } = form.getFieldsValue();
+    return {
+      condo_id: condoId,
+      max_cars,
+      user_id: user_id === undefined ? null : user_id,
+      address,
+    };
   };
-
-  // this should handle the closing of the drawer
-  const handleClose = async () => {
-    setDrawerOpen(false);
-  };
-
-  // Set the default values for carList and maxCars state
-  // And set the form values for the drawer
-  // if the drawer is open and the isEdit prop is true
 
   useEffect(() => {
-    if (isEdit) {
-      handleSetCarsAndMaxCarsForEdit();
-      setFormValuesEdit();
+    if (drawerOpen) {
+      const users = getUsersOptions();
+      users.then((data) => {
+        setResidentSelections(data);
+      });
     }
-  }, [isEdit, handleSetCarsAndMaxCarsForEdit, setFormValuesEdit]);
+  }, [drawerOpen]);
 
-  // get the selection options for the condo and resident
-  // and set the condoSelections and residentSelections state
   useEffect(() => {
-    getCondosOptions().then((res) => {
-      setCondoSelections(res);
-    });
-    getUsersOptions().then((res) => {
-      setResidentSelections(res);
-    });
-  }, []);
+    if (drawerOpen && !isEdit) {
+      const max = getMaxCarsForCondo(condoId);
+      max.then((data) => {
+        setMaxCars(data);
+        form.setFieldValue("max_cars", data);
+      });
+    } else if (drawerOpen && isEdit) {
+      setMaxCars(editRecord?.max_cars);
+    }
+  }, [drawerOpen, condoId, form, isEdit, editRecord]);
 
-  // handles the change for the form input max_cars
-  // to add or remove cars from the carList state and reflect on the form items
+  useEffect(() => {
+    if (drawerOpen && !isEdit) {
+      setFormDisabled(false);
+    }
+  }, [isEdit, drawerOpen]);
+
+  useEffect(() => {
+    if (isEdit && drawerOpen) {
+      form.setFieldsValue({ ...editRecord });
+    }
+  }, [isEdit, editRecord, drawerOpen, form]);
+
+  useEffect(() => {
+    if (drawerOpen && isEdit) {
+      const car = getCarsForUnit(editRecord.unit_id);
+      car.then((data) => {
+        console.log(data, "data");
+        setCarList(data);
+      });
+    }
+  }, [drawerOpen, isEdit, editRecord]);
+
   const handleMaxChange = (value) => {
-    setMaxCars(value);
     if (value < carList.length) {
-      setCarList(carList.slice(0, value));
-    } else if (value > carList.length) {
-      setCarList([
-        ...carList,
-        ...Array.from({ length: value - carList.length }),
-      ]);
+      return;
+    } else {
+      setMaxCars(value);
     }
+  };
+
+  const handleOpneCarNew = () => {
+    setIsEditCar(false);
+    setUnitId(editRecord?.unit_id);
+    setCar(null);
+    setCarModalOpen(true);
+  };
+
+  const handleOpneCarEdit = (car) => {
+    setIsEditCar(true);
+    setUnitId(null);
+    setCar(car);
+    setCarModalOpen(true);
   };
 
   return (
-    <Drawer
-      title="Unit Settings"
-      width={500}
-      onClose={handleClose}
-      open={true}
-      className="unit-drawer"
-      styles={{
-        header: {
-          backgroundColor: "#f0f2f5",
-        },
-        body: {
-          border: "2px solid #f0f2f5",
-        },
-      }}
-      extra={
-        formEnable ? (
-          <Space>
-            <Button
-              onClick={handleCancel}
-              style={{
-                width: "100%",
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              loading={submitLoading}
-              type="primary"
-              onClick={handleSubmit}
-              style={{
-                width: "100%",
-              }}
-            >
-              Submit
-            </Button>
-          </Space>
-        ) : (
-          <Tooltip title="Edit" color="#52c41a" placement="left">
-            <FiEdit
-              color={"rgb(22, 119, 255)"}
-              style={{ fontSize: "20px" }}
-              className="edit-icon"
-              onClick={() => {
-                setFormEnable(true);
-              }}
-            />
-          </Tooltip>
-        )
-      }
-    >
-      <CustomLoadingIndecator loading={submitLoading}>
+    <>
+      <ModalCar
+        car={car}
+        isEdit={isEditCar}
+        open={carModalOpen}
+        setOpen={setCarModalOpen}
+        unitId={unitId}
+        fetchCars={fetchCars}
+      />
+      <Drawer
+        title="Unit Settings"
+        width={500}
+        open={drawerOpen}
+        onClose={onClose}
+        className="unit-drawer"
+        styles={{
+          header: {
+            backgroundColor: "#f0f2f5",
+          },
+          body: {
+            border: "2px solid #f0f2f5",
+          },
+        }}
+        extra={
+          !formDisabled ? (
+            <Space>
+              <Button
+                onClick={onCansel}
+                style={{
+                  width: "100%",
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={onSubmit}
+                disabled={submitDisabled}
+                loading={SubmitLoading}
+                type="primary"
+                style={{
+                  width: "100%",
+                }}
+              >
+                Submit
+              </Button>
+            </Space>
+          ) : (
+            <Tooltip title="Edit" color="#52c41a" placement="left">
+              <FiEdit
+                color={"rgb(22, 119, 255)"}
+                style={{ fontSize: "20px" }}
+                className="edit-icon"
+                onClick={() => {
+                  setFormDisabled(false);
+                }}
+              />
+            </Tooltip>
+          )
+        }
+      >
         <Form
           form={form}
-          disabled={!formEnable}
           layout="vertical"
+          disabled={formDisabled}
           requiredMark={false}
+          onValuesChange={(changedValues, allValues) => {
+            setSubmitDisabled(false);
+          }}
         >
           <Row gutter={16} key={"1"}>
-            <Col span={12}>
+            <Col span={24}>
               <Form.Item name="unit_id" label="Unit ID">
                 <Input
-                  addonBefore="#"
                   placeholder="This will be auto generated"
                   disabled
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                name="condo_id"
-                label="Condo"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please choose the Condo",
-                  },
-                ]}
-              >
-                <Select
-                  options={condoSelections}
-                  optionFilterProp="children"
-                  placeholder="Select Condo"
-                  filterOption={(input, option) =>
-                    (option?.label ?? "")
-                      .toLocaleLowerCase()
-                      .includes(input.toLocaleLowerCase())
-                  }
-                  notFoundContent={
-                    <div>
-                      Driver Not Fownd{" "}
-                      <NavLink to={`/users/${editRecord?.condo_id}`}>
-                        create one
-                      </NavLink>
-                    </div>
-                  }
-                  showSearch
-                  allowClear
+                  bordered={false}
                 />
               </Form.Item>
             </Col>
@@ -248,6 +295,7 @@ const DrawerUnit = (props) => {
                 ]}
               >
                 <Select
+                  bordered={!formDisabled}
                   options={residentSelections}
                   optionFilterProp="children"
                   placeholder="Select Resident"
@@ -278,10 +326,21 @@ const DrawerUnit = (props) => {
                     required: true,
                     message: "Please enter a number 1-5",
                   },
+                  {
+                    validator: (_, value) =>
+                      value >= carList.length
+                        ? Promise.resolve()
+                        : Promise.reject(
+                            new Error(
+                              "Max cars can't be less than the current number of cars."
+                            )
+                          ),
+                  },
                 ]}
                 initialValue={maxCars}
               >
                 <InputNumber
+                  bordered={!formDisabled}
                   style={{
                     width: "100%",
                   }}
@@ -307,62 +366,55 @@ const DrawerUnit = (props) => {
                   },
                 ]}
               >
-                <Input placeholder="Enter A Unit Inductor" />
+                <Input
+                  bordered={!formDisabled}
+                  placeholder="Enter A Unit Inductor"
+                />
               </Form.Item>
             </Col>
           </Row>
-          {carList.map((car, index) => (
-            <Row gutter={16} key={index + 5}>
-              <Col span={24}>
-                <Form.Item
-                  name={`car_list[${index}]`}
-                  label={`Car ${index + 1}`}
-                  initialValue={car}
-                >
-                  <Input
-                    style={{
-                      width: "100%",
-                    }}
-                    addonBefore={<CarTwoTone />}
-                    placeholder={`Enter Car ${index + 1}`}
-                    maxLength={10}
-                    onChange={(event) => {
-                      const newCarList = [...carList];
-                      newCarList[index] = event.target.value;
-                      setCarList(newCarList);
-                    }}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          ))}
-          {Array.from({ length: maxCars - carList.length }, (_, i) => (
-            <Row gutter={16} key={i}>
-              <Col span={24}>
-                <Form.Item
-                  name={`car_list[${carList.length + i}]`}
-                  label={`Car ${carList.length + i + 1}`}
-                >
-                  <Input
-                    style={{
-                      width: "100%",
-                    }}
-                    addonBefore={<CarTwoTone />}
-                    placeholder={`Enter Car ${carList.length + i + 1}`}
-                    maxLength={10}
-                    onChange={(event) => {
-                      const newCarList = [...carList];
-                      newCarList[carList.length + i] = event.target.value;
-                      setCarList(newCarList);
-                    }}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-          ))}
+          <Divider orientation="left">Cars</Divider>
+          <Row gutter={14} key={"5"}>
+            <Col
+              span={24}
+              style={{
+                display: "flex",
+                justifyContent: "center", // Center the items horizontally
+              }}
+            >
+              <Button
+                type="primary"
+                disabled={carList?.length >= maxCars || !formDisabled}
+                style={{
+                  width: "90%",
+                  marginBottom: 10,
+                }}
+                onClick={handleOpneCarNew}
+              >
+                Add Car
+              </Button>
+            </Col>
+          </Row>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "space-around",
+            }}
+          >
+            {carList.map((car, index) => {
+              return (
+                <UnitCar
+                  key={index}
+                  car={car}
+                  handleOpneCarEdit={handleOpneCarEdit}
+                />
+              );
+            })}
+          </div>
         </Form>
-      </CustomLoadingIndecator>
-    </Drawer>
+      </Drawer>
+    </>
   );
 };
 

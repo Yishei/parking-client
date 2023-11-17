@@ -64,28 +64,28 @@ const CondoColumns = (handleDroawer) => {
             size="middle"
             style={{ justifyContent: "center", width: "100%" }}
           >
-            <Tooltip title="Lots" color="#52c41a" placement="top">
+            {/* <Tooltip title="Lots" color="#52c41a" placement="top"> */}
               <FaWarehouse
                 color={"rgb(22, 119, 255)"}
                 style={{ fontSize: "17px", marginRight: 5 }}
                 onClick={() => {
-                  navigate(`/app/lots/${record.condo_id}`);
+                  navigate(`/admin/lots/${record.condo_id}`);
                 }}
                 className="lot-icon"
               />
-            </Tooltip>
-            <Tooltip title="Units" color="#52c41a" placement="top">
+            {/* </Tooltip>
+            <Tooltip title="Units" color="#52c41a" placement="top"> */}
               <RiCommunityLine
                 color={"rgb(22, 119, 255)"}
                 style={{ fontSize: "20px", margin: "0 5 0 5" }}
                 onClick={() => {
-                  navigate(`/app/units/${record.condo_id}`);
+                  navigate(`/admin/units/${record.condo_id}`);
                 }}
                 className="unit-icon"
               />
-            </Tooltip>
+            {/* </Tooltip>
 
-            <Tooltip title="Users" color="#52c41a" placement="top">
+            <Tooltip title="Users" color="#52c41a" placement="top"> */}
               <UsergroupAddOutlined
                 style={{
                   fontSize: "17px",
@@ -93,11 +93,11 @@ const CondoColumns = (handleDroawer) => {
                   color: "rgb(22, 119, 255)",
                 }}
                 onClick={() => {
-                  navigate(`/app/Users/${record.condo_id}`);
+                  navigate(`/admin/Users/${record.condo_id}`);
                 }}
                 className="user-icon"
               />
-            </Tooltip>
+            {/* </Tooltip> */}
             <SettingTwoTone
               style={{ fontSize: "17px", marginLeft: 5 }}
               onClick={() => handleDroawer(record)}

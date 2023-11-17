@@ -26,7 +26,7 @@ export const LotInfoBredcrumb = ({ id }) => {
     breadcrumbItems: [
       {
         title: (
-          <NavLink to="/app/">
+          <NavLink to="/admin">
             <HomeOutlined />
           </NavLink>
         ),
@@ -38,7 +38,7 @@ export const LotInfoBredcrumb = ({ id }) => {
             {
               key: "1",
               label: (
-                <NavLink to={`/app/units/${id}`}>
+                <NavLink to={`/admin/units/${id}`}>
                   <HomeTwoTone /> Units
                 </NavLink>
               ),
@@ -46,7 +46,7 @@ export const LotInfoBredcrumb = ({ id }) => {
             {
               key: "3",
               label: (
-                <NavLink to={`/app/users/${id}`}>
+                <NavLink to={`/admin/users/${id}`}>
                   <UserOutlined style={{ color: "rgb(22, 119, 255)" }} /> Users
                 </NavLink>
               ),
@@ -64,7 +64,7 @@ export const UnitInfoBredcrumb = ({ id }) => {
     breadcrumbItems: [
       {
         title: (
-          <NavLink to="/app/">
+          <NavLink to="/admin">
             <HomeOutlined />
           </NavLink>
         ),
@@ -76,7 +76,7 @@ export const UnitInfoBredcrumb = ({ id }) => {
             {
               key: "1",
               label: (
-                <NavLink to={`/app/lots/${id}`}>
+                <NavLink to={`/admin/lots/${id}`}>
                   <FaWarehouse /> Lots
                 </NavLink>
               ),
@@ -84,7 +84,7 @@ export const UnitInfoBredcrumb = ({ id }) => {
             {
               key: "3",
               label: (
-                <NavLink to={`/app/users/${id}`}>
+                <NavLink to={`/admin/users/${id}`}>
                   <UserOutlined style={{ color: "rgb(22, 119, 255)" }} /> Users
                 </NavLink>
               ),
@@ -102,7 +102,7 @@ export const UsersInfoBredcrumb = ({ id }) => {
     breadcrumbItems: [
       {
         title: (
-          <NavLink to="/app/">
+          <NavLink to="/admin">
             <HomeOutlined />
           </NavLink>
         ),
@@ -114,7 +114,7 @@ export const UsersInfoBredcrumb = ({ id }) => {
             {
               key: "1",
               label: (
-                <NavLink to={`/app/units/${id}`}>
+                <NavLink to={`/admin/units/${id}`}>
                   <HomeTwoTone /> Units
                 </NavLink>
               ),
@@ -122,7 +122,7 @@ export const UsersInfoBredcrumb = ({ id }) => {
             {
               key: "3",
               label: (
-                <NavLink to={`/app/lots/${id}`}>
+                <NavLink to={`/admin/lots/${id}`}>
                   <CarTwoTone /> Lots
                 </NavLink>
               ),
@@ -140,19 +140,19 @@ export const CameraInfoBredcrumb = ({ id }) => {
     breadcrumbItems: [
       {
         title: (
-          <NavLink to="/app/">
+          <NavLink to="/admin">
             <HomeOutlined />
           </NavLink>
         ),
       },
       {
-        title: <NavLink to={`/app/lots/${id}`}>Lots</NavLink>,
+        title: <NavLink to={`/admin/lots/${id}`}>Lots</NavLink>,
         menu: {
           items: [
             {
               key: "1",
               label: (
-                <NavLink to={`/app/units/${id}`}>
+                <NavLink to={`/admin/units/${id}`}>
                   <HomeTwoTone /> Units
                 </NavLink>
               ),
@@ -160,7 +160,7 @@ export const CameraInfoBredcrumb = ({ id }) => {
             {
               key: "2",
               label: (
-                <NavLink to={`/app/lots/${id}`}>
+                <NavLink to={`/admin/lots/${id}`}>
                   <CarTwoTone /> Lots
                 </NavLink>
               ),
@@ -168,7 +168,7 @@ export const CameraInfoBredcrumb = ({ id }) => {
             {
               key: "3",
               label: (
-                <NavLink to={`/app/users/${id}`}>
+                <NavLink to={`/admin/users/${id}`}>
                   <UserOutlined style={{ color: "rgb(22, 119, 255)" }} /> Users
                 </NavLink>
               ),
@@ -183,7 +183,7 @@ export const CameraInfoBredcrumb = ({ id }) => {
             {
               key: "1.1",
               label: (
-                <NavLink to={`/app/lots/logs/${id}`}>
+                <NavLink to={`/admin/lots/logs/${id}`}>
                   <FcDataSheet />
                   Logs
                 </NavLink>
@@ -202,19 +202,19 @@ export const LogInfoBredcrumb = ({ id }) => {
     breadcrumbItems: [
       {
         title: (
-          <NavLink to="/app/">
+          <NavLink to="/admin">
             <HomeOutlined />
           </NavLink>
         ),
       },
       {
-        title: <NavLink to={`/app/lots/${id}`}>Lots</NavLink>,
+        title: <NavLink to={`/admin/lots/${id}`}>Lots</NavLink>,
         menu: {
           items: [
             {
               key: "1",
               label: (
-                <NavLink to={`/app/units/${id}`}>
+                <NavLink to={`/admin/units/${id}`}>
                   <HomeTwoTone /> Units
                 </NavLink>
               ),
@@ -222,7 +222,7 @@ export const LogInfoBredcrumb = ({ id }) => {
             {
               key: "2",
               label: (
-                <NavLink to={`/app/lots/${id}`}>
+                <NavLink to={`/admin/lots/${id}`}>
                   <FaWarehouse /> Lots
                 </NavLink>
               ),
@@ -230,7 +230,7 @@ export const LogInfoBredcrumb = ({ id }) => {
             {
               key: "3",
               label: (
-                <NavLink to={`/app/users/${id}`}>
+                <NavLink to={`/admin/users/${id}`}>
                   <UserOutlined style={{ color: "rgb(22, 119, 255)" }} /> Users
                 </NavLink>
               ),
@@ -245,7 +245,7 @@ export const LogInfoBredcrumb = ({ id }) => {
             {
               key: "1.1",
               label: (
-                <NavLink to={`/app/lots/cameras/${id}`}>
+                <NavLink to={`/admin/lots/cameras/${id}`}>
                   <BsFillCameraReelsFill/>
                   Lot Cameras
                 </NavLink>
@@ -263,7 +263,7 @@ export const settingsBreadcrumb = () => {
     name: "Settings",
     breadcrumbItems: [
       {
-        href: "/app/",
+        href: "/admin/",
         title: <HomeOutlined />,
       },
       {
@@ -279,7 +279,7 @@ export const profileBreadcrumb = () => {
     breadcrumbItems: [
       {
         title: (
-          <NavLink to="/app/">
+          <NavLink to="/admin">
             <HomeOutlined />
           </NavLink>
         ),

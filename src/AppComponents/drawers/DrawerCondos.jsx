@@ -1,9 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { MessageContext } from "../../Context/MessageContext";
-import {
-  DeleteOutlined,
-  ExclamationCircleOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { FiEdit } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import {
@@ -151,7 +148,7 @@ const DrawerCondos = (props) => {
     } = form.getFieldsValue();
     return {
       condo_admin_id,
-      towing_driver_id: towing_driver_id,
+      towing_driver_id,
       condo_address,
       city,
       state,
@@ -179,7 +176,7 @@ const DrawerCondos = (props) => {
     if (isEdit && drawerOpen) {
       form.setFieldsValue({ ...editRecord });
     }
-  }, [isEdit, drawerOpen, editRecord, form, TowingDriverSelection]);
+  }, [isEdit, drawerOpen, editRecord, form]);
 
   return (
     <>
@@ -208,10 +205,10 @@ const DrawerCondos = (props) => {
                 Cancel
               </Button>
               <Button
-                loading={SubmitLoading}
-                type="primary"
                 onClick={onSubmit}
+                loading={SubmitLoading}
                 disabled={submitDisabled}
+                type="primary"
                 style={{
                   width: "100%",
                 }}

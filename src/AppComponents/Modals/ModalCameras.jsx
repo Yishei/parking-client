@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import { MessageContext } from "../../Context/MessageContext";
-import { Button, Col, Drawer, Form, Input, Row } from "antd";
-import { createLot, seeIfCameraExists } from "../../utilities/fetchData";
+import { Button, Col, Form, Input, InputNumber, Modal, Row } from "antd";
+import { createCamera, seeIfCameraExists } from "../../utilities/fetchData";
 import { useParams } from "react-router-dom";
 
-const DrawerCameras = (props) => {
+const ModalCameras = (props) => {
   const { drawerOpen, setDrawerOpen, fetchData } = props;
   const [submitDisabled, setSubmitDisabled] = useState(true);
   const [formDisabled, setFormDisabled] = useState(false);
@@ -39,7 +39,7 @@ const DrawerCameras = (props) => {
   };
 
   const handleSubmitNew = async () => {
-    const res = await createLot(form.getFieldsValue());
+    const res = await createCamera(form.getFieldsValue());
     console.log(res, "res");
     setSubmitLoading(false);
 
@@ -64,20 +64,11 @@ const DrawerCameras = (props) => {
 
   return (
     <>
-      <Drawer
+      <Modal
         title="Add New Camera"
-        width={500}
-        onClose={onClose}
         open={drawerOpen}
-        styles={{
-          header: {
-            backgroundColor: "#f0f2f5",
-            textAlign: "center",
-          },
-          body: {
-            marginTop: 20,
-          },
-        }}
+        onCancel={onClose}
+        footer={null}
       >
         <Form
           form={form}
@@ -105,6 +96,7 @@ const DrawerCameras = (props) => {
                     required: true,
                     message: "Enter OpenOLPR Camera ID",
                   },
+
                   {
                     validator: async (_, value) => {
                       if (value) {
@@ -120,7 +112,8 @@ const DrawerCameras = (props) => {
                   },
                 ]}
               >
-                <Input
+                <InputNumber
+                  controls={false}
                   bordered={!formDisabled}
                   style={{
                     width: "100%",
@@ -145,8 +138,8 @@ const DrawerCameras = (props) => {
             </Button>
           </Col>
         </Row>
-      </Drawer>
+      </Modal>
     </>
   );
 };
-export default DrawerCameras;
+export default ModalCameras;

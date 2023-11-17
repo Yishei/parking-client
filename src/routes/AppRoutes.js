@@ -1,8 +1,22 @@
+import urls from "../utilities/urls.json";
+import { apiService } from "../utilities/apiService";
+import { singOut } from "../utilities/AuthFunctionality";
 import {
   Route,
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
+
+// Global Components
+import GlobalBody from "../GlobalComponents/GlobalBody";
+import PasswordSetUp from "../GlobalComponents/PasswordSetUp";
+import LoginForm from "../GlobalComponents/LoginForm";
+import NotFound from "../GlobalComponents/NotFound";
+import ErrorPage from "../GlobalComponents/ErrorPage";
+import ErrorBoundary from "../ErrorBoundary";
+import OtpReq from "../GlobalComponents/OtpReq";
+
+// Admin Components
 import AppBody from "../AppComponents/AppBody";
 import TableCondos from "../AppComponents/tables/TableCondos";
 import TableLots from "../AppComponents/tables/TableLots";
@@ -10,54 +24,87 @@ import TableUnits from "../AppComponents/tables/TableUnits";
 import TableUsers from "../AppComponents/tables/TableUsers";
 import TableCamera from "../AppComponents/tables/TableCamera";
 import TableLogs from "../AppComponents/tables/TableLogs";
-import LoginForm from "../AppComponents/LoginForm";
-import NotFound from "../AppComponents/NotFound";
-//import Settings from "../AppComponents/Settings";
-import {
-  getCameras,
-  getCondos,
-  getLogs,
-  getLots,
-  getUnits,
-  getUsers,
-} from "../utilities/fetchData";
+
+const baseurl = urls.baseURl;
 
 const appRoutes = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/app" element={<AppBody />}>
-        <Route index element={<TableCondos />} loader={getCondos} />
-        <Route
-          path="lots/:condoId"
-          element={<TableLots />}
-          loader={(params) => getLots(params.params.condoId)}
-        />
-        <Route
-          path="units/:condoId"
-          element={<TableUnits />}
-          loader={(params) => getUnits(params.params.condoId)}
-        />
-        <Route
-          path="lots/cameras/:lotId"
-          element={<TableCamera />}
-          loader={(params) => getCameras(params.params.lotId)}
-        />
-        <Route
-          path="users/:condoId"
-          element={<TableUsers />}
-          loader={(params) => getUsers(params.params.condoId)}
-        />
-        <Route
-          path="lots/logs/:lotId"
-          element={<TableLogs />}
-          loader={(params) => getLogs(params.params.lotId)}
-        />
-        <Route path="profile" element={<div>profile</div>} />
-        <Route path="settings" element={<h1>settings</h1>} />
-        <Route path="contact" element={<h1>Contact</h1>} />
-        <Route path="login" element={<LoginForm />} />
+      <Route path="/" element={<GlobalBody />} errorElement={<ErrorBoundary />}>
+        <Route path="logIn" element={<LoginForm />} />
+        <Route path="logOut" element={<LoginForm />} loader={() => singOut()} />
+        <Route path="forgotPassword" element={<OtpReq />} />
+        <Route path="resetPassword/:token" element={<PasswordSetUp />} />
+        <Route path="notFound" element={<NotFound />} />
+        <Route path="errorPage" element={<ErrorPage />} />
+        <Route path="superAdmin" element={<div>superAdmin</div>}>
+          {/* All superAdmin routes */}
+        </Route>
+        <Route path="driver" element={<div>driver</div>}>
+          {/* All driver routes */}
+        </Route>
+        <Route path="resident" element={<div>resident</div>}>
+          {/* All resident routes */}
+        </Route>
+        <Route path="admin" element={<AppBody />}>
+          <Route
+            index
+            element={<TableCondos />}
+            loader={() =>
+              apiService.get(`${baseurl}${urls.get.condosForAdmin}`)
+            }
+          />
+          <Route
+            path="lots/:condoId"
+            element={<TableLots />}
+            loader={(params) =>
+              apiService.get(
+                `${baseurl}${urls.get.lotsForCondo}${params.params.condoId}`
+              )
+            }
+          />
+          <Route
+            path="units/:condoId"
+            element={<TableUnits />}
+            loader={(params) =>
+              apiService.get(
+                `${baseurl}${urls.get.unitsForCondo}${params.params.condoId}`
+              )
+            }
+          />
+          <Route
+            path="lots/cameras/:lotId"
+            element={<TableCamera />}
+            loader={(params) =>
+              apiService.get(
+                `${baseurl}${urls.get.camerasForLot}${params.params.lotId}`
+              )
+            }
+          />
+          <Route
+            path="users/:condoId"
+            element={<TableUsers />}
+            loader={(params) =>
+              apiService.get(
+                `${baseurl}${urls.get.usersForCondo}${params.params.condoId}`
+              )
+            }
+          />
+          <Route
+            path="lots/logs/:lotId"
+            element={<TableLogs />}
+            loader={(params) =>
+              apiService.get(
+                `${baseurl}${urls.get.logsForLot}${params.params.lotId}`
+              )
+            }
+          />
+          <Route path="profile" element={<div>profile</div>} />
+          <Route path="settings" element={<h1>settings</h1>} />
+          <Route path="contact" element={<h1>Contact</h1>} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
       </Route>
-      <Route path="*" element={<NotFound />} />
     </Route>
   )
 );

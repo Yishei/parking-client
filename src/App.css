@@ -78,3 +78,20 @@
   cursor: pointer;
 }
 
+/* this is for the Users Table */
+.row-table-users:hover {
+  cursor: pointer;
+}
+
+
+/* this is for the Units Cars */
+
+.image-container {
+  transition: transform 0.3s ease-in-out;
+
+}
+
+.image-container:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}

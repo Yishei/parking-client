@@ -124,45 +124,45 @@ const LotsColumns = (
             size="middle"
             style={{ justifyContent: "center", width: "100%" }}
           >
-            <Tooltip title="Save" color="#52c41a" placement="top">
+            {/* <Tooltip title="Save" color="#52c41a" placement="top"> */}
               <AiTwotoneSave
                 color={"rgb(82, 196, 26)"}
                 style={{ fontSize: "17px" }}
                 onClick={() => Save()}
                 className="save-icon"
               />
-            </Tooltip>
+            {/* </Tooltip>
 
-            <Tooltip title="Cancel" color="#52c41a" placement="top">
+            <Tooltip title="Cancel" color="#52c41a" placement="top"> */}
               <FcCancel
                 style={{ fontSize: "17px" }}
                 onClick={() => cancel()}
                 className="cancel-icon"
               />
-            </Tooltip>
+            {/* </Tooltip> */}
           </Space>
         ) : (
           <Space
             size="middle"
             style={{ justifyContent: "center", width: "100%" }}
           >
-            <Tooltip title="Cameras" color="#52c41a" placement="top">
+            {/* <Tooltip title="Cameras" color="#52c41a" placement="top"> */}
               <CameraTwoTone
                 style={{ fontSize: "17px" }}
                 onClick={() => {
-                  navigate(`/app/lots/cameras/${record.lot_id}`);
+                  navigate(`/admin/lots/cameras/${record.lot_id}`);
                 }}
                 className="camera-icon"
               />
-            </Tooltip>
-            <Tooltip title="Camera Logs" color="#52c41a" placement="top">
+            {/* </Tooltip>
+            <Tooltip title="Camera Logs" color="#52c41a" placement="top"> */}
               <FcDataSheet
                 style={{ fontSize: "17px" }}
-                onClick={() => navigate(`/app/lots/logs/${record.lot_id}`)}
+                onClick={() => navigate(`/admin/lots/logs/${record.lot_id}`)}
                 className="camera-icon"
               />
-            </Tooltip>
-            <Tooltip title="Edit" color="#52c41a" placement="top">
+            {/* </Tooltip>
+            <Tooltip title="Edit" color="#52c41a" placement="top"> */}
               <FiEdit
                 color={"rgb(22, 119, 255)"}
                 style={{ fontSize: "17px" }}
@@ -170,15 +170,15 @@ const LotsColumns = (
                 disabled={editingId !== ""}
                 className="edit-icon"
               />
-            </Tooltip>
-            <Tooltip title="Delete" color="red" placement="top">
+            {/* </Tooltip>
+            <Tooltip title="Delete" color="red" placement="top"> */}
               <DeleteTwoTone
                 twoToneColor={"#eb2f96"}
                 style={{ fontSize: "17px" }}
                 onClick={() => showConfirm(record)}
                 className="edit-icon"
               />
-            </Tooltip>
+            {/* </Tooltip> */}
           </Space>
         );
       },
