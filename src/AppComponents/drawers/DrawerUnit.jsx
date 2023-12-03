@@ -1,13 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { MessageContext } from "../../Context/MessageContext";
 import { NavLink, useParams } from "react-router-dom";
-import {
-  getUsersOptions,
-  getCarsForUnit,
-  getMaxCarsForCondo,
-  updateUnit,
-  createUnit,
-} from "../../utilities/fetchData";
+import urls from "../../utilities/urls.json";
 import { FiEdit } from "react-icons/fi";
 import {
   Drawer,
@@ -19,11 +13,11 @@ import {
   Select,
   Button,
   Space,
-  Tooltip,
   Divider,
 } from "antd";
 import UnitCar from "../UnitCar";
 import ModalCar from "../Modals/ModalCar";
+import { apiService } from "../../utilities/apiService";
 
 const DrawerUnit = (props) => {
   const { drawerOpen, setDrawerOpen, editRecord, isEdit, fetchData } = props;
@@ -46,7 +40,10 @@ const DrawerUnit = (props) => {
   const [form] = Form.useForm();
 
   const fetchCars = async () => {
-    const cars = await getCarsForUnit(editRecord.unit_id);
+    console.log("fetchCars");
+    const cars = await apiService.get(
+      `${urls.baseURl}${urls.get.carsForUnit}${editRecord.unit_id}`
+    );
     console.log(cars, "cars");
     if (cars.length > 0) {
       setCarList(cars);
@@ -98,7 +95,11 @@ const DrawerUnit = (props) => {
 
   const handleSubmitNew = async () => {
     const record = getNeededFormValues();
-    const res = await createUnit(record);
+    //const res = await createUnit(record);
+    const res = await apiService.post(
+      `${urls.baseURl}${urls.post.createUnit}`,
+      record
+    );
     setSubmitLoading(false);
     if (res !== "fail") {
       form.setFieldValue("unit_id", res);
@@ -113,7 +114,12 @@ const DrawerUnit = (props) => {
 
   const handleSubmitEdit = async () => {
     const record = getNeededFormValues();
-    const res = await updateUnit(editRecord.unit_id, record);
+    //const res = await updateUnit(editRecord.unit_id, record);
+    const res = await apiService.put(
+      `${urls.baseURl}${urls.put.updateUnit}${editRecord.unit_id}`,
+      record
+    );
+    console.log(res, "res");
     setSubmitLoading(false);
     if (res === "success") {
       setSubmitDisabled(true);
@@ -138,20 +144,31 @@ const DrawerUnit = (props) => {
 
   useEffect(() => {
     if (drawerOpen) {
-      const users = getUsersOptions();
-      users.then((data) => {
-        setResidentSelections(data);
-      });
+      const users = apiService.get(`${urls.baseURl}${urls.get.usersForSelect}`);
+      users
+        .then((data) => {
+          setResidentSelections(data);
+        })
+        .catch((err) => {
+          console.log(err, "err");
+        });
     }
   }, [drawerOpen]);
 
   useEffect(() => {
     if (drawerOpen && !isEdit) {
-      const max = getMaxCarsForCondo(condoId);
-      max.then((data) => {
-        setMaxCars(data);
-        form.setFieldValue("max_cars", data);
-      });
+      const max = apiService.get(
+        `${urls.baseURl}${urls.get.getMaxCars}${condoId}`
+      );
+      max
+        .then((data) => {
+          let max = data.max_cars;
+          setMaxCars(max);
+          form.setFieldValue("max_cars", max);
+        })
+        .catch((err) => {
+          console.log(err, "err");
+        });
     } else if (drawerOpen && isEdit) {
       setMaxCars(editRecord?.max_cars);
     }
@@ -171,11 +188,17 @@ const DrawerUnit = (props) => {
 
   useEffect(() => {
     if (drawerOpen && isEdit) {
-      const car = getCarsForUnit(editRecord.unit_id);
-      car.then((data) => {
-        console.log(data, "data");
-        setCarList(data);
-      });
+      const cars = apiService.get(
+        `${urls.baseURl}${urls.get.carsForUnit}${editRecord.unit_id}`
+      );
+      cars
+        .then((data) => {
+          console.log(data, "data");
+          setCarList(data);
+        })
+        .catch((err) => {
+          console.log(err, "err");
+        });
     }
   }, [drawerOpen, isEdit, editRecord]);
 
@@ -218,14 +241,18 @@ const DrawerUnit = (props) => {
         onClose={onClose}
         className="unit-drawer"
         styles={{
-          header: {
-            backgroundColor: "#f0f2f5",
-          },
           body: {
             border: "2px solid #f0f2f5",
           },
+          footer: {
+            backgroundColor: "#f0f2f5",
+            border: "2px solid #f0f2f5",
+            display: "flex",
+            justifyContent: "flex-end"
+          },
+          
         }}
-        extra={
+        footer={
           !formDisabled ? (
             <Space>
               <Button
@@ -249,7 +276,7 @@ const DrawerUnit = (props) => {
               </Button>
             </Space>
           ) : (
-            <Tooltip title="Edit" color="#52c41a" placement="left">
+            
               <FiEdit
                 color={"rgb(22, 119, 255)"}
                 style={{ fontSize: "20px" }}
@@ -258,7 +285,6 @@ const DrawerUnit = (props) => {
                   setFormDisabled(false);
                 }}
               />
-            </Tooltip>
           )
         }
       >

@@ -38,3 +38,60 @@ export const singOut = async () => {
     return "error";
   }
 };
+
+export const getOtp = async (email) => {
+  try {
+    const res = await fetch(`${urls.baseURl}${urls.get.otp}?email=${email}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (res.status === 200) return "success";
+    else if (res.status === 400) return "userNotFound";
+    else return "fail";
+  } catch (error) {
+    return "fail";
+  }
+};
+
+export const setPass = async (token, pass) => {
+  try {
+    const res = await fetch(`${urls.baseURl}${urls.post.setPassword}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify({ token, pass }),
+    });
+
+    if (res.status === 200) return "success";
+    else if (res.status === 401) return "unauthorized";
+    else if (res.status === 400) return "passSet";
+    else return "fail";
+  } catch (error) {
+    console.error(error);
+    return "fail";
+  }
+};
+
+export const postOtp = async (email, otp) => {
+  try {
+    const res = await fetch(`${urls.baseURl}${urls.post.otp}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, otp }),
+    });
+    console.log(res, "res token");
+    const token = await res.json();
+    console.log(token, "token");
+    if (res.status === 200) return { status: "success", token };
+    else if (res.status === 400) return { status: "otpIncorrect" };
+    else return { status: "fail" };
+  } catch (error) {
+    return { status: "fail" };
+  }
+};

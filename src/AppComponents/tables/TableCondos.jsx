@@ -6,7 +6,8 @@ import { HomeBreadcrumb } from "../../utilities/HeaderBreadcrumbs";
 import DrawerCondos from "../drawers/DrawerCondos";
 import Columns from "../../utilities/TableColumns/CondoColumns";
 import { useLoaderData, useNavigation } from "react-router-dom";
-import { getCondos } from "../../utilities/fetchData";
+import urls from "../../utilities/urls.json";
+import { apiService } from "../../utilities/apiService";
 
 const TableCondos = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -32,7 +33,9 @@ const TableCondos = () => {
 
   const fetchData = async () => {
     setTableLoading(true);
-    const data = await getCondos();
+    const data = await apiService.get(
+      `${urls.baseURl}${urls.get.condosForAdmin}`
+    );
     if (data.length > 0) {
       setData(data);
     } else {
@@ -62,6 +65,7 @@ const TableCondos = () => {
         Add New Condo
       </Button>
       <DrawerCondos
+      superAdmin={true}
         drawerOpen={drawerOpen}
         setDrawerOpen={setDrawerOpen}
         editRecord={editRecord}

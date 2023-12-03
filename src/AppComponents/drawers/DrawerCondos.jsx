@@ -16,15 +16,21 @@ import {
   Tooltip,
   Modal,
 } from "antd";
-import {
-  createCondo,
-  getUsersOptions,
-  updateCondo,
-  deleteCondo,
-} from "../../utilities/fetchData";
+import urls from "../../utilities/urls.json";
+import { apiService } from "../../utilities/apiService";
 
 const DrawerCondos = (props) => {
-  const { drawerOpen, setDrawerOpen, editRecord, isEdit, fetchData } = props;
+  DrawerCondos.defaultProps = {
+    superAdmin: false,
+  };
+  const {
+    drawerOpen,
+    setDrawerOpen,
+    editRecord,
+    isEdit,
+    fetchData,
+    superAdmin,
+  } = props;
   const [submitDisabled, setSubmitDisabled] = useState(true);
   const [SubmitLoading, setSubmitLoading] = useState(false);
   const [formDisabled, setFormDisabled] = useState(true);
@@ -54,7 +60,10 @@ const DrawerCondos = (props) => {
       okType: "danger",
       cancelText: "No",
       async onOk() {
-        const res = await deleteCondo(editRecord.condo_id);
+        //const res = await deleteCondo(editRecord.condo_id);
+        const res = await apiService.delete(
+          `${urls.baseURl}${urls.delete.deleteCondo}${editRecord.condo_id}`
+        );
         if (res === "success") {
           msg("success", "Condo Deleted");
           setSubmitted(true);
@@ -109,7 +118,11 @@ const DrawerCondos = (props) => {
 
   const handleSubmitNew = async () => {
     const record = getNeededFormValues();
-    const res = await createCondo(record);
+    //const res = await createCondo(record);
+    const res = await apiService.post(
+      `${urls.baseURl}${urls.post.createCondo}`,
+      record
+    );
     setSubmitLoading(false);
     if (res !== "fail") {
       form.setFieldValue("condo_id", res);
@@ -124,7 +137,11 @@ const DrawerCondos = (props) => {
 
   const handleSubmitEdit = async () => {
     const record = getNeededFormValues();
-    const res = await updateCondo(editRecord.condo_id, record);
+    //const res = await updateCondo(editRecord.condo_id, record);
+    const res = await apiService.put(
+      `${urls.baseURl}${urls.put.updateCondo}${editRecord.condo_id}`,
+      record
+    );
     setSubmitLoading(false);
     if (res === "success") {
       setSubmitDisabled(true);
@@ -159,10 +176,14 @@ const DrawerCondos = (props) => {
 
   useEffect(() => {
     if (drawerOpen) {
-      const res = getUsersOptions();
-      res.then((data) => {
-        setTowingDriverSelection(data);
-      });
+      const res = apiService.get(`${urls.baseURl}${urls.get.usersForSelect}`);
+      res
+        .then((data) => {
+          setTowingDriverSelection(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [drawerOpen]);
 
@@ -186,14 +207,17 @@ const DrawerCondos = (props) => {
         onClose={onClose}
         open={drawerOpen}
         styles={{
-          header: {
-            backgroundColor: "#f0f2f5",
-          },
           body: {
             marginTop: 20,
           },
+          footer: {
+            backgroundColor: "#f0f2f5",
+            border: "2px solid #f0f2f5",
+            display: "flex",
+            justifyContent: "flex-end",
+          },
         }}
-        extra={
+        footer={
           !formDisabled ? (
             <Space>
               <Button
@@ -217,16 +241,14 @@ const DrawerCondos = (props) => {
               </Button>
             </Space>
           ) : (
-            <Tooltip title="Edit" color="#52c41a" placement="left">
-              <FiEdit
-                color={"rgb(22, 119, 255)"}
-                style={{ fontSize: "20px" }}
-                className="edit-icon"
-                onClick={() => {
-                  setFormDisabled(false);
-                }}
-              />
-            </Tooltip>
+            <FiEdit
+              color={"rgb(22, 119, 255)"}
+              style={{ fontSize: "20px" }}
+              className="edit-icon"
+              onClick={() => {
+                setFormDisabled(false);
+              }}
+            />
           )
         }
       >
@@ -416,7 +438,7 @@ const DrawerCondos = (props) => {
             </Col>
           </Row>
         </Form>
-        {isEdit && (
+        {isEdit && superAdmin && (
           <Row gutter={16} key={"6"}>
             <Col span={24}>
               <Tooltip title="Delete Condo" color="red" placement="top">

@@ -1,4 +1,5 @@
-import { Table, Button } from "antd";
+import { Table, Empty } from "antd";
+import { IoAdd } from "react-icons/io5";
 import { useParams, useLoaderData } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../Context/AppContext";
@@ -6,7 +7,9 @@ import { MessageContext } from "../../Context/MessageContext";
 import { UsersInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
 import Columns from "../../utilities/TableColumns/UsersColumns";
 import DrawerUser from "../drawers/DrawerUsers";
-import { getUsers } from "../../utilities/fetchData";
+import urls from "../../utilities/urls.json";
+import { apiService } from "../../utilities/apiService";
+import SidePanel from "../adminComponents/SidePanel";
 
 const TableUsers = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -14,15 +17,23 @@ const TableUsers = () => {
   const [editRecord, setEditRecord] = useState(null);
   const [tableLoading, setTableLoading] = useState(false);
   const [data, setData] = useState(useLoaderData());
+  const [filterdData, setFilterdData] = useState(useLoaderData());
   const { condoId } = useParams();
   const { setAppInnerHeadContent } = useContext(AppContext);
   const { msg } = useContext(MessageContext);
 
+  const handleFilter = (value, _e, info) => {
+    const filterd = data.filter((item) => {
+      return item.email.toLowerCase().includes(value.toLowerCase());
+    });
+    setFilterdData(filterd);
+  };
+
   const handleSettingsOpen = (record) => {
-      setIsEdit(true);
-      setEditRecord(record);
-      console.log(record);
-      setDrawerOpen(true);
+    setIsEdit(true);
+    setEditRecord(record);
+    console.log(record);
+    setDrawerOpen(true);
   };
 
   const handleNewUserOpen = () => {
@@ -33,9 +44,12 @@ const TableUsers = () => {
 
   const fetchData = async () => {
     setTableLoading(true);
-    const data = await getUsers(condoId);
+    const data = await apiService.get(
+      `${urls.baseURl}${urls.get.usersForCondo}${condoId}`
+    );
     if (data.length > 0) {
       setData(data);
+      setFilterdData(data);
     } else {
       msg("error", "Error Getting Data");
     }
@@ -49,40 +63,48 @@ const TableUsers = () => {
 
   return (
     <>
-      <Button
-        type="primary"
-        onClick={handleNewUserOpen}
-        style={{ marginBlock: 16, width: "100%", backgroundColor: "#52c41a" }}
-      >
-        Add New User
-      </Button>
-      <DrawerUser
-        drawerOpen={drawerOpen}
-        setDrawerOpen={setDrawerOpen}
-        editRecord={editRecord}
-        isEdit={isEdit}
-        fetchData={fetchData}
-      />
-      <Table
-        columns={Columns()}
-        dataSource={data}
-        rowKey={(record) => record.user_id}
-        onRow={(record, rowIndex) => {
-          return {
-            onClick: (event) => {
-              handleSettingsOpen(record);
-            },
-          };
-        }}
-        rowClassName={(record, rowIndex) => "row-table-users"}
-        pagination={{
-          defaultPageSize: 5,
-          showSizeChanger: true,
-          pageSizeOptions: ["5", "10", "15"],
-          position: "bottomCenter",
-        }}
-        loading={tableLoading}
-      />
+      <div className="container">
+        <SidePanel handleFilter={handleFilter} createNew={handleNewUserOpen} />
+        <div className="table">
+          <DrawerUser
+            drawerOpen={drawerOpen}
+            setDrawerOpen={setDrawerOpen}
+            editRecord={editRecord}
+            isEdit={isEdit}
+            fetchData={fetchData}
+          />
+          <Table
+            columns={Columns()}
+            dataSource={filterdData}
+            rowKey={(record) => record.user_id}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  handleSettingsOpen(record);
+                },
+              };
+            }}
+            rowClassName={(record, rowIndex) => "row-table-users"}
+            pagination={{
+              defaultPageSize: 5,
+              showSizeChanger: true,
+              pageSizeOptions: ["5", "10", "15"],
+              position: "bottomCenter",
+            }}
+            locale={{
+              emptyText: (
+                <Empty
+                  description={<span>No Data</span>}
+                  imageStyle={{ fontSize: 35 }}
+                >
+                  <IoAdd className="add-icon" onClick={handleNewUserOpen} />
+                </Empty>
+              ),
+            }}
+            loading={tableLoading}
+          />
+        </div>
+      </div>
     </>
   );
 };

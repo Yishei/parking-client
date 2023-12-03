@@ -6,41 +6,43 @@ import { Breadcrumb, Card, Layout } from "antd";
 import AppHeader from "./AppHeader";
 import CustomLoadingIndecator from "../GlobalComponents/CustomLoadingIndecator";
 import { Helmet } from "react-helmet";
-const { Content, Footer } = Layout;
+const { Footer } = Layout;
 
 const AppBody = () => {
   const navigation = useNavigation();
   const { appInnerHeadContent, loading } = useContext(AppContext);
 
   return (
-    <Layout>
+    <Layout
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+    >
       <Helmet>
         <title>{appInnerHeadContent.name}</title>
       </Helmet>
       <AppHeader />
-      <Content>
-        <div className="app-div-container">
-          <CustomLoadingIndecator
-            loading={navigation.state === "loading" ? true : loading}
+      <div className="app-div-container">
+        <CustomLoadingIndecator
+          loading={navigation.state === "loading" ? true : loading}
+        >
+          <Card
+            title={
+              <>
+                <Breadcrumb items={appInnerHeadContent.breadcrumbItems} />
+                <div style={{ color: "#52c41a" }}>
+                  {appInnerHeadContent.name}
+                </div>
+              </>
+            }
+            headStyle={mainCardHeadStyle}
+            bodyStyle={mainCardStyle}
           >
-            <Card
-              title={
-                <>
-                  <Breadcrumb items={appInnerHeadContent.breadcrumbItems} />
-                  <div style={{ color: "#52c41a" }}>
-                    {appInnerHeadContent.name}
-                  </div>
-                </>
-              }
-              headStyle={mainCardHeadStyle}
-              bodyStyle={mainCardStyle}
-            >
-                <Outlet />
-            </Card>
-          </CustomLoadingIndecator>
-        </div>
-      </Content>
-      <Footer>SafetyHood ©2023 Created by SafetyHood</Footer>
+            <Outlet />
+          </Card>
+        </CustomLoadingIndecator>
+      </div>
+      <Footer style={{ marginTop: "auto" }}>
+        SafetyHood ©2023 Created by SafetyHood
+      </Footer>
     </Layout>
   );
 };

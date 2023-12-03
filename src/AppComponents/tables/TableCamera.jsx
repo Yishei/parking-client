@@ -5,12 +5,9 @@ import { AppContext } from "../../Context/AppContext";
 import { MessageContext } from "../../Context/MessageContext";
 import { CameraInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
 import Columns from "../../utilities/TableColumns/CameraColumns";
-import {
-  getCameras,
-  updateCamera,
-  seeIfCameraExists,
-} from "../../utilities/fetchData";
+import urls from "../../utilities/urls.json";
 import ModalCameras from "../Modals/ModalCameras";
+import { apiService } from "../../utilities/apiService";
 
 const TableCamera = () => {
   const [editingId, setEditingId] = useState("");
@@ -39,7 +36,9 @@ const TableCamera = () => {
 
   const fetchData = async () => {
     setTableLoading(true);
-    const data = await getCameras(lotId);
+    const data = await apiService.get(
+      `${urls.baseURl}${urls.get.camerasForLot}${lotId}`
+    );
     if (data.length > 0) {
       setData(data);
     } else {
@@ -78,7 +77,11 @@ const TableCamera = () => {
 
   const saveUpdate = async () => {
     const record = form.getFieldsValue();
-    const res = await updateCamera(editingId, record);
+    //const res = await updateCamera(editingId, record);
+    const res = await apiService.put(
+      `${urls.baseURl}${urls.put.updateCamera}${editingId}`,
+      record
+    );
     cancel();
     if (res === "success") {
       msg("success", "Camera updated successfully");
@@ -113,10 +116,10 @@ const TableCamera = () => {
               {
                 validator: async (_, value) => {
                   if (value) {
-                    const exists = await seeIfCameraExists(
-                      value,
-                      record.camera_id
+                    const exists = await apiService.get(
+                      `${urls.baseURl}${urls.get.seeIfCamaeraExists}?camId=${value}&uptRcId=${record.camera_id}`
                     );
+
                     if (exists) {
                       return Promise.reject(
                         new Error("This Camera ID Already Exists")

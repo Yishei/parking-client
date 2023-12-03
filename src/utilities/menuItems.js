@@ -1,59 +1,30 @@
-export const CameraTableSelection = [
-  {
-    value: "1",
-    label: "1 (77 forever Dr)",
-  },
-  {
-    value: "2",
-    label: "2 (241 Main St)",
-  },
-];
+import { NavLink } from "react-router-dom";
+import { FaWarehouse } from "react-icons/fa";
+import { PiHouseLight } from "react-icons/pi";
+import { FaUser } from "react-icons/fa";
+import { GoDeviceCameraVideo } from "react-icons/go";
 
-export const LotsTableSelection = [
-  {
-    value: 1,
-    label: "14 mounen",
-  },
-  {
-    value: 2,
-    label: "77 forest rd",
-  },
-];
-
-export const CondoSettingsTowingSelection = [
-  {
-    value: "1",
-    label: "Joe",
-  },
-  {
-    value: "2",
-    label: "John",
-  },
-  {
-    value: "3",
-    label: "Mike",
-  },
-  {
-    value: "4",
-    label: "Bob",
-  },
-  {
-    value: "5",
-    label: "Steve",
-  },
-];
-
-export const testCarList = [
-  {
-    label: "Car 1",
-    value: "car1",
-  },
-  {
-    label: "Car 2",
-    value: "car2",
-  },
-  {
-    label: "Car 3",
-    value: "car3",
-  },
-];
+export const condoAdminRouteOptions = (condoId) => {
+  return [
+    {
+      label: <NavLink to={`/resident/lots/${condoId}`}>Lots</NavLink>,
+      icon : <FaWarehouse />,
+      key: "1",
+    },
+    {
+      label: <NavLink to={`/resident/units/${condoId}`}>Units</NavLink>,
+      icon : <PiHouseLight />,
+      key: "2",
+    },
+    {
+      label: <NavLink to={`/resident/users/${condoId}`}>Users</NavLink>,
+      icon : <FaUser />,
+      key: "3",
+    },
+    {
+      label: <NavLink to={`/resident/logs/${condoId}`}>Camera Logs</NavLink>,
+      icon : <GoDeviceCameraVideo />,
+      key: "4",
+    }
+  ];
+};

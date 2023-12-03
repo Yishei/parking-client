@@ -31,7 +31,7 @@ const HeadPopover = () => {
         <List.Item>
           <List.Item.Meta
             avatar={<LogoutOutlined />}
-            title={<NavLink to="/logOut">Logout</NavLink>}
+            title={<NavLink to="/logIn">Logout</NavLink>}
           />
         </List.Item>
       </List>

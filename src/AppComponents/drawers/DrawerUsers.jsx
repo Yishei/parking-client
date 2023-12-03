@@ -22,13 +22,8 @@ import {
   Tooltip,
   Modal,
 } from "antd";
-import {
-  updateUser,
-  createUser,
-  seeIfPhoneExists,
-  seeIfEmailExists,
-  deleteUser,
-} from "../../utilities/fetchData";
+import urls from "../../utilities/urls.json";
+import { apiService } from "../../utilities/apiService";
 const { confirm } = Modal;
 
 const DrawerUser = (props) => {
@@ -63,7 +58,10 @@ const DrawerUser = (props) => {
       okType: "danger",
       cancelText: "No",
       async onOk() {
-        const res = await deleteUser(editRecord.user_id);
+        //const res = await deleteUser(editRecord.user_id);
+        const res = await apiService.delete(
+          `${urls.baseURl}${urls.delete.deleteUser}${editRecord.user_id}`
+        );
         if (res === "success") {
           msg("success", "Condo Deleted");
           setSubmitted(true);
@@ -121,7 +119,11 @@ const DrawerUser = (props) => {
 
   const handleSubmitNew = async () => {
     const record = getNeededFormValues();
-    const res = await createUser(record);
+    //const res = await createUser(record);
+    const res = await apiService.post(
+      `${urls.baseURl}${urls.post.createUser}`,
+      record
+    );
     setSubmitLoading(false);
     if (res !== "fail") {
       form.setFieldValue("user_id", res);
@@ -136,7 +138,11 @@ const DrawerUser = (props) => {
 
   const handleSubmitEdit = async () => {
     const record = getNeededFormValues();
-    const res = await updateUser(editRecord.user_id, record);
+    //const res = await updateUser(editRecord.user_id, record);
+    const res = await apiService.put(
+      `${urls.baseURl}${urls.put.updateUser}${editRecord.user_id}`,
+      record
+    ); //`${urls.baseURl}${urls.put.updateUser}${editingId}`,
     setSubmitLoading(false);
     if (res === "success") {
       setSubmitDisabled(true);
@@ -167,6 +173,26 @@ const DrawerUser = (props) => {
     };
   };
 
+  const validatePhoneNumber = async (_, value) => {
+    if (value && value.toString().length !== 11) {
+      return Promise.reject("Phone Number should be 11 digits");
+    }
+
+    if (value) {
+      let url = `${urls.baseURl}${urls.get.seeIfPhoneExists}?phone=${value}`;
+      if (isEdit) {
+        url += `&uptRcId=${editRecord.user_id}`;
+      }
+
+      const exists = await apiService.get(url);
+      if (exists) {
+        return Promise.reject(new Error("This Phone Number Already Exists"));
+      }
+    }
+
+    return Promise.resolve();
+  };
+
   useEffect(() => {
     if (!isEdit && drawerOpen) {
       setFormDisabled(false);
@@ -188,14 +214,17 @@ const DrawerUser = (props) => {
         onClose={onClose}
         open={drawerOpen}
         styles={{
-          header: {
-            backgroundColor: "#f0f2f5",
-          },
           body: {
             paddingBottom: 80,
           },
+          footer: {
+            backgroundColor: "#f0f2f5",
+            border: "2px solid #f0f2f5",
+            display: "flex",
+            justifyContent: "flex-end"
+          },
         }}
-        extra={
+        footer={
           !formDisabled ? (
             <Space>
               <Button
@@ -219,7 +248,6 @@ const DrawerUser = (props) => {
               </Button>
             </Space>
           ) : (
-            <Tooltip title="Edit" color="#52c41a" placement="left">
               <FiEdit
                 color={"rgb(22, 119, 255)"}
                 style={{ fontSize: "20px" }}
@@ -228,7 +256,6 @@ const DrawerUser = (props) => {
                   setFormDisabled(false);
                 }}
               />
-            </Tooltip>
           )
         }
       >
@@ -252,9 +279,9 @@ const DrawerUser = (props) => {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item name="is_active" label="Is Active" >
+              <Form.Item name="is_active" label="Is Active">
                 <Switch
-                disabled= {true}
+                  disabled={true}
                   checkedChildren="Active"
                   unCheckedChildren="Inactive"
                   checked={userActive}
@@ -302,12 +329,14 @@ const DrawerUser = (props) => {
                   {
                     validator: async (_, value) => {
                       if (value) {
-                        const exists = isEdit
-                          ? await seeIfEmailExists(value, editRecord.user_id)
-                          : await seeIfEmailExists(value);
+                        let url = `${urls.baseURl}${urls.get.seeIfEmailExists}?email=${value}`;
+                        if (isEdit) {
+                          url += `&uptRcId=${editRecord.user_id}`;
+                        }
+                        const exists = await apiService.get(url);
                         if (exists) {
                           return Promise.reject(
-                            new Error("This Email Already Exists")
+                            new Error("This Phone Number Already Exists")
                           );
                         }
                       }
@@ -335,29 +364,7 @@ const DrawerUser = (props) => {
                     message: "Please enter a Phone Number",
                   },
                   {
-                    validator: (_, value) => {
-                      if (value && value.toString().length !== 11) {
-                        return Promise.reject(
-                          "Phone Number should be 11 digits"
-                        );
-                      }
-                      return Promise.resolve();
-                    },
-                  },
-                  {
-                    validator: async (_, value) => {
-                      if (value) {
-                        const exists = isEdit
-                          ? await seeIfPhoneExists(value, editRecord.user_id)
-                          : await seeIfPhoneExists(value);
-                        if (exists) {
-                          return Promise.reject(
-                            new Error("This Phone Number Already Exists")
-                          );
-                        }
-                      }
-                      return Promise.resolve();
-                    },
+                    validator: validatePhoneNumber,
                   },
                 ]}
               >
@@ -387,29 +394,7 @@ const DrawerUser = (props) => {
                 label="Phone Number (Secondary)"
                 rules={[
                   {
-                    validator: (_, value) => {
-                      if (value && value.toString().length !== 11) {
-                        return Promise.reject(
-                          "Phone Number should be 11 digits"
-                        );
-                      }
-                      return Promise.resolve();
-                    },
-                  },
-                  {
-                    validator: async (_, value) => {
-                      if (value) {
-                        const exists = isEdit
-                          ? await seeIfPhoneExists(value, editRecord.user_id)
-                          : await seeIfPhoneExists(value);
-                        if (exists) {
-                          return Promise.reject(
-                            new Error("This Phone Number Already Exists")
-                          );
-                        }
-                      }
-                      return Promise.resolve();
-                    },
+                    validator: validatePhoneNumber,
                   },
                 ]}
               >

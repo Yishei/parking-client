@@ -9,6 +9,7 @@ export const mainCardHeadStyle = {
 
 export const mainCardStyle = {
   width: "100%",
+  height: "100%",
   backgroundColor: "transparent",
 };
 

@@ -24,6 +24,7 @@ import TableUnits from "../AppComponents/tables/TableUnits";
 import TableUsers from "../AppComponents/tables/TableUsers";
 import TableCamera from "../AppComponents/tables/TableCamera";
 import TableLogs from "../AppComponents/tables/TableLogs";
+import CondoPage from "../AppComponents/adminComponents/CondoPage";
 
 const baseurl = urls.baseURl;
 
@@ -31,8 +32,8 @@ const appRoutes = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<GlobalBody />} errorElement={<ErrorBoundary />}>
-        <Route path="logIn" element={<LoginForm />} />
-        <Route path="logOut" element={<LoginForm />} loader={() => singOut()} />
+        {/* <Route path="logIn" element={<LoginForm />} /> */}
+        <Route path="logIn" element={<LoginForm />} loader={() => singOut()} />
         <Route path="forgotPassword" element={<OtpReq />} />
         <Route path="resetPassword/:token" element={<PasswordSetUp />} />
         <Route path="notFound" element={<NotFound />} />
@@ -43,8 +44,48 @@ const appRoutes = createBrowserRouter(
         <Route path="driver" element={<div>driver</div>}>
           {/* All driver routes */}
         </Route>
-        <Route path="resident" element={<div>resident</div>}>
+        <Route path="resident" element={<CondoPage />}>
           {/* All resident routes */}
+          <Route
+          index
+          element={<ErrorPage/>}
+          />
+          <Route
+            path="lots/:condoId"
+            element={<TableLots />}
+            loader={(params) =>
+              apiService.get(
+                `${baseurl}${urls.get.lotsForCondo}${params.params.condoId}`
+              )
+            }
+          />
+          <Route
+            path="units/:condoId"
+            element={<TableUnits />}
+            loader={(params) =>
+              apiService.get(
+                `${baseurl}${urls.get.unitsForCondo}${params.params.condoId}`
+              )
+            }
+          />
+          <Route
+            path="users/:condoId"
+            element={<TableUsers />}
+            loader={(params) =>
+              apiService.get(
+                `${baseurl}${urls.get.usersForCondo}${params.params.condoId}`
+              )
+            }
+          />
+          <Route
+            path="logs/:condoId"
+            element={<TableLogs />}
+            loader={(params) =>
+              apiService.get(
+                `${baseurl}${urls.get.logsForCondo}${params.params.condoId}`
+              )
+            }
+          />
         </Route>
         <Route path="admin" element={<AppBody />}>
           <Route
@@ -91,11 +132,11 @@ const appRoutes = createBrowserRouter(
             }
           />
           <Route
-            path="lots/logs/:lotId"
+            path="logs/:condoId"
             element={<TableLogs />}
             loader={(params) =>
               apiService.get(
-                `${baseurl}${urls.get.logsForLot}${params.params.lotId}`
+                `${baseurl}${urls.get.logsForLot}${params.params.condoId}`
               )
             }
           />

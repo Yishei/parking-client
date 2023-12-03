@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { MessageContext } from "../../Context/MessageContext";
 import { Button, Col, Form, Input, InputNumber, Modal, Row } from "antd";
-import { createCamera, seeIfCameraExists } from "../../utilities/fetchData";
 import { useParams } from "react-router-dom";
+import urls from "../../utilities/urls.json";
+import { apiService } from "../../utilities/apiService";
 
 const ModalCameras = (props) => {
   const { drawerOpen, setDrawerOpen, fetchData } = props;
@@ -39,7 +40,11 @@ const ModalCameras = (props) => {
   };
 
   const handleSubmitNew = async () => {
-    const res = await createCamera(form.getFieldsValue());
+    //const res = await createCamera(form.getFieldsValue());
+    const res = await apiService.post(
+      `${urls.baseURl}${urls.post.createCamera}`,
+      form.getFieldsValue()
+    );
     console.log(res, "res");
     setSubmitLoading(false);
 
@@ -100,7 +105,10 @@ const ModalCameras = (props) => {
                   {
                     validator: async (_, value) => {
                       if (value) {
-                        const exists = await seeIfCameraExists(value);
+                        // const exists = await seeIfCameraExists(value);
+                        const exists = await apiService.get(
+                          `${urls.baseURl}${urls.get.seeIfCamaeraExists}?camId=${value}`
+                        );
                         if (exists) {
                           return Promise.reject(
                             new Error("This Camera ID Already Exists")

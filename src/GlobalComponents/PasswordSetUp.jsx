@@ -5,7 +5,7 @@ import SignUpSuccess from "./SignUpSuccess";
 import { LockOutlined } from "@ant-design/icons";
 import { useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { setPass } from "../utilities/fetchData";
+import { setPass } from "../utilities/AuthFunctionality.js";
 const { Footer } = Layout;
 
 const PasswordSetUp = () => {

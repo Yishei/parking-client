@@ -4,10 +4,11 @@ import {
   DeleteTwoTone,
   ExclamationCircleOutlined,
 } from "@ant-design/icons";
-import { deleteCamera } from "../fetchData";
+import urls from "../urls.json";
 import { FiEdit } from "react-icons/fi";
 import { FcCancel } from "react-icons/fc";
 import { AiTwotoneSave } from "react-icons/ai";
+import { apiService } from "../apiService";
 const { confirm } = Modal;
 
 const CameraColumns = (
@@ -35,7 +36,10 @@ const CameraColumns = (
       okType: "danger",
       cancelText: "No",
       async onOk() {
-        const res = await deleteCamera(record.camera_id);
+        //const res = await deleteCamera(record.camera_id);
+        const res = await apiService.delete(
+          `${urls.baseURl}${urls.delete.deleteCamera}${record.camera_id}`
+        );
         if (res === "success") {
           await handleDeleteSuccess();
         } else {
@@ -90,20 +94,20 @@ const CameraColumns = (
             style={{ justifyContent: "center", width: "100%" }}
           >
             {/* <Tooltip title="Save" color="#52c41a" placement="top"> */}
-              <AiTwotoneSave
-                color={"rgb(82, 196, 26)"}
-                style={{ fontSize: "17px" }}
-                onClick={() => Save(record.lot_id)}
-                className="save-icon"
-              />
+            <AiTwotoneSave
+              color={"rgb(82, 196, 26)"}
+              style={{ fontSize: "17px" }}
+              onClick={() => Save(record.lot_id)}
+              className="save-icon"
+            />
             {/* </Tooltip> */}
 
             {/* <Tooltip title="Cancel" color="#52c41a" placement="top"> */}
-              <FcCancel
-                style={{ fontSize: "17px" }}
-                onClick={() => cancel()}
-                className="cancel-icon"
-              />
+            <FcCancel
+              style={{ fontSize: "17px" }}
+              onClick={() => cancel()}
+              className="cancel-icon"
+            />
             {/* </Tooltip> */}
           </Space>
         ) : (
@@ -112,21 +116,21 @@ const CameraColumns = (
             style={{ justifyContent: "center", width: "100%" }}
           >
             {/* <Tooltip title="Edit" color="#52c41a" placement="top"> */}
-              <FiEdit
-                color={"rgb(22, 119, 255)"}
-                style={{ fontSize: "17px" }}
-                onClick={() => edit(record)}
-                disabled={editingId !== ""}
-                className="edit-icon"
-              />
+            <FiEdit
+              color={"rgb(22, 119, 255)"}
+              style={{ fontSize: "17px" }}
+              onClick={() => edit(record)}
+              disabled={editingId !== ""}
+              className="edit-icon"
+            />
             {/* </Tooltip> */}
             {/* <Tooltip title="Delete" color="red" placement="top"> */}
-              <DeleteTwoTone
-                twoToneColor={"#eb2f96"}
-                style={{ fontSize: "17px" }}
-                onClick={() => showConfirm(record)}
-                className="edit-icon"
-              />
+            <DeleteTwoTone
+              twoToneColor={"#eb2f96"}
+              style={{ fontSize: "17px" }}
+              onClick={() => showConfirm(record)}
+              className="edit-icon"
+            />
             {/* </Tooltip> */}
           </Space>
         );

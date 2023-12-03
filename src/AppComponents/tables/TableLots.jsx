@@ -1,54 +1,62 @@
-import { Table, Form, Button, Select, Input, Switch } from "antd";
+import { Table, Form, Input, Switch, Empty } from "antd";
+import { IoAdd } from "react-icons/io5";
+import urls from "../../utilities/urls.json";
 import { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../Context/AppContext";
 import { MessageContext } from "../../Context/MessageContext";
 import { LotInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
-import { useParams, useLoaderData, NavLink } from "react-router-dom";
+import { useParams, useLoaderData } from "react-router-dom";
 import Columns from "../../utilities/TableColumns/LotsColumns";
-import {
-  getCondosOptions,
-  getLots,
-  updateLot,
-} from "../../utilities/fetchData";
 import ModalLots from "../Modals/ModalLots";
+import { apiService } from "../../utilities/apiService";
+import SidePanel from "../adminComponents/SidePanel";
 
 const TableLots = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [editingId, setEditingId] = useState("");
   const [tableLoading, setTableLoading] = useState(false);
-  const [lotsTableSelections, setLotsTableSelections] = useState([]);
   const [data, setData] = useState(useLoaderData());
+  const [filterdData, setFilterdData] = useState(useLoaderData());
   const [form] = Form.useForm();
   const { setAppInnerHeadContent } = useContext(AppContext);
   const { condoId } = useParams();
   const { msg } = useContext(MessageContext);
   const isEditing = (record) => record.lot_id === editingId;
 
-  const filterOption = (input, option) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+  const handleFilter = (value, _e, info) => {
+    const filterd = data.filter((item) => {
+      return item.lot_name.toLowerCase().includes(value.toLowerCase());
+    });
+    setFilterdData(filterd);
+  };
 
-    const handleDeleteSuccess =  async() => {
-      msg("success", "Lot deleted successfully");
-      await fetchData();
-    }
+  const createNewBtnHandler = () => {
+    setDrawerOpen(true);
+    cancel();
+  };
 
-    const handleDeleteError = () => {
-      msg("error", "Error deleting lot");
-    }
+  const handleDeleteSuccess = async () => {
+    msg("success", "Lot deleted successfully");
+    await fetchData();
+  };
+
+  const handleDeleteError = () => {
+    msg("error", "Error deleting lot");
+  };
 
   useEffect(() => {
     const headInfo = LotInfoBredcrumb({ id: condoId });
     setAppInnerHeadContent(headInfo);
-    getCondosOptions().then((res) => {
-      setLotsTableSelections(res);
-    });
   }, [setAppInnerHeadContent, condoId]);
 
   const fetchData = async () => {
     setTableLoading(true);
-    const data = await getLots(condoId);
+    const data = await apiService.get(
+      `${urls.baseURl}${urls.get.lotsForCondo}${condoId}`
+    );
     if (data.length > 0) {
       setData(data);
+      setFilterdData(data);
     } else {
       msg("error", "Error Getting Data");
     }
@@ -81,7 +89,11 @@ const TableLots = () => {
 
   const saveUpdate = async () => {
     const record = form.getFieldsValue();
-    const res = await updateLot(editingId, record);
+    const res = await apiService.put(
+      `${urls.baseURl}${urls.put.updateLot}${editingId}`,
+      record
+    );
+    console.log(res, "reds");
     cancel();
     if (res === "success") {
       msg("success", "Lot updated successfully");
@@ -105,21 +117,10 @@ const TableLots = () => {
     const inputNode =
       inputType === "text" ? (
         <Input maxLength={40} />
-      ) : inputType === "boolean" ? (
-        <Switch defaultChecked={record.locked} checkedChildren="Locked" />
       ) : (
-        <Select
-          options={selectItems}
-          showSearch
-          allowClear
-          optionFilterProp="children"
-          filterOption={filterOption}
-          notFoundContent={
-            <div>
-              Driver Not Fownd <NavLink to={`/app`}>create one</NavLink>
-            </div>
-          }
-        />
+        inputType === "boolean" && (
+          <Switch defaultChecked={record.locked} checkedChildren="Locked" />
+        )
       );
     return (
       <td {...restProps}>
@@ -151,52 +152,63 @@ const TableLots = () => {
     edit,
     cancel,
     save,
-    lotsTableSelections,
     handleDeleteSuccess,
     handleDeleteError
   );
 
-
-
   return (
     <>
-      <Button
-        type="primary"
-        onClick={() => {
-          setDrawerOpen(true);
-          cancel();
-        }}
-        style={{ marginBlock: 16, width: "100%", backgroundColor: "#52c41a" }}
-      >
-        Add New Lot
-      </Button>
-      <Form form={form} component={false}>
-        <ModalLots
-        drawerOpen={drawerOpen}
-        setDrawerOpen={setDrawerOpen}
-        fetchData={fetchData}
+      <div className="container">
+        <SidePanel
+          handleFilter={handleFilter}
+          createNew={createNewBtnHandler}
         />
-        <Table
-          components={{
-            body: {
-              cell: EditableCell,
-            },
-          }}
-          columns={columns}
-          dataSource={data}
-          rowKey={(record) => record.lot_id}
-          pagination={{
-            defaultPageSize: 5,
-            showSizeChanger: true,
-            pageSizeOptions: ["5", "10", "15"],
-            position: "bottomCenter",
-          }}
-          onChange={() => {
-            cancel();
-          }}
-          loading={tableLoading}
-        />
-      </Form>
+        <div className="table">
+          <Form form={form} component={false}>
+            <ModalLots
+              drawerOpen={drawerOpen}
+              setDrawerOpen={setDrawerOpen}
+              fetchData={fetchData}
+            />
+            <Table
+              components={{
+                body: {
+                  cell: EditableCell,
+                },
+              }}
+              columns={columns}
+              dataSource={filterdData}
+              rowKey={(record) => record.lot_id}
+              pagination={{
+                defaultPageSize: 5,
+                showSizeChanger: true,
+                pageSizeOptions: ["5", "10", "15"],
+                position: "bottomCenter",
+              }}
+              locale={{
+                emptyText: (
+                  <Empty
+                    description={<span>No Data</span>}
+                    imageStyle={{ fontSize: 35 }}
+                  >
+                    <IoAdd
+                      className="add-icon"
+                      onClick={() => {
+                        setDrawerOpen(true);
+                        cancel();
+                      }}
+                    />
+                  </Empty>
+                ),
+              }}
+              onChange={() => {
+                cancel();
+              }}
+              loading={tableLoading}
+            />
+          </Form>
+        </div>
+      </div>
     </>
   );
 };

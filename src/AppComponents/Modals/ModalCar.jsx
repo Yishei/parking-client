@@ -7,12 +7,8 @@ import {
 import { FiEdit } from "react-icons/fi";
 import { useEffect, useState, useContext } from "react";
 import { MessageContext } from "../../Context/MessageContext";
-import {
-  updateCar,
-  createCar,
-  deleteCar,
-  seeIfCarIsLocked,
-} from "../../utilities/fetchData";
+import urls from "../../utilities/urls.json";
+import { apiService } from "../../utilities/apiService";
 
 const ModalCar = (props) => {
   const { car, open, setOpen, unitId, isEdit, fetchCars } = props;
@@ -26,7 +22,7 @@ const ModalCar = (props) => {
 
   const showConfirm = () => {
     confirm({
-      title: "Do you Want to delete this condo?",
+      title: "Do you Want to delete this Car?",
       icon: <ExclamationCircleOutlined />,
       content: (
         <div>
@@ -40,7 +36,12 @@ const ModalCar = (props) => {
       okType: "danger",
       cancelText: "No",
       async onOk() {
-        const res = await deleteCar(car.car_id);
+        //const res = await deleteCar(car.car_id);
+        msg("loading", "Deleting Car...");
+        const res = await apiService.delete(
+          `${urls.baseURl}${urls.delete.deleteCar}${car.car_id}`
+        );
+        console.log(res, "res");
         if (res === "success") {
           msg("success", "Car Deleted");
           setSubmitted(true);
@@ -59,6 +60,7 @@ const ModalCar = (props) => {
     setFormDisabled(true);
     setSubmitDisabled(true);
     if (submitted) {
+      console.log("submitted and closed");
       fetchCars();
       setSubmitted(false);
     }
@@ -95,7 +97,11 @@ const ModalCar = (props) => {
     const record = form.getFieldsValue();
     record.plate_number = record.plate_number.toLowerCase();
     record.unit_id = unitId;
-    const res = await createCar(record);
+    //const res = await createCar(record);
+    const res = await apiService.post(
+      `${urls.baseURl}${urls.post.createCar}`,
+      record
+    );
     setSubmitLoading(false);
     if (res !== "fail") {
       setFormDisabled(true);
@@ -110,7 +116,11 @@ const ModalCar = (props) => {
   const handleSubmitEdit = async () => {
     const record = form.getFieldsValue();
     record.plate_number = record.plate_number.toLowerCase();
-    const res = await updateCar(car.car_id, record);
+    //const res = await updateCar(car.car_id, record);
+    const res = await apiService.put(
+      `${urls.baseURl}${urls.put.updateCar}${car.car_id}`,
+      record
+    ); //`${urls.baseURl}${urls.put.updateCar}${car.car_id}
     setSubmitLoading(false);
     if (res === "success") {
       setSubmitDisabled(true);
@@ -190,7 +200,7 @@ const ModalCar = (props) => {
             ) : (
               <img
                 alt="example"
-                src={`http://localhost:5050/condoAdmin/image/unit/car/${car.car_id}?w=175&h=130`}
+                src={`http://localhost:5050/api/image/unit/car/${car.car_id}?w=175&h=130`}
                 style={{
                   borderRadius: 5,
                 }}
@@ -260,8 +270,10 @@ const ModalCar = (props) => {
                   {
                     validator: async (_, value) => {
                       if (value) {
-                        const exists = await seeIfCarIsLocked(value);
-                        if (exists) {
+                        const locked = await apiService.get(
+                          `${urls.baseURl}${urls.get.seeIfCarIsLocked}${value}`
+                        );
+                        if (locked) {
                           return Promise.reject(
                             new Error("This Car is Locked")
                           );

@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { MessageContext } from "../../Context/MessageContext";
 import { Button, Col, Form, Input, Modal, Row } from "antd";
-import { createLot } from "../../utilities/fetchData";
+import urls from "../../utilities/urls.json";
+import { apiService } from "../../utilities/apiService";
 import { useParams } from "react-router-dom";
 
 const ModalLots = (props) => {
@@ -39,7 +40,11 @@ const ModalLots = (props) => {
   };
 
   const handleSubmitNew = async () => {
-    const res = await createLot(form.getFieldsValue());
+    //const res = await createLot(form.getFieldsValue());
+    const res = await apiService.post(
+      `${urls.baseURl}${urls.post.createLot}`,
+      form.getFieldsValue()
+    );
     console.log(res, "res");
     setSubmitLoading(false);
 
@@ -66,7 +71,7 @@ const ModalLots = (props) => {
     <>
       <Modal
         title="Add New Lot"
-        visible={drawerOpen}
+        open={drawerOpen}
         onCancel={onClose}
         footer={null}
       >

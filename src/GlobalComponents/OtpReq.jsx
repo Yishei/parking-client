@@ -4,7 +4,8 @@ import { MdAlternateEmail } from "react-icons/md";
 import { MessageContext } from "../Context/MessageContext";
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getOtp, postOtp } from "../utilities/fetchData";
+import { postOtp } from "../utilities/AuthFunctionality.js";
+import { getOtp } from "../utilities/AuthFunctionality";
 const { Footer } = Layout;
 
 const OtpReq = () => {
@@ -23,6 +24,7 @@ const OtpReq = () => {
       .validateFields()
       .then(() => {
         setLoading(true);
+        msg("loading", "Verifying OTP");
         setFormDisabled(true);
         const values = form.getFieldsValue();
         let otp = "";
@@ -222,7 +224,7 @@ const OtpReq = () => {
                 layout="vertical"
                 form={form}
                 requiredMark={false}
-                disabled={formDisabled}
+                
               >
                 <Form.Item>
                   <Space
@@ -232,6 +234,7 @@ const OtpReq = () => {
                     {Array.from({ length: 6 }, (_, i) => i + 1).map(
                       (_, index) => (
                         <Form.Item
+                        
                           name={`digit${index}`}
                           rules={[{ required: true, message: "" }]}
                           style={{
@@ -242,6 +245,7 @@ const OtpReq = () => {
                           key={index}
                         >
                           <InputNumber
+                          disabled={formDisabled}
                             style={{
                               display: "inline-block",
                               width: "33px",

@@ -1,11 +1,13 @@
 /* this is for the AppBody */
 .app-div-container {
-  top: 75px;
-  position: relative;
+  flex-grow: 1;
+  overflow: auto;
+  padding-top: 75px;
 }
 
 .ant-layout-footer {
   text-align: center;
+  height: 75px;
 }
 
 /* this is for the AppHeader */
@@ -18,7 +20,7 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1;
+  z-index: 2000;
 }
 .user-Avatar {
   margin: 20px 20px 20px 10px;
@@ -83,15 +85,109 @@
   cursor: pointer;
 }
 
-
 /* this is for the Units Cars */
 
 .image-container {
   transition: transform 0.3s ease-in-out;
-
 }
 
 .image-container:hover {
   transform: scale(1.05);
   cursor: pointer;
 }
+
+/* this is for the Lots Table */
+
+.add-icon {
+  transition: transform 0.3s ease-in-out;
+  color: #52c41a;
+  font-size: 30px;
+}
+
+.add-icon:hover {
+  transform: scale(1.4);
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  margin-top: 10px;
+  padding-right: 10px;
+  padding-left: 10px;
+  min-height: 500px;
+  position: relative;
+  overflow: hidden; /* Add this line */
+}
+
+/* ... other CSS classes ... */
+
+.toggle-button {
+  position: absolute;
+  top: 0;
+  left: 0; /* start from the left */
+  z-index: 200;
+  transition: left 0.3s ease-in-out;
+}
+
+.toggle-button.open {
+  left: 250px; /* move to the right when the panel is open */
+}
+
+.side-panel {
+  background-color: #52c41a;
+  position: absolute;
+  z-index: 1000;
+  left: 0;
+  height: 250px;
+  border-radius: 5px;
+}
+
+.table {
+  flex-grow: 1;
+  padding-left: 50px;
+}
+
+.side-panel-overlay,
+.side-panel-card {
+  transition: width 0.3s ease-out; /* adjust as needed */
+}
+
+.ant-input-search-button {
+  background-color: #52c41a;
+  border-color: #52c41a;
+}
+
+.side-panel-overlay {
+  background-color: rgb(240, 242, 245);
+  border: 1px solid rgb(29, 113, 185);
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  position: absolute;
+  z-index: 1000;
+  left: 0;
+  height: 250px;
+  border-radius: 7px;
+  width: 50px;
+}
+
+.side-panel-card {
+  background-color: rgb(240, 242, 245);
+  border: 1px solid rgb(29, 113, 185);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: absolute;
+  z-index: 1000;
+  left: 0;
+  height: 250px;
+  border-radius: 7px;
+  width: 220px;
+}
+
+.side-panel-overlay-item {
+  margin: 15px;
+  font-size: 23px;
+  color: rgb(82, 196, 26);
+}
+

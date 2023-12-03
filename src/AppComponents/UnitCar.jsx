@@ -27,7 +27,7 @@ const UnitCar = ({ car, handleOpneCarEdit }) => {
         ) : (
           <img
             alt="example"
-            src={`http://localhost:5050/condoAdmin/image/unit/car/${car.car_id}?w=175&h=130`}
+            src={`http://localhost:5050/api/image/unit/car/${car.car_id}?w=175&h=130`}
             style={{
               borderTopRightRadius: 5,
               borderTopLeftRadius: 5,
