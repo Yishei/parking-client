@@ -25,7 +25,9 @@ const TableLots = () => {
 
   const handleFilter = (value, _e, info) => {
     const filterd = data.filter((item) => {
-      return item.lot_name.toLowerCase().includes(value.toLowerCase());
+      return Object.values(item).some(val =>
+        val.toString().toLowerCase().includes(value.toLowerCase())
+      );
     });
     setFilterdData(filterd);
   };

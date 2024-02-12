@@ -6,10 +6,10 @@ import { AppContext } from "../../Context/AppContext";
 import { MessageContext } from "../../Context/MessageContext";
 import { UsersInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
 import Columns from "../../utilities/TableColumns/UsersColumns";
-import DrawerUser from "../drawers/DrawerUsers";
 import urls from "../../utilities/urls.json";
 import { apiService } from "../../utilities/apiService";
 import SidePanel from "../adminComponents/SidePanel";
+import ModalUsers from "../Modals/ModalUsers";
 
 const TableUsers = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -24,7 +24,9 @@ const TableUsers = () => {
 
   const handleFilter = (value, _e, info) => {
     const filterd = data.filter((item) => {
-      return item.email.toLowerCase().includes(value.toLowerCase());
+      return Object.values(item).some(val =>
+        val.toString().toLowerCase().includes(value.toLowerCase())
+      );
     });
     setFilterdData(filterd);
   };
@@ -66,7 +68,7 @@ const TableUsers = () => {
       <div className="container">
         <SidePanel handleFilter={handleFilter} createNew={handleNewUserOpen} />
         <div className="table">
-          <DrawerUser
+          <ModalUsers
             drawerOpen={drawerOpen}
             setDrawerOpen={setDrawerOpen}
             editRecord={editRecord}

@@ -25,6 +25,7 @@ import TableUsers from "../AppComponents/tables/TableUsers";
 import TableCamera from "../AppComponents/tables/TableCamera";
 import TableLogs from "../AppComponents/tables/TableLogs";
 import CondoPage from "../AppComponents/adminComponents/CondoPage";
+import ResidentHome from "../AppComponents/residentComponents/ResidentHome";
 
 const baseurl = urls.baseURl;
 
@@ -32,24 +33,19 @@ const appRoutes = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<GlobalBody />} errorElement={<ErrorBoundary />}>
-        {/* <Route path="logIn" element={<LoginForm />} /> */}
         <Route path="logIn" element={<LoginForm />} loader={() => singOut()} />
         <Route path="forgotPassword" element={<OtpReq />} />
         <Route path="resetPassword/:token" element={<PasswordSetUp />} />
         <Route path="notFound" element={<NotFound />} />
         <Route path="errorPage" element={<ErrorPage />} />
-        <Route path="superAdmin" element={<div>superAdmin</div>}>
+        <Route path="resident" element={<ResidentHome />}>
           {/* All superAdmin routes */}
         </Route>
         <Route path="driver" element={<div>driver</div>}>
           {/* All driver routes */}
         </Route>
-        <Route path="resident" element={<CondoPage />}>
-          {/* All resident routes */}
-          <Route
-          index
-          element={<ErrorPage/>}
-          />
+        <Route path="admin" element={<CondoPage />}>
+          {/* All admin routes */}
           <Route
             path="lots/:condoId"
             element={<TableLots />}
@@ -82,12 +78,12 @@ const appRoutes = createBrowserRouter(
             element={<TableLogs />}
             loader={(params) =>
               apiService.get(
-                `${baseurl}${urls.get.logsForCondo}${params.params.condoId}`
+                `${baseurl}${urls.get.logsForLot}${params.params.condoId}`
               )
             }
           />
         </Route>
-        <Route path="admin" element={<AppBody />}>
+        <Route path="host" element={<AppBody />}>
           <Route
             index
             element={<TableCondos />}

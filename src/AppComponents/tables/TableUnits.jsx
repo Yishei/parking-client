@@ -6,10 +6,10 @@ import { AppContext } from "../../Context/AppContext";
 import { MessageContext } from "../../Context/MessageContext";
 import { UnitInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
 import Columns from "../../utilities/TableColumns/UnitsColumns";
-import DrawerUnit from "../drawers/DrawerUnit";
 import urls from "../../utilities/urls.json";
 import { apiService } from "../../utilities/apiService";
 import SidePanel from "../adminComponents/SidePanel";
+import ModalUnits from "../Modals/ModalUnits";
 
 const TableUnits = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -24,11 +24,13 @@ const TableUnits = () => {
 
   const handleFilter = (value, _e, info) => {
     const filterd = data.filter((item) => {
-      return item.username.toLowerCase().includes(value.toLowerCase());
+      return Object.values(item).some((val) =>
+        val.toString().toLowerCase().includes(value.toLowerCase())
+      );
     });
     setFilterdData(filterd);
   };
-      
+
   const handleDelete = async (record) => {
     //const res = await deleteUnit(record.unit_id);
     const res = await apiService.delete(
@@ -76,20 +78,28 @@ const TableUnits = () => {
   return (
     <>
       <div className="container">
-        <SidePanel createNew={handleNewUnit} handleFilter={handleFilter}/>
+        <SidePanel createNew={handleNewUnit} handleFilter={handleFilter} />
         <div className="table">
-         
-          <DrawerUnit
+          <ModalUnits
             drawerOpen={drawerOpen}
             setDrawerOpen={setDrawerOpen}
             editRecord={editRecord}
             isEdit={isEdit}
             fetchData={fetchData}
+            handleDelete={handleDelete}
           />
           <Table
-            columns={Columns(handleSettingsOpen, handleDelete)}
+            columns={Columns()}
             dataSource={filterdData}
             rowKey={(record) => record.unit_id}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  handleSettingsOpen(record);
+                },
+              };
+            }}
+            rowClassName={(record, rowIndex) => "row-table-units"}
             pagination={{
               defaultPageSize: 5,
               showSizeChanger: true,
