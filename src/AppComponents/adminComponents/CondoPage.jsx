@@ -13,7 +13,7 @@ import {
 import DrawerCondos from "../drawers/DrawerCondos";
 import { condoAdminRouteOptions } from "../../utilities/menuItems";
 import CustomLoadingIndecator from "../../GlobalComponents/CustomLoadingIndecator";
-import HeadPopover from "../HeadPopover";
+import HeadPopover from "../HeadPopover/HeadPopover";
 const { Footer } = Layout;
 
 const CondoPage = () => {

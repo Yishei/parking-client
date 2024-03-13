@@ -8,12 +8,15 @@ export const AppContextProvider = ({ children }) => {
   const defaultBreadcrumb = HomeBreadcrumb();
   const [appInnerHeadContent, setAppInnerHeadContent] =
     useState(defaultBreadcrumb);
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
 
   const value = {
     loading,
     setLoading,
     appInnerHeadContent,
     setAppInnerHeadContent,
+    isMenuOpen,
+    setIsMenuOpen,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -1,0 +1,34 @@
+.app-header {
+  display: flex;
+  position: sticky;
+  width: 100%;
+  top: 0;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(29, 113, 185);
+  color: white;
+  min-height: 75px;
+}
+
+
+
+.app-header-right {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.ant-select.css-dev-only-do-not-override-qgg3xn.ant-select-single.ant-select-show-arrow {
+  height: auto !important;
+}
+
+.add-address-bottom {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 8px;
+  justify-content: center;
+  border-top: "1px solid rgb(201, 210, 212)";
+}

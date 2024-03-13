@@ -1,3 +1,4 @@
+import "./HeadPopover.css";
 import {
   UserOutlined,
   SettingOutlined,
@@ -14,7 +15,16 @@ const HeadPopover = () => {
   };
 
   const content = (
-    <div className="app-head-popover-div">
+    <div className="popover-container">
+      <div className="popover-top-container">
+        <div className="popover-top-container-avatar">
+          <Avatar size={45} icon={<UserOutlined />} className="user-Avatar" />
+        </div>
+        <div className="popover-top-container-title" style={{ textAlign: "center", width: "100%" }}>
+          Yishei Jacobowitz
+        </div>
+      </div>
+
       <List size="small">
         <List.Item>
           <List.Item.Meta
@@ -46,7 +56,7 @@ const HeadPopover = () => {
       onOpenChange={handleVisibleChange}
       content={content}
     >
-      <Avatar size={45} icon={<UserOutlined />} className="user-Avatar" />
+      <div className="user-Avatar">YJ</div>
     </Popover>
   );
 };

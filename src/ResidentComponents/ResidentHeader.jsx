@@ -1,14 +1,14 @@
-import { useContext } from "react";
-
+import "./styles/ResidentHeader.css";
 import { Button, Select } from "antd";
-import HeadPopover from "./HeadPopover/HeadPopover";
-import AppContext from "../Context/AppContext";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { useContext } from "react";
+import AppContext from "../Context/AppContext";
+import AddressSelect from "./AddressSelect";
+import HeadPopover from "../AppComponents/HeadPopover/HeadPopover";
+import { addressList } from "./data/addressList";
+const ResidentHeader = () => {
+  const { isMenuOpen, setIsMenuOpen } = useContext(AppContext);
 
-import AddressSelect from "../ResidentComponents/AddressSelect";
-import { addressList } from "../ResidentComponents/data/addressList";
-
-const AppHeader = () => {
   const AddressList = addressList.map((address) => {
     return {
       label: <AddressSelect address={address} />,
@@ -16,7 +16,8 @@ const AppHeader = () => {
     };
   });
 
-  const { isMenuOpen, setIsMenuOpen } = useContext(AppContext);
+  console.log(AddressList);
+
   return (
     <div className="app-header">
       <Button
@@ -48,4 +49,4 @@ const AppHeader = () => {
   );
 };
 
-export default AppHeader;
+export default ResidentHeader;
