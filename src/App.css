@@ -1,4 +1,9 @@
-/* this is for the AppBody */
+.app {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
 .app-div-container {
   flex-grow: 1;
   overflow: auto;
@@ -10,7 +15,30 @@
   height: 75px;
 }
 
-/* this is for the AppHeader */
+.app-head-div {
+  padding: 0px;
+  background-color: rgb(29, 113, 185);
+  height: 75px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2000;
+}
+
+/* 
+.app-div-container {
+  flex-grow: 1;
+  overflow: auto;
+  padding-top: 75px;
+}
+
+.ant-layout-footer {
+  text-align: center;
+  height: 75px;
+}
+
+
 
 .app-head-div {
   padding: 0px;
@@ -37,7 +65,6 @@
   padding: 0px;
 }
 
-/* this is for the table icons */
 
 .setting-icon {
   transition: transform 0.3s ease-in-out;
@@ -80,12 +107,12 @@
   cursor: pointer;
 }
 
-/* this is for the Users Table */
+
 .row-table-users:hover {
   cursor: pointer;
 }
 
-/* this is for the Units Cars */
+
 
 .image-container {
   transition: transform 0.3s ease-in-out;
@@ -96,7 +123,7 @@
   cursor: pointer;
 }
 
-/* this is for the Lots Table */
+
 
 .add-icon {
   transition: transform 0.3s ease-in-out;
@@ -116,22 +143,21 @@
   padding-left: 10px;
   min-height: 500px;
   position: relative;
-  overflow: hidden; /* Add this line */
+  overflow: hidden;
 }
 
-/* ... other CSS classes ... */
+
 
 .toggle-button {
   position: absolute;
   top: 0;
-  left: 0; /* start from the left */
+  left: 0;
   z-index: 200;
   transition: left 0.3s ease-in-out;
 }
 
 .toggle-button.open {
-  left: 250px; /* move to the right when the panel is open */
-}
+  left: 250px; }
 
 .side-panel {
   background-color: #52c41a;
@@ -149,7 +175,7 @@
 
 .side-panel-overlay,
 .side-panel-card {
-  transition: width 0.3s ease-out; /* adjust as needed */
+  transition: width 0.3s ease-out;
 }
 
 .ant-input-search-button {
@@ -189,5 +215,4 @@
   margin: 15px;
   font-size: 23px;
   color: rgb(82, 196, 26);
-}
-
+} */

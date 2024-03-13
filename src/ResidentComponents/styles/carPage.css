@@ -1,0 +1,16 @@
+.car-page-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.car-page-header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-height: 77px;
+  justify-content: flex-end;
+  background-color: rgb(200, 215, 26);
+}
+

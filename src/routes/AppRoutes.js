@@ -25,7 +25,7 @@ import TableUsers from "../AppComponents/tables/TableUsers";
 import TableCamera from "../AppComponents/tables/TableCamera";
 import TableLogs from "../AppComponents/tables/TableLogs";
 import CondoPage from "../AppComponents/adminComponents/CondoPage";
-import ResidentHome from "../AppComponents/residentComponents/ResidentHome";
+import ResidentHome from "../ResidentComponents/ResidentHome";
 
 const baseurl = urls.baseURl;
 

@@ -1,0 +1,47 @@
+.user-Avatar {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 20px 20px 20px;
+  background-color: #52c41a;
+  float: right;
+  font-weight: bold;
+  font-size: large;
+}
+
+
+.user-Avatar:hover {
+  cursor: pointer;
+}
+
+.popover-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  padding: 0px;
+}
+
+.popover-top-container {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(128, 128, 128, 0.81);
+  border-radius: 10px;
+}
+
+.popover-top-container-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.popover-top-container-title {
+    width: 100%;
+    text-align: center;
+    font-weight: bolder;
+    font-size: larger;
+    padding: 5px;
+}
