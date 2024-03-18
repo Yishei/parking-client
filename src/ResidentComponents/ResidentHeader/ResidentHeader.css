@@ -6,9 +6,9 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  /* background-color: black; */
+  background-color: rgb(142, 139, 139);
   color: white;
-  min-height: 75px;
+  height: 90px;
 }
 
 .app-header-right {

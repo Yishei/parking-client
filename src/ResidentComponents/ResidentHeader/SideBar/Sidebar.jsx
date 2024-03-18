@@ -1,18 +1,19 @@
+import "./sidebar.css";
 import { Layout, Menu, theme } from "antd";
 import React, { useContext, useState } from "react";
-import { items } from "./data/sideBarItems";
-import AppContext from "../Context/AppContext";
+import { items } from "../../data/sideBarItems";
+import AppContext from "../../../Context/AppContext";
 const { Sider } = Layout;
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(true);
-  const { isMenuOpen, setIsMenuOpen } = useContext(AppContext);
+  const { isMenuOpen } = useContext(AppContext);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   return (
-    <div>
+    <div className="main-con">
       <Sider
         className="side-bar-menu"
         translate="true"

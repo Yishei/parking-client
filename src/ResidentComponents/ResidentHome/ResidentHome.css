@@ -5,11 +5,11 @@
   height: 100%;
 }
 
-
 .app-body-container {
   display: flex;
   flex-direction: column;
 }
+
 .side-bar {
   background-color: lightblue;
   display: flex;
@@ -20,10 +20,25 @@
   flex-grow: 1;
 }
 
-.app-body {
-  background-color: aquamarine;
+.app-body-inner {
+  background-color: rgb(238, 243, 241);
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
+}
+
+.welcome{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 50px;
+  padding-left: 15px;
+  font-size: larger;
+}
+
+.app-body{
+  display: flex;
+  width: 100%;
 }
 
 .app-footer {

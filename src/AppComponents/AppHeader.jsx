@@ -5,7 +5,7 @@ import HeadPopover from "./HeadPopover/HeadPopover";
 import AppContext from "../Context/AppContext";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 
-import AddressSelect from "../ResidentComponents/AddressSelect";
+import AddressSelect from "../ResidentComponents/AddressSelect/AddressSelect";
 import { addressList } from "../ResidentComponents/data/addressList";
 
 const AppHeader = () => {
@@ -31,14 +31,6 @@ const AppHeader = () => {
       <div className="app-header-right">
         <Select
           suffixIcon=""
-          dropdownRender={(menu) => (
-            <div>
-              {menu}
-              <div className="add-address-bottom">
-                <Button type="primary">Add Address</Button>
-              </div>
-            </div>
-          )}
           defaultValue={AddressList[0].value}
           options={AddressList}
         />

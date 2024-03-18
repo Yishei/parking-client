@@ -1,0 +1,31 @@
+import "./ResidentHome.css";
+import Sidebar from "../ResidentHeader/SideBar/Sidebar";
+import ResidentHeader from "../ResidentHeader/ResidentHeader";
+import { Outlet } from "react-router-dom";
+import { Button } from "antd";
+
+const ResidentHome = () => {
+  return (
+    <div className="app-container">
+      <Sidebar className="side-bar" />
+      <div className="app-body-container">
+        <ResidentHeader />
+        <div className="app-body-inner">
+          <div className="welcome">
+            <div>Hello, Joel</div>
+            <div className="add-btn-container">
+              <Button type="primary" className="add-btn">
+                Add New
+              </Button>
+            </div>
+          </div>
+          <div className="app-body">
+            <Outlet />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ResidentHome;

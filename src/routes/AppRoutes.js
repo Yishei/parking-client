@@ -25,7 +25,8 @@ import TableUsers from "../AppComponents/tables/TableUsers";
 import TableCamera from "../AppComponents/tables/TableCamera";
 import TableLogs from "../AppComponents/tables/TableLogs";
 import CondoPage from "../AppComponents/adminComponents/CondoPage";
-import ResidentHome from "../ResidentComponents/ResidentHome";
+import ResidentHome from "../ResidentComponents/ResidentHome/ResidentHome";
+import Cars from "../ResidentComponents/Cars/Cars";
 
 const baseurl = urls.baseURl;
 
@@ -39,6 +40,7 @@ const appRoutes = createBrowserRouter(
         <Route path="notFound" element={<NotFound />} />
         <Route path="errorPage" element={<ErrorPage />} />
         <Route path="resident" element={<ResidentHome />}>
+          <Route path="cars/:unitId" element={<Cars />} />
           {/* All superAdmin routes */}
         </Route>
         <Route path="driver" element={<div>driver</div>}>

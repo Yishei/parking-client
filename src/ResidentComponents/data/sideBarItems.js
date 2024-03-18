@@ -7,11 +7,12 @@ import {
 import { TfiAnnouncement } from "react-icons/tfi";
 import { RiContactsLine, RiGitPullRequestLine } from "react-icons/ri";
 import { CgDanger, CgFileDocument } from "react-icons/cg";
+import { NavLink } from "react-router-dom";
 
 export const items = [
   {
     key: 1,
-    label: `Home`,
+    label: <NavLink to={`/`}>Home</NavLink>,
     icon: <HomeOutlined />,
   },
   {

@@ -7,8 +7,8 @@ import { Breadcrumb, Card, Layout } from "antd";
 import AppHeader from "./AppHeader";
 import CustomLoadingIndecator from "../GlobalComponents/CustomLoadingIndecator";
 import { Helmet } from "react-helmet";
-import Sidebar from "../ResidentComponents/Sidebar";
-import ResidentHeader from "../ResidentComponents/ResidentHeader";
+import Sidebar from "../ResidentComponents/ResidentHeader/SideBar/Sidebar";
+import ResidentHeader from "../ResidentComponents/ResidentHeader/ResidentHeader";
 const { Footer } = Layout;
 
 const AppBody = () => {
