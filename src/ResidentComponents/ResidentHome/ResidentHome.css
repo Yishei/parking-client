@@ -1,6 +1,7 @@
 .app-container {
   display: flex;
   flex-direction: row;
+  overflow: hidden;
   width: 100%;
   height: 100%;
 }
@@ -22,12 +23,13 @@
 
 .app-body-inner {
   background-color: rgb(238, 243, 241);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.welcome{
+.welcome {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -36,7 +38,7 @@
   font-size: larger;
 }
 
-.app-body{
+.app-body {
   display: flex;
   width: 100%;
 }

@@ -1,4 +1,7 @@
-.main-con{
+.main-con {
+  position: sticky;
+  left: 0;
+  top: 0;
   filter: drop-shadow(3px 3px 3px gray);
   background-color: rgb(255, 255, 255);
 }
@@ -37,7 +40,7 @@ img {
   display: flex;
   justify-content: center;
   width: 275px;
-  background-color:  rgb(156, 153, 153);
+  background-color: rgb(156, 153, 153);
   align-items: center;
   text-align: center;
   min-height: 60px;
