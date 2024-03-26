@@ -16,8 +16,6 @@ const ResidentHeader = () => {
     };
   });
 
-  console.log(AddressList);
-
   return (
     <div className="app-header">
       <Button

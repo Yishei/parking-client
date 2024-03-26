@@ -60,7 +60,7 @@ const Sidebar = () => {
       {isMenuOpen && (
         <div className="side-bar-footer">
           SafetyHood &copy;{new Date().getFullYear()} <br /> Created by
-          SafetyHood
+          SafetyHood <br /> All Rights Reserved
         </div>
       )}
     </div>

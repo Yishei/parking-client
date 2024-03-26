@@ -5,11 +5,12 @@ const AddressSelect = ({ address }) => {
   return (
     <div className="address-indicator">
       <div className="address-indicator-title">
-        <b>{address.address}</b>
+        <b>
+          {address.address} #{address.unit}
+        </b>
         <br />
         {String(address.city).toLocaleUpperCase()},{" "}
-        {String(address.state).toLocaleUpperCase()} {address.zip} #
-        {address.unit}
+        {String(address.state).toLocaleUpperCase()} {address.zip}
       </div>
       <div>
         <LiaMapMarkerAltSolid style={{ fontSize: "30" }} />

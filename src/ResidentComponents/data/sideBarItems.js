@@ -1,9 +1,5 @@
 import { CarOutlined, HomeOutlined } from "@ant-design/icons";
-import {
-  MdOutlineApartment,
-  MdPayment,
-  MdOutlineHowToVote,
-} from "react-icons/md";
+import { MdPayment, MdOutlineHowToVote } from "react-icons/md";
 import { TfiAnnouncement } from "react-icons/tfi";
 import { RiContactsLine, RiGitPullRequestLine } from "react-icons/ri";
 import { CgDanger, CgFileDocument } from "react-icons/cg";
@@ -16,42 +12,42 @@ export const items = [
     icon: <HomeOutlined />,
   },
   {
-    key: 3,
-    label: `Cars`,
+    key: 2,
+    label: <NavLink to={`/resident/cars/:unitId`}>Cars</NavLink>,
     icon: <CarOutlined />,
   },
   {
-    key: 4,
-    label: `Payments`,
+    key: 3,
+    label: <NavLink to={`/resident/payments/:unitId`}>Payments</NavLink>,
     icon: <MdPayment />,
   },
   {
-    key: 5,
-    label: `Requests`,
+    key: 4,
+    label: <NavLink to={`/resident/requests/:unitId`}>Requests</NavLink>,
     icon: <RiGitPullRequestLine />,
   },
   {
-    key: 6,
+    key: 5,
     label: `Announcements`,
     icon: <TfiAnnouncement />,
   },
   {
-    key: 7,
+    key: 6,
     label: `Violations`,
     icon: <CgDanger />,
   },
   {
-    key: 8,
+    key: 7,
     label: `Documents`,
     icon: <CgFileDocument />,
   },
   {
-    key: 9,
+    key: 8,
     label: `Voting`,
     icon: <MdOutlineHowToVote />,
   },
   {
-    key: 10,
+    key: 9,
     label: `Contacts`,
     icon: <RiContactsLine />,
   },

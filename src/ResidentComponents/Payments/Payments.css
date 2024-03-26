@@ -1,0 +1,87 @@
+.payments-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 75px 0 25px;
+}
+
+.main-card-container{
+    width: 75%;
+    padding-right: 10px;
+}
+
+.inner-card-container{
+    display: flex;
+    flex-direction: column;
+    padding: 0 5px 0 5px;
+}
+
+.title-info{
+    padding: 5px 0 5px 0;
+    width: 100%;
+}
+
+.info-container{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.payment-info{
+    padding: 5px 0 5px 5px;
+    width: 100%;
+}
+
+.info-container:nth-child(even){
+    background-color: rgb(230, 230, 230);
+}
+
+.side-container{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    width: 300px;
+}
+
+.make-payment-container{
+    width: 100%;
+    background-color: rgb(247, 247, 247);
+    padding: 25px;
+    text-align: center;
+    filter: drop-shadow(3px 3px 3px gray);
+    border-radius: 5px;
+    font-size: large;
+    margin-bottom: 25px;
+}
+
+.current-balance{
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.make-payment-inner{
+    padding: 15px;
+}
+
+.make-payment-btn{
+    font-size: medium;
+    padding: 0;
+}
+
+.autopay-container{
+    padding: 15px;
+}
+
+.autopay-btn{
+    font-size: medium;
+    padding: 0;
+}
+
+.latefee-container{
+    width: 100%;
+    background-color: rgb(247, 247, 247);
+    padding: 3px 25px 20px 25px;
+    filter: drop-shadow(3px 3px 3px gray);
+    border-radius: 5px;
+}

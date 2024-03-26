@@ -27,6 +27,7 @@ import TableLogs from "../AppComponents/tables/TableLogs";
 import CondoPage from "../AppComponents/adminComponents/CondoPage";
 import ResidentHome from "../ResidentComponents/ResidentHome/ResidentHome";
 import Cars from "../ResidentComponents/Cars/Cars";
+import Payments from "../ResidentComponents/Payments/Payments";
 
 const baseurl = urls.baseURl;
 
@@ -41,6 +42,7 @@ const appRoutes = createBrowserRouter(
         <Route path="errorPage" element={<ErrorPage />} />
         <Route path="resident" element={<ResidentHome />}>
           <Route path="cars/:unitId" element={<Cars />} />
+          <Route path="payments/:unitId" element={<Payments />} />
           {/* All superAdmin routes */}
         </Route>
         <Route path="driver" element={<div>driver</div>}>
