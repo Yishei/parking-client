@@ -13,11 +13,6 @@ const ResidentHome = () => {
         <div className="app-body-inner">
           <div className="welcome">
             <div>Hello, Joel</div>
-            <div className="add-btn-container">
-              <Button type="primary" className="add-btn">
-                Add New
-              </Button>
-            </div>
           </div>
           <div className="app-body">
             <Outlet />

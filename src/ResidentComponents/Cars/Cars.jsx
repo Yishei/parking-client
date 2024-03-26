@@ -57,6 +57,23 @@ const Cars = () => {
           </div>
         ))}
       </div>
+      <div className="action-section">
+        <div className="kpi-section">
+          <div className="kpi">
+            <div className="kpi-data">4</div>
+            <div className="kpi-title">Allowed Cars</div>
+          </div>
+          <div className="kpi">
+            <div className="kpi-data">3</div>
+            <div className="kpi-title">Current Car Count</div>
+          </div>
+        </div>
+        <div className="add-car">
+          <Button type="primary" block style={{ backgroundColor: "#52c41a" }}>
+            Add Car
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
