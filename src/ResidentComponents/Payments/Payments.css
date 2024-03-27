@@ -38,9 +38,24 @@
     width: 25%;
 }
 
-.payment-info{
+.payment-date-info{
+    padding: 5px 0 5px 5px;
+    width: 80%;
+}
+
+.payment-title-info{
     padding: 5px 0 5px 5px;
     width: 100%;
+}
+
+.payment-amount-info{
+    padding: 5px 0 5px 5px;
+    width: 80%;
+}
+
+.payment-bal-info{
+    padding: 5px 0 5px 5px;
+    width: 80%;
 }
 
 .info-container:nth-child(even){

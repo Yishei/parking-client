@@ -15,10 +15,10 @@
   display: flex;
   flex-direction: column;
 }
-/* 
+
 .app-body-container {
   flex-grow: 1;
-} */
+}
 
 .app-body-inner {
   background-color: rgb(238, 243, 241);
@@ -38,7 +38,7 @@
 }
 
 .app-body {
-  /* display: flex; */
+  display: flex;
 }
 
 .data_div {

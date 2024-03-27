@@ -29,7 +29,7 @@ const data = [];
 for (let i = 0; i < 25; i++) {
   data.push({
     key: i,
-    date: new Date().toLocaleString(),
+    date: new Date().toLocaleDateString(),
     memo: `Payment or Charge ${i + 1}`,
     amount: `$150.00`,
     balance: `$380.00`,
@@ -60,16 +60,16 @@ const Payments = () => {
                   <div className="index-info">
                     <div>{index + 1}.</div>
                   </div>
-                  <div className="payment-info">
+                  <div className="payment-date-info">
                     <div>{item.date}</div>
                   </div>
-                  <div className="payment-info">
+                  <div className="payment-title-info">
                     <div>{item.memo}</div>
                   </div>
-                  <div className="payment-info">
+                  <div className="payment-amount-info">
                     <div>{item.amount}</div>
                   </div>
-                  <div className="payment-info">
+                  <div className="payment-bal-info">
                     <div>{item.balance}</div>
                   </div>
                 </div>
