@@ -45,6 +45,7 @@ const Payments = () => {
             size="small"
             title={
               <div className="info-container">
+                <div className="index">#</div>
                 <div className="title-info">{columns[0].title}</div>
                 <div className="title-info">{columns[1].title}</div>
                 <div className="title-info">{columns[2].title}</div>
@@ -56,6 +57,9 @@ const Payments = () => {
             <div className="inner-card-container">
               {data.map((item, index) => (
                 <div key={index} className="info-container">
+                  <div className="index-info">
+                    <div>{index + 1}.</div>
+                  </div>
                   <div className="payment-info">
                     <div>{item.date}</div>
                   </div>

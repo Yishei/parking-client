@@ -2,7 +2,6 @@ import "./ResidentHome.css";
 import Sidebar from "../ResidentHeader/SideBar/Sidebar";
 import ResidentHeader from "../ResidentHeader/ResidentHeader";
 import { Outlet } from "react-router-dom";
-import { Button } from "antd";
 
 const ResidentHome = () => {
   return (
