@@ -68,9 +68,13 @@ const Cars = () => {
           </div>
         </div>
         <div className="add-car">
-          <Button type="primary" block style={{ backgroundColor: "#52c41a" }}>
-            Add Car
-          </Button>
+          {info.length >= 4 ? (
+            "You have reached the max of cars"
+          ) : (
+            <Button type="primary" block style={{ backgroundColor: "#52c41a" }}>
+              Add Car
+            </Button>
+          )}
         </div>
       </div>
     </div>
