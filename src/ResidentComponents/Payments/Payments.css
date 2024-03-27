@@ -2,8 +2,8 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 100%;
-    padding: 0 75px 0 25px;
+    flex-grow: 1;
+    padding: 25px 75px 5px 25px;
 }
 
 .main-card-container{
@@ -50,8 +50,8 @@
 .side-container{
     display: flex;
     flex-direction: column;
-    align-items: end;
-    width: 300px;
+    align-items: flex-end;
+    width: 20%;
 }
 
 .make-payment-container{
