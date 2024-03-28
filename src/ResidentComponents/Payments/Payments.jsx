@@ -31,6 +31,7 @@ for (let i = 0; i < 25; i++) {
     key: i,
     date: new Date().toLocaleDateString(),
     memo: `Payment or Charge ${i + 1}`,
+    type: "Credit Card",
     amount: `$150.00`,
     balance: `$380.00`,
   });
@@ -65,6 +66,7 @@ const Payments = () => {
                   </div>
                   <div className="payment-title-info">
                     <div>{item.memo}</div>
+                    <div style={{ fontSize: "10px" }}>{item.type}</div>
                   </div>
                   <div className="payment-amount-info">
                     <div>{item.amount}</div>
