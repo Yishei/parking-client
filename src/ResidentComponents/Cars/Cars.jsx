@@ -1,9 +1,8 @@
-import { Avatar, Button, Card, Col, Row, Image } from "antd";
+import { Button, Card } from "antd";
 import data from "./database.json";
 import React, { useState, useEffect } from "react";
 import Meta from "antd/es/card/Meta";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
-import { IoMdAdd } from "react-icons/io";
 import carImage from "./images/exterior-640-en_US.webp";
 import "./Cars.css";
 
@@ -58,22 +57,24 @@ const Cars = () => {
         ))}
       </div>
       <div className="action-section">
-        <div className="action-section-inner">
-          <div className="kpi-section">
-            <div className="kpi">
-              <div className="kpi-data">4</div>
-              <div className="kpi-title">Allowed Cars</div>
-            </div>
-            <div className="kpi">
-              <div className="kpi-data">3</div>
-              <div className="kpi-title">Current Car Count</div>
-            </div>
+        <div className="kpi-section">
+          <div className="kpi">
+            <div className="kpi-data">4</div>
+            <div className="kpi-title">Allowed Cars</div>
           </div>
-          <div className="add-car">
+          <div className="kpi">
+            <div className="kpi-data">{info.length}</div>
+            <div className="kpi-title">Current Car Count</div>
+          </div>
+        </div>
+        <div className="add-car">
+          {info.length >= 4 ? (
+            "You have reached the max of cars"
+          ) : (
             <Button type="primary" block style={{ backgroundColor: "#52c41a" }}>
               Add Car
             </Button>
-          </div>
+          )}
         </div>
       </div>
     </div>
