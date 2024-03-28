@@ -2,6 +2,7 @@
   width: 100%;
   padding: 25px;
   display: flex;
+  justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 10px;
@@ -13,11 +14,21 @@
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
+  flex-grow: 1;
   gap: 20px;
-  width: 65%;
 }
 
 .action-section {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 8px;
+  gap: 40px;
+  max-width: 20%;
+  max-height: 40%;
+}
+
+.action-section-inner {
   filter: drop-shadow(3px 3px 3px gray);
   background-color: rgb(255, 255, 255);
   display: flex;
@@ -25,9 +36,7 @@
   padding: 20px;
   border-radius: 8px;
   gap: 40px;
-  max-height: 40%;
 }
-
 .kpi-section {
   padding: 4px;
   display: flex;
@@ -66,11 +75,8 @@
   background-color: rgb(136, 122, 122);
 }
 
-/* .info-card-container{
-    padding: 15px;
-    margin-top: 50px;
-    background-color: rgb(235, 233, 233);
-} */
+.info-card-container {
+}
 
 .data-section {
   display: flex;

@@ -1,21 +1,24 @@
 import "./ResidentHeader.css";
 import { Button, Select } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AppContext from "../../Context/AppContext";
 import AddressSelect from "../AddressSelect/AddressSelect";
 import HeadPopover from "../../AppComponents/HeadPopover/HeadPopover";
 import { addressList } from "../data/addressList";
+import { useLoaderData } from "react-router-dom";
 const ResidentHeader = () => {
   const { isMenuOpen, setIsMenuOpen } = useContext(AppContext);
 
-  const AddressList = addressList.map((address) => {
+  const [unitList, _] = useState(useLoaderData());
+  const AddressList = unitList.map((address) => {
     return {
       label: <AddressSelect address={address} />,
-      value: address.id,
+      value: address.unit_id,
     };
   });
 
+  console.log(unitList, AddressList, "stat");
   return (
     <div className="app-header">
       <Button

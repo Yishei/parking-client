@@ -5,14 +5,17 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AppContextProvider } from "./Context/AppContext";
 import { MessageContextProvider } from "./Context/MessageContext";
+import { UserContextProvider } from "./Context/userContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AppContextProvider>
-      <MessageContextProvider>
-        <App />
-      </MessageContextProvider>
+      <UserContextProvider>
+        <MessageContextProvider>
+          <App />
+        </MessageContextProvider>
+      </UserContextProvider>
     </AppContextProvider>
   </React.StrictMode>
 );
