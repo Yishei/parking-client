@@ -40,7 +40,13 @@ const appRoutes = createBrowserRouter(
         <Route path="resetPassword/:token" element={<PasswordSetUp />} />
         <Route path="notFound" element={<NotFound />} />
         <Route path="errorPage" element={<ErrorPage />} />
-        <Route path="resident" element={<ResidentHome />}>
+        <Route
+          path="resident"
+          loader={(params) =>
+            apiService.get(`${baseurl}${urls.get.unitsForUser}`)
+          }
+          element={<ResidentHome />}
+        >
           <Route path="cars/:unitId" element={<Cars />} />
           <Route path="payments/:unitId" element={<Payments />} />
           {/* All superAdmin routes */}

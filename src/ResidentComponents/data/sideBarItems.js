@@ -8,7 +8,7 @@ import { NavLink } from "react-router-dom";
 export const items = [
   {
     key: 1,
-    label: <NavLink to={`/`}>Home</NavLink>,
+    label: <NavLink to={`/resident`}>Home</NavLink>,
     icon: <HomeOutlined />,
   },
   {
