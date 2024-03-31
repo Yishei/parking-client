@@ -27,7 +27,17 @@ const CarModel = () => {
       </Button>
       <div className="model-container">
         <Modal
-          width={800}
+          styles={{
+            header: {
+              height: 50,
+              padding: "10px",
+            },
+            body: {
+              height: "auto",
+              padding: "10px",
+            },
+          }}
+          width={700}
           className="add-car-model"
           title="Add Car"
           open={isModalOpen}

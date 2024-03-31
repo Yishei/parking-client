@@ -1,13 +1,46 @@
-/* .add-car-container{
-    background-color: brown;
-} */
+.kpi-section {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 10px;
+}
+  
+.kpi {
+    background-color: rgb(239, 239, 239);
+    padding: 10px;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    gap: 5px;
+}
+  
+.kpi-data {
+    font-size: 27px;
+    font-weight: bold;
+    color:rgb(47, 47, 47) ;
+}
+  
+.kpi-title {
+    font-weight: bolder;
+}
 
-/* .add-car-from{
-    background-color: blue;
-} */
+.max-cars{
+    text-align: center;
+    font-weight: bold;
+    font-size: larger;
+}
+
+.add-car-from{
+    padding-top: 40px;
+}
 
 .form-items{
     padding-top: 20px;
+    min-height: 300px;
 }
 
 .submit-add-form-btn{

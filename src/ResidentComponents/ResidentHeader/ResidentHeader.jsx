@@ -7,6 +7,7 @@ import AddressSelect from "../AddressSelect/AddressSelect";
 import HeadPopover from "../../AppComponents/HeadPopover/HeadPopover";
 import { addressList } from "../data/addressList";
 import { useLoaderData } from "react-router-dom";
+
 const ResidentHeader = () => {
   const { isMenuOpen, setIsMenuOpen } = useContext(AppContext);
 
@@ -19,6 +20,7 @@ const ResidentHeader = () => {
   });
 
   console.log(unitList, AddressList, "stat");
+
   return (
     <div className="app-header">
       <Button
@@ -33,8 +35,8 @@ const ResidentHeader = () => {
       <div className="app-header-right">
         <Select
           suffixIcon=""
-          defaultValue={AddressList[0].value}
-          options={AddressList}
+          defaultValue={addressList[0].value}
+          options={addressList}
         />
         <HeadPopover />
       </div>
