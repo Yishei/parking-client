@@ -2,7 +2,6 @@ import { LiaMapMarkerAltSolid } from "react-icons/lia";
 import "./AddressSelect.css";
 
 const AddressSelect = ({ address }) => {
-  console.log(address);
   return (
     <div className="address-indicator">
       <div className="address-indicator-title">

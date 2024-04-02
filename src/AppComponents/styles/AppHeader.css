@@ -8,12 +8,21 @@
   min-height: 75px;
 }
 
+.col-btn-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 80%;
+  gap: 20PX;
+}
+
 .app-header-right {
   display: flex;
   flex-direction: row;
   gap: 20px;
   align-items: center;
-  margin-right: 20px;
+  /* margin-right: 20px; */
+  width: 500px;
 }
 
 .ant-select.css-dev-only-do-not-override-qgg3xn.ant-select-single.ant-select-show-arrow {

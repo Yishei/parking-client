@@ -1,21 +1,17 @@
 .main-container{
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding: 25px;
-    width: 100%;
     top: 0;
 }
 
-.lot-table-container{
+.unit-table-container{
     width: 90%;
     padding: 25px;
 }
 
-.lot-side-panel-container{
+.unit-side-panel-container{
     padding: 25px;
 }
-
-/* .table{
-    
-} */

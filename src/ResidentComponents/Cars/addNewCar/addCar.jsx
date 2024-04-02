@@ -30,7 +30,7 @@ const AddCar = () => {
               </div>
             </div>
             <div className="kpi">
-              <div className="kpi-title">Total cars of your account</div>
+              <div className="kpi-title">Total cars in your account</div>
               <div className="kpi-data">{info.length}</div>
             </div>
           </div>

@@ -29,11 +29,13 @@ const AppHeader = () => {
         </div>
       </div>
       <div className="app-header-right">
-        <Select
-          suffixIcon=""
-          defaultValue={AddressList[0].value}
-          options={AddressList}
-        />
+        <div className="app-header-select">
+          <Select
+            suffixIcon=""
+            defaultValue={AddressList[0].value}
+            options={AddressList}
+          />
+        </div>
         <HeadPopover />
       </div>
     </div>

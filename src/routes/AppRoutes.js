@@ -14,12 +14,12 @@ import ErrorBoundary from "../ErrorBoundary";
 
 // Admin Components
 import CAdminLots from "../CAdminComponents/CAdminLots/CAdminLots";
+import CAdminUnits from "../CAdminComponents/CAdminUnits/CAdminUnits";
+import CAdminUsers from "../CAdminComponents/CAdminUsers/CAdminUsers";
+import CAdminLogs from "../CAdminComponents/CAdminLogs/CAdminLogs";
 import TableCondos from "../AppComponents/tables/TableCondos";
-import TableUnits from "../AppComponents/tables/TableUnits";
-import TableUsers from "../AppComponents/tables/TableUsers";
 import TableCamera from "../AppComponents/tables/TableCamera";
-import TableLogs from "../AppComponents/tables/TableLogs";
-import CondoPage from "../AppComponents/adminComponents/CondoPage";
+// import CondoPage from "../AppComponents/adminComponents/CondoPage";
 import ResidentHome from "../ResidentComponents/ResidentHome/ResidentHome";
 import Cars from "../ResidentComponents/Cars/Cars";
 import Payments from "../ResidentComponents/Payments/Payments";
@@ -71,7 +71,7 @@ const appRoutes = createBrowserRouter(
           />
           <Route
             path="units/:condoId"
-            element={<TableUnits />}
+            element={<CAdminUnits />}
             loader={(params) =>
               apiService.get(
                 `${baseurl}${urls.get.unitsForCondo}${params.params.condoId}`
@@ -89,7 +89,7 @@ const appRoutes = createBrowserRouter(
           />
           <Route
             path="users/:condoId"
-            element={<TableUsers />}
+            element={<CAdminUsers />}
             loader={(params) =>
               apiService.get(
                 `${baseurl}${urls.get.usersForCondo}${params.params.condoId}`
@@ -98,7 +98,7 @@ const appRoutes = createBrowserRouter(
           />
           <Route
             path="logs/:condoId"
-            element={<TableLogs />}
+            element={<CAdminLogs />}
             loader={(params) =>
               apiService.get(
                 `${baseurl}${urls.get.logsForLot}${params.params.condoId}`

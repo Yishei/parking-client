@@ -12,7 +12,6 @@ function ErrorBoundary() {
     switch (error.data) {
       case 1:
         return <Navigate to="/supperAdmin" />;
-
       case 2:
         return <Navigate to="/admin" />;
       case 3:

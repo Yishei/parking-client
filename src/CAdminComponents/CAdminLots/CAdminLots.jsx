@@ -1,4 +1,4 @@
-import { Table, Form, Input, Switch, Empty, Pagination } from "antd";
+import { Table, Form, Input, Switch, Empty } from "antd";
 import { IoAdd } from "react-icons/io5";
 import urls from "../../utilities/urls.json";
 import { useState, useContext, useEffect } from "react";
@@ -161,13 +161,13 @@ const TableLots = () => {
 
   return (
     <div className="main-container">
-      <div className="side-panel-container">
+      <div className="lot-side-panel-container">
         <SidePanel
           handleFilter={handleFilter}
           createNew={createNewBtnHandler}
         />
       </div>
-      <div className="table-container">
+      <div className="lot-table-container">
         <Form form={form} component={false}>
           <ModalLots
             drawerOpen={drawerOpen}

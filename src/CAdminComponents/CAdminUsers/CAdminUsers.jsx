@@ -1,23 +1,24 @@
 import { Table, Empty } from "antd";
 import { IoAdd } from "react-icons/io5";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useParams, useLoaderData } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { AppContext } from "../../Context/AppContext";
 import { MessageContext } from "../../Context/MessageContext";
-import { UnitInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
-import Columns from "../../utilities/TableColumns/UnitsColumns";
+import { UsersInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
+import Columns from "../../utilities/TableColumns/UsersColumns";
 import urls from "../../utilities/urls.json";
 import { apiService } from "../../utilities/apiService";
-import SidePanel from "../adminComponents/SidePanel";
-import ModalUnits from "../Modals/ModalUnits";
+import SidePanel from "../../AppComponents/adminComponents/SidePanel";
+import ModalUsers from "../../AppComponents/Modals/ModalUsers";
+import "./CAdminUsers.css";
 
-const TableUnits = () => {
+const TableUsers = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [data, setData] = useState(useLoaderData());
-  const [filterdData, setFilterdData] = useState(useLoaderData());
   const [editRecord, setEditRecord] = useState(null);
   const [tableLoading, setTableLoading] = useState(false);
+  const [data, setData] = useState(useLoaderData());
+  const [filterdData, setFilterdData] = useState(useLoaderData());
   const { condoId } = useParams();
   const { setAppInnerHeadContent } = useContext(AppContext);
   const { msg } = useContext(MessageContext);
@@ -31,26 +32,14 @@ const TableUnits = () => {
     setFilterdData(filterd);
   };
 
-  const handleDelete = async (record) => {
-    //const res = await deleteUnit(record.unit_id);
-    const res = await apiService.delete(
-      `${urls.baseURl}${urls.delete.deleteUnit}${record.unit_id}`
-    );
-    if (res === "success") {
-      msg("success", "Unit Deleted");
-      fetchData();
-    } else {
-      msg("error", "Error Deleting Unit");
-    }
-  };
-
   const handleSettingsOpen = (record) => {
     setIsEdit(true);
     setEditRecord(record);
+    console.log(record);
     setDrawerOpen(true);
   };
 
-  const handleNewUnit = () => {
+  const handleNewUserOpen = () => {
     setIsEdit(false);
     setEditRecord(null);
     setDrawerOpen(true);
@@ -59,7 +48,7 @@ const TableUnits = () => {
   const fetchData = async () => {
     setTableLoading(true);
     const data = await apiService.get(
-      `${urls.baseURl}${urls.get.unitsForCondo}${condoId}`
+      `${urls.baseURl}${urls.get.usersForCondo}${condoId}`
     );
     if (data.length > 0) {
       setData(data);
@@ -71,27 +60,31 @@ const TableUnits = () => {
   };
 
   useEffect(() => {
-    const headInfo = UnitInfoBredcrumb({ id: condoId });
+    const headInfo = UsersInfoBredcrumb({ id: condoId });
     setAppInnerHeadContent(headInfo);
-  }, [setAppInnerHeadContent, condoId]);
+  }, [setAppInnerHeadContent, condoId, data]);
 
   return (
     <>
-      <div className="container">
-        <SidePanel createNew={handleNewUnit} handleFilter={handleFilter} />
-        <div className="table">
-          <ModalUnits
+      <div className="main-container">
+        <div className="user-side-panel-container">
+          <SidePanel
+            handleFilter={handleFilter}
+            createNew={handleNewUserOpen}
+          />
+        </div>
+        <div className="user-table-container">
+          <ModalUsers
             drawerOpen={drawerOpen}
             setDrawerOpen={setDrawerOpen}
             editRecord={editRecord}
             isEdit={isEdit}
             fetchData={fetchData}
-            handleDelete={handleDelete}
           />
           <Table
             columns={Columns()}
             dataSource={filterdData}
-            rowKey={(record) => record.unit_id}
+            rowKey={(record) => record.user_id}
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {
@@ -99,7 +92,7 @@ const TableUnits = () => {
                 },
               };
             }}
-            rowClassName={(record, rowIndex) => "row-table-units"}
+            rowClassName={(record, rowIndex) => "row-table-users"}
             pagination={{
               defaultPageSize: 5,
               showSizeChanger: true,
@@ -112,7 +105,7 @@ const TableUnits = () => {
                   description={<span>No Data</span>}
                   imageStyle={{ fontSize: 35 }}
                 >
-                  <IoAdd className="add-icon" onClick={handleNewUnit} />
+                  <IoAdd className="add-icon" onClick={handleNewUserOpen} />
                 </Empty>
               ),
             }}
@@ -123,4 +116,4 @@ const TableUnits = () => {
     </>
   );
 };
-export default TableUnits;
+export default TableUsers;
