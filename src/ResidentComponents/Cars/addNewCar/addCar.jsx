@@ -13,22 +13,28 @@ const AddCar = () => {
   return (
     <div className="add-car-container">
       {info.length >= 4 ? (
-        <div className="max-cars">
-          The total number of cars assigned to your account is {info.length}
-          <br /> You have reached the max of cars.
+        <div className="max-cars-title">
+          The total number of cars assigned to your account is:{" "}
+          <span className="max-cars-data-1">{info.length}</span>
+          <br />{" "}
+          <div className="max-cars-data-2">
+            You have reached the max of cars.
+          </div>
         </div>
       ) : (
         <>
           <div className="kpi-section">
             <div className="kpi">
-              <div className="kpi-title">Allowed Cars</div>
-              <div className="kpi-data">4</div>
+              <div className="kpi-title">
+                Total cars allowed <div className="kpi-data">4</div>
+              </div>
             </div>
             <div className="kpi">
-              <div className="kpi-title">Current Car Count</div>
+              <div className="kpi-title">Total cars of your account</div>
               <div className="kpi-data">{info.length}</div>
             </div>
           </div>
+
           <div>
             <Form
               className="add-car-from"

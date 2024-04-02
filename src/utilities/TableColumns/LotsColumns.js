@@ -145,7 +145,7 @@ const LotsColumns = (
             <CameraTwoTone
               style={{ fontSize: "17px" }}
               onClick={() => {
-                navigate(`/admin/lots/cameras/${record.lot_id}`);
+                navigate(`/condo-admin/cameras/${record.lot_id}`);
               }}
               className="camera-icon"
             />
@@ -153,7 +153,7 @@ const LotsColumns = (
             <Tooltip title="Camera Logs" color="#52c41a" placement="top"> */}
             <FcDataSheet
               style={{ fontSize: "17px" }}
-              onClick={() => navigate(`/admin/lots/logs/${record.lot_id}`)}
+              onClick={() => navigate(`/condo-admin/logs/${record.lot_id}`)}
               className="camera-icon"
             />
             {/* </Tooltip>

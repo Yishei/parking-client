@@ -8,18 +8,13 @@ import {
 } from "react-router-dom";
 
 // Global Components
-import GlobalBody from "../GlobalComponents/GlobalBody";
 import PasswordSetUp from "../GlobalComponents/PasswordSetUp";
-import LoginForm from "../GlobalComponents/LoginForm";
-import NotFound from "../GlobalComponents/NotFound";
-import ErrorPage from "../GlobalComponents/ErrorPage";
+import ErrorPage from "../GlobalComponents/ErrorPage/ErrorPage";
 import ErrorBoundary from "../ErrorBoundary";
-import OtpReq from "../GlobalComponents/OtpReq";
 
 // Admin Components
-import AppBody from "../AppComponents/AppBody";
+import CAdminLots from "../CAdminComponents/CAdminLots/CAdminLots";
 import TableCondos from "../AppComponents/tables/TableCondos";
-import TableLots from "../AppComponents/tables/TableLots";
 import TableUnits from "../AppComponents/tables/TableUnits";
 import TableUsers from "../AppComponents/tables/TableUsers";
 import TableCamera from "../AppComponents/tables/TableCamera";
@@ -28,16 +23,20 @@ import CondoPage from "../AppComponents/adminComponents/CondoPage";
 import ResidentHome from "../ResidentComponents/ResidentHome/ResidentHome";
 import Cars from "../ResidentComponents/Cars/Cars";
 import Payments from "../ResidentComponents/Payments/Payments";
+import Login from "../GlobalComponents/Login/Login";
+import OtpReq from "../GlobalComponents/OtpReq/OtpReq";
+import NotFound from "../GlobalComponents/NotFound/NotFound";
+import CAdminHome from "../CAdminComponents/CAdminHome/CAdminHome";
 
 const baseurl = urls.baseURl;
 
 const appRoutes = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/" element={<GlobalBody />} errorElement={<ErrorBoundary />}>
-        <Route path="logIn" element={<LoginForm />} loader={() => singOut()} />
+      <Route path="/" errorElement={<ErrorBoundary />}>
+        <Route path="logIn" element={<Login />} loader={() => singOut()} />
         <Route path="forgotPassword" element={<OtpReq />} />
-        <Route path="resetPassword/:token" element={<PasswordSetUp />} />
+        <Route path="passwordSetUp/:token" element={<PasswordSetUp />} />
         <Route path="notFound" element={<NotFound />} />
         <Route path="errorPage" element={<ErrorPage />} />
         <Route
@@ -49,51 +48,11 @@ const appRoutes = createBrowserRouter(
         >
           <Route path="cars/:unitId" element={<Cars />} />
           <Route path="payments/:unitId" element={<Payments />} />
-          {/* All superAdmin routes */}
         </Route>
         <Route path="driver" element={<div>driver</div>}>
           {/* All driver routes */}
         </Route>
-        <Route path="admin" element={<CondoPage />}>
-          {/* All admin routes */}
-          <Route
-            path="lots/:condoId"
-            element={<TableLots />}
-            loader={(params) =>
-              apiService.get(
-                `${baseurl}${urls.get.lotsForCondo}${params.params.condoId}`
-              )
-            }
-          />
-          <Route
-            path="units/:condoId"
-            element={<TableUnits />}
-            loader={(params) =>
-              apiService.get(
-                `${baseurl}${urls.get.unitsForCondo}${params.params.condoId}`
-              )
-            }
-          />
-          <Route
-            path="users/:condoId"
-            element={<TableUsers />}
-            loader={(params) =>
-              apiService.get(
-                `${baseurl}${urls.get.usersForCondo}${params.params.condoId}`
-              )
-            }
-          />
-          <Route
-            path="logs/:condoId"
-            element={<TableLogs />}
-            loader={(params) =>
-              apiService.get(
-                `${baseurl}${urls.get.logsForLot}${params.params.condoId}`
-              )
-            }
-          />
-        </Route>
-        <Route path="host" element={<AppBody />}>
+        <Route path="condo-admin" element={<CAdminHome />}>
           <Route
             index
             element={<TableCondos />}
@@ -103,7 +62,7 @@ const appRoutes = createBrowserRouter(
           />
           <Route
             path="lots/:condoId"
-            element={<TableLots />}
+            element={<CAdminLots />}
             loader={(params) =>
               apiService.get(
                 `${baseurl}${urls.get.lotsForCondo}${params.params.condoId}`
@@ -120,7 +79,7 @@ const appRoutes = createBrowserRouter(
             }
           />
           <Route
-            path="lots/cameras/:lotId"
+            path="cameras/:lotId"
             element={<TableCamera />}
             loader={(params) =>
               apiService.get(

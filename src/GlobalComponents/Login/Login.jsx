@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
+
 import { Helmet } from "react-helmet";
-import { MessageContext } from "../Context/MessageContext";
+import { MessageContext } from "../../Context/MessageContext";
 import {
   Form,
   Input,
@@ -13,11 +14,12 @@ import {
   Col,
 } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { login } from "../utilities/AuthFunctionality";
+import { login } from "../../utilities/AuthFunctionality";
 import { useNavigate } from "react-router-dom";
+import "./Login.css";
 const { Footer } = Layout;
 
-function LoginForm() {
+function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [form] = Form.useForm();
@@ -118,34 +120,17 @@ function LoginForm() {
       <Helmet>
         <title>Log In</title>
       </Helmet>
-      <Layout
-        className="login-layout"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100vh",
-          justifyContent: "center",
-          backgroundImage: "url('/loginpic.jpg')",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
+      <Layout className="login-layout">
         <div>
           {showAlert && (
             <Alert
+              className="logIn-alert"
               message="Didn't complete sign up"
               type="warning"
               closable
               showIcon
               description="You didn't complete sign up. Please check your email for the sign up link."
               onClose={() => setShowAlert(false)}
-              style={{
-                position: "fixed",
-                top: 5,
-                left: "50%",
-                transform: "translateX(-50%)",
-                zIndex: 1000,
-              }}
             />
           )}
           <Row justify="center">
@@ -257,4 +242,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default Login;

@@ -10,7 +10,7 @@
       "state": "NY",
       "zip_code": 10950,
       "user_id": "30",
-      "max_cars": "2",
+      "max_cars": "4",
       "car_id": "1",
       "plate_number": "JBS5965",
       "car_color": "silver",
@@ -31,7 +31,7 @@
       "state": "NY",
       "zip_code": 10950,
       "user_id": "31",
-      "max_cars": "2",
+      "max_cars": "4",
       "car_id": "2",
       "plate_number": "JBL7108",
       "car_color": "brown",
@@ -51,7 +51,7 @@
       "state": "NY",
       "zip_code": 10950,
       "user_id": "31",
-      "max_cars": "2",
+      "max_cars": "4",
       "car_id": "2",
       "plate_number": "JBL7108",
       "car_color": "brown",
@@ -61,4 +61,4 @@
       "unit_id": "?",
       "last_updated": "01/16/2024"
     }
-  ]
+]

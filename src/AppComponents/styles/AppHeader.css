@@ -4,14 +4,9 @@
   width: 100%;
   top: 0;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-  background-color: rgb(29, 113, 185);
-  color: white;
   min-height: 75px;
 }
-
-
 
 .app-header-right {
   display: flex;

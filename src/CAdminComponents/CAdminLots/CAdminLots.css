@@ -1,0 +1,21 @@
+.main-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 25px;
+    width: 100%;
+    top: 0;
+}
+
+.table-container{
+    width: 90%;
+    padding: 25px;
+}
+
+.side-panel-container{
+    padding: 25px;
+}
+
+/* .table{
+    
+} */

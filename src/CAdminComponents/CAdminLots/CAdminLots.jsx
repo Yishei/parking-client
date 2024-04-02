@@ -1,4 +1,4 @@
-import { Table, Form, Input, Switch, Empty } from "antd";
+import { Table, Form, Input, Switch, Empty, Pagination } from "antd";
 import { IoAdd } from "react-icons/io5";
 import urls from "../../utilities/urls.json";
 import { useState, useContext, useEffect } from "react";
@@ -7,9 +7,10 @@ import { MessageContext } from "../../Context/MessageContext";
 import { LotInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
 import { useParams, useLoaderData } from "react-router-dom";
 import Columns from "../../utilities/TableColumns/LotsColumns";
-import ModalLots from "../Modals/ModalLots";
+import ModalLots from "../../AppComponents/Modals/ModalLots";
 import { apiService } from "../../utilities/apiService";
-import SidePanel from "../adminComponents/SidePanel";
+import SidePanel from "../../AppComponents/adminComponents/SidePanel";
+import "./CAdminLots.css";
 
 const TableLots = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -25,7 +26,7 @@ const TableLots = () => {
 
   const handleFilter = (value, _e, info) => {
     const filterd = data.filter((item) => {
-      return Object.values(item).some(val =>
+      return Object.values(item).some((val) =>
         val.toString().toLowerCase().includes(value.toLowerCase())
       );
     });
@@ -159,59 +160,60 @@ const TableLots = () => {
   );
 
   return (
-    <>
-      <div className="container">
+    <div className="main-container">
+      <div className="side-panel-container">
         <SidePanel
           handleFilter={handleFilter}
           createNew={createNewBtnHandler}
         />
-        <div className="table">
-          <Form form={form} component={false}>
-            <ModalLots
-              drawerOpen={drawerOpen}
-              setDrawerOpen={setDrawerOpen}
-              fetchData={fetchData}
-            />
-            <Table
-              components={{
-                body: {
-                  cell: EditableCell,
-                },
-              }}
-              columns={columns}
-              dataSource={filterdData}
-              rowKey={(record) => record.lot_id}
-              pagination={{
-                defaultPageSize: 5,
-                showSizeChanger: true,
-                pageSizeOptions: ["5", "10", "15"],
-                position: "bottomCenter",
-              }}
-              locale={{
-                emptyText: (
-                  <Empty
-                    description={<span>No Data</span>}
-                    imageStyle={{ fontSize: 35 }}
-                  >
-                    <IoAdd
-                      className="add-icon"
-                      onClick={() => {
-                        setDrawerOpen(true);
-                        cancel();
-                      }}
-                    />
-                  </Empty>
-                ),
-              }}
-              onChange={() => {
-                cancel();
-              }}
-              loading={tableLoading}
-            />
-          </Form>
-        </div>
       </div>
-    </>
+      <div className="table-container">
+        <Form form={form} component={false}>
+          <ModalLots
+            drawerOpen={drawerOpen}
+            setDrawerOpen={setDrawerOpen}
+            fetchData={fetchData}
+          />
+          <Table
+            className="table"
+            components={{
+              body: {
+                cell: EditableCell,
+              },
+            }}
+            columns={columns}
+            dataSource={filterdData}
+            rowKey={(record) => record.lot_id}
+            pagination={{
+              defaultPageSize: 5,
+              showSizeChanger: true,
+              pageSizeOptions: ["5", "10", "15", "20"],
+              position: "bottomCenter",
+            }}
+            locale={{
+              emptyText: (
+                <Empty
+                  description={<span>No Data</span>}
+                  imageStyle={{ fontSize: 35 }}
+                >
+                  <IoAdd
+                    className="add-icon"
+                    onClick={() => {
+                      setDrawerOpen(true);
+                      cancel();
+                    }}
+                  />
+                </Empty>
+              ),
+            }}
+            onChange={() => {
+              cancel();
+            }}
+            loading={tableLoading}
+          />
+        </Form>
+      </div>
+    </div>
   );
 };
 export default TableLots;

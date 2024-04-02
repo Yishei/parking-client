@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Button, Modal } from "antd";
 import AddCar from "./addCar";
+import cars from "../database.json";
 import "./carModel.css";
 
 const CarModel = () => {
+  const [data, setData] = useState(cars);
+  const [maxCars, setMaxCars] = useState(4);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -17,14 +20,16 @@ const CarModel = () => {
   };
   return (
     <>
-      <Button
-        type="primary"
-        onClick={showModal}
-        block
-        style={{ backgroundColor: "#52c41a" }}
-      >
-        Add car
-      </Button>
+      {data.length < maxCars && (
+        <Button
+          type="primary"
+          onClick={showModal}
+          block
+          style={{ backgroundColor: "#52c41a" }}
+        >
+          Add car
+        </Button>
+      )}
       <div className="model-container">
         <Modal
           styles={{

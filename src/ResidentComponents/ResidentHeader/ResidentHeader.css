@@ -4,12 +4,26 @@
   width: 100%;
   top: 0;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background-color: rgb(142, 139, 139);
-  color: white;
+  background-color: rgb(17, 36, 65);
   height: 90px;
   z-index: 500;
+}
+
+.col-btn-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 20PX;
+}
+
+.col-btn{
+  color: white;
+}
+
+.welcome {
+  font-size: larger;
+  color: white;
 }
 
 .app-header-right {

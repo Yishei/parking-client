@@ -1,11 +1,12 @@
 import { Input, Form, Button, Card, Space, InputNumber, Layout } from "antd";
 import { Helmet } from "react-helmet";
 import { MdAlternateEmail } from "react-icons/md";
-import { MessageContext } from "../Context/MessageContext";
+import { MessageContext } from "../../Context/MessageContext.js";
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { postOtp } from "../utilities/AuthFunctionality.js";
-import { getOtp } from "../utilities/AuthFunctionality";
+import { postOtp } from "../../utilities/AuthFunctionality.js";
+import { getOtp } from "../../utilities/AuthFunctionality.js";
+import "./OtpReq.css";
 const { Footer } = Layout;
 
 const OtpReq = () => {
@@ -224,7 +225,6 @@ const OtpReq = () => {
                 layout="vertical"
                 form={form}
                 requiredMark={false}
-                
               >
                 <Form.Item>
                   <Space
@@ -234,7 +234,6 @@ const OtpReq = () => {
                     {Array.from({ length: 6 }, (_, i) => i + 1).map(
                       (_, index) => (
                         <Form.Item
-                        
                           name={`digit${index}`}
                           rules={[{ required: true, message: "" }]}
                           style={{
@@ -245,7 +244,7 @@ const OtpReq = () => {
                           key={index}
                         >
                           <InputNumber
-                          disabled={formDisabled}
+                            disabled={formDisabled}
                             style={{
                               display: "inline-block",
                               width: "33px",

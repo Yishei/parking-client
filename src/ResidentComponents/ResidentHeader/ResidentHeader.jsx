@@ -10,8 +10,8 @@ import { useLoaderData } from "react-router-dom";
 
 const ResidentHeader = () => {
   const { isMenuOpen, setIsMenuOpen } = useContext(AppContext);
-
   const [unitList, _] = useState(useLoaderData());
+
   const AddressList = unitList.map((address) => {
     return {
       label: <AddressSelect address={address} />,
@@ -19,19 +19,21 @@ const ResidentHeader = () => {
     };
   });
 
-  console.log(unitList, AddressList, "stat");
+  // console.log(unitList, AddressList, "stat");
 
   return (
     <div className="app-header">
-      <Button
-        type="text"
-        icon={!isMenuOpen ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-        style={{
-          fontSize: "18px",
-          background: "transparent",
-        }}
-      />
+      <div className="col-btn-container">
+        <Button
+          type="text"
+          icon={!isMenuOpen ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="col-btn"
+        />
+        <div className="welcome">
+          <div className="welcome-data">Welcome, Joel</div>
+        </div>
+      </div>
       <div className="app-header-right">
         <Select
           suffixIcon=""

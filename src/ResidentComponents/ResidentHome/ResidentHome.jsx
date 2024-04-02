@@ -1,5 +1,5 @@
 import "./ResidentHome.css";
-import Sidebar from "../ResidentHeader/SideBar/Sidebar";
+import Sidebar from "../SideBar/Sidebar";
 import ResidentHeader from "../ResidentHeader/ResidentHeader";
 import { Outlet } from "react-router-dom";
 
@@ -10,9 +10,6 @@ const ResidentHome = () => {
       <div className="app-body-container">
         <ResidentHeader />
         <div className="app-body-inner">
-          <div className="welcome">
-            <div>Hello, Joel</div>
-          </div>
           <div className="app-body">
             <Outlet />
           </div>

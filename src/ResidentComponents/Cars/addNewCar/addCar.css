@@ -7,31 +7,39 @@
 }
   
 .kpi {
-    background-color: rgb(239, 239, 239);
+    background-color: rgb(243, 243, 243);
     padding: 10px;
     border-radius: 3px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 50%;
+    width: 90%;
     gap: 5px;
 }
   
-.kpi-data {
-    font-size: 27px;
-    font-weight: bold;
-    color:rgb(47, 47, 47) ;
+.kpi-title {
+    text-align: center;
+    font-size: medium;
 }
   
-.kpi-title {
-    font-weight: bolder;
+.kpi-data {
+    font-weight: bold;
+    font-size: x-large;
+    color:rgb(59, 59, 59) ;
 }
 
-.max-cars{
+.max-cars-title{
     text-align: center;
-    font-weight: bold;
     font-size: larger;
+}
+
+.max-cars-data-1{
+    font-weight: bold;
+}
+
+.max-cars-data-2{
+    font-weight: bold;
 }
 
 .add-car-from{

@@ -1,8 +1,8 @@
 import "./sidebar.css";
 import { Layout, Menu, theme } from "antd";
 import React, { useContext, useState } from "react";
-import { items } from "../../data/sideBarItems";
-import AppContext from "../../../Context/AppContext";
+import { items } from "../data/sideBarItems";
+import AppContext from "../../Context/AppContext";
 const { Sider } = Layout;
 
 const Sidebar = () => {
