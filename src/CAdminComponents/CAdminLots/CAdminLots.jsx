@@ -161,12 +161,6 @@ const TableLots = () => {
 
   return (
     <div className="main-container">
-      <div className="lot-side-panel-container">
-        <SidePanel
-          handleFilter={handleFilter}
-          createNew={createNewBtnHandler}
-        />
-      </div>
       <div className="lot-table-container">
         <Form form={form} component={false}>
           <ModalLots
@@ -212,6 +206,12 @@ const TableLots = () => {
             loading={tableLoading}
           />
         </Form>
+      </div>
+      <div className="lot-side-panel-container">
+        <SidePanel
+          handleFilter={handleFilter}
+          createNew={createNewBtnHandler}
+        />
       </div>
     </div>
   );

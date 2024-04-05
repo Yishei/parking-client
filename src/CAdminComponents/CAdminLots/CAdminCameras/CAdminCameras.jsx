@@ -1,13 +1,14 @@
 import { Form, Table, Button, InputNumber } from "antd";
 import { useParams, useLoaderData } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
-import { AppContext } from "../../Context/AppContext";
-import { MessageContext } from "../../Context/MessageContext";
-import { CameraInfoBredcrumb } from "../../utilities/HeaderBreadcrumbs";
-import Columns from "../../utilities/TableColumns/CameraColumns";
-import urls from "../../utilities/urls.json";
-import ModalCameras from "../Modals/ModalCameras";
-import { apiService } from "../../utilities/apiService";
+import { AppContext } from "../../../Context/AppContext";
+import { MessageContext } from "../../../Context/MessageContext";
+import { CameraInfoBredcrumb } from "../../../utilities/HeaderBreadcrumbs";
+import Columns from "../../../utilities/TableColumns/CameraColumns";
+import urls from "../../../utilities/urls.json";
+import ModalCameras from "../../../AppComponents/Modals/ModalCameras";
+import { apiService } from "../../../utilities/apiService";
+import "./CAdminCameras.css";
 
 const TableCamera = () => {
   const [editingId, setEditingId] = useState("");
@@ -155,45 +156,49 @@ const TableCamera = () => {
   );
 
   return (
-    <>
-      <Button
-        type="primary"
-        onClick={() => {
-          setDrawerOpen(true);
-          cancel();
-        }}
-        style={{ marginBlock: 16, width: "100%", backgroundColor: "#52c41a" }}
-      >
-        Add New Camera
-      </Button>
-      <Form form={form} component={false}>
-        <ModalCameras
-          drawerOpen={drawerOpen}
-          setDrawerOpen={setDrawerOpen}
-          fetchData={fetchData}
-        />
-        <Table
-          components={{
-            body: {
-              cell: EditableCell,
-            },
-          }}
-          columns={columns}
-          dataSource={data}
-          rowKey={(record) => record.camera_id}
-          pagination={{
-            defaultPageSize: 5,
-            showSizeChanger: true,
-            pageSizeOptions: ["5", "10", "15"],
-            position: "bottomCenter",
-          }}
-          onChange={() => {
+    <div className="main-container">
+      <div className="add-camera-container">
+        <Button
+          type="primary"
+          onClick={() => {
+            setDrawerOpen(true);
             cancel();
           }}
-          loading={tableLoading}
-        />
-      </Form>
-    </>
+          className="add-btn"
+        >
+          Add New Camera
+        </Button>
+      </div>
+      <div className="form-container">
+        <Form form={form} component={false}>
+          <ModalCameras
+            drawerOpen={drawerOpen}
+            setDrawerOpen={setDrawerOpen}
+            fetchData={fetchData}
+          />
+          <Table
+            components={{
+              body: {
+                cell: EditableCell,
+              },
+            }}
+            columns={columns}
+            dataSource={data}
+            rowKey={(record) => record.camera_id}
+            pagination={{
+              defaultPageSize: 5,
+              showSizeChanger: true,
+              pageSizeOptions: ["5", "10", "15"],
+              position: "bottomCenter",
+            }}
+            onChange={() => {
+              cancel();
+            }}
+            loading={tableLoading}
+          />
+        </Form>
+      </div>
+    </div>
   );
 };
 export default TableCamera;

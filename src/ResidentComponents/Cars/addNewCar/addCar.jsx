@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input } from "antd";
-import data from "../database.json";
+import data from "../../database.json";
 import "./addCar.css";
 
 const AddCar = () => {

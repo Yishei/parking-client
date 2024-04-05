@@ -1,5 +1,5 @@
 import { Card } from "antd";
-import data from "./database.json";
+import data from "../database.json";
 import React, { useState, useEffect } from "react";
 import Meta from "antd/es/card/Meta";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";

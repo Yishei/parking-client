@@ -14,11 +14,11 @@ import ErrorBoundary from "../ErrorBoundary";
 
 // Admin Components
 import CAdminLots from "../CAdminComponents/CAdminLots/CAdminLots";
+import CAdminCameras from "../CAdminComponents/CAdminLots/CAdminCameras/CAdminCameras";
 import CAdminUnits from "../CAdminComponents/CAdminUnits/CAdminUnits";
 import CAdminUsers from "../CAdminComponents/CAdminUsers/CAdminUsers";
 import CAdminLogs from "../CAdminComponents/CAdminLogs/CAdminLogs";
 import TableCondos from "../AppComponents/tables/TableCondos";
-import TableCamera from "../AppComponents/tables/TableCamera";
 // import CondoPage from "../AppComponents/adminComponents/CondoPage";
 import ResidentHome from "../ResidentComponents/ResidentHome/ResidentHome";
 import Cars from "../ResidentComponents/Cars/Cars";
@@ -27,6 +27,7 @@ import Login from "../GlobalComponents/Login/Login";
 import OtpReq from "../GlobalComponents/OtpReq/OtpReq";
 import NotFound from "../GlobalComponents/NotFound/NotFound";
 import CAdminHome from "../CAdminComponents/CAdminHome/CAdminHome";
+import Home from "../ResidentComponents/home/home";
 
 const baseurl = urls.baseURl;
 
@@ -46,6 +47,7 @@ const appRoutes = createBrowserRouter(
           }
           element={<ResidentHome />}
         >
+          <Route path="home/:unitId" element={<Home />} />
           <Route path="cars/:unitId" element={<Cars />} />
           <Route path="payments/:unitId" element={<Payments />} />
         </Route>
@@ -80,7 +82,7 @@ const appRoutes = createBrowserRouter(
           />
           <Route
             path="cameras/:lotId"
-            element={<TableCamera />}
+            element={<CAdminCameras />}
             loader={(params) =>
               apiService.get(
                 `${baseurl}${urls.get.camerasForLot}${params.params.lotId}`

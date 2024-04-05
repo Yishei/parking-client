@@ -10,7 +10,6 @@ export const apiService = {
    */
   async get(url) {
     try {
-      console.trace(url, "url");
       let response = await fetch(url, {
         method: "GET",
         headers: {
@@ -26,7 +25,6 @@ export const apiService = {
       }
 
       const data = await response.json();
-      console.log(data, "data");
       return data;
     } catch (err) {
       console.log(err);

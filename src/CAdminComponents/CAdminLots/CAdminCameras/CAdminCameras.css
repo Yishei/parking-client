@@ -1,0 +1,26 @@
+.main-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 25px;
+    width: 100%;
+    top: 0;
+}
+
+.add-camera-container{
+    width: 10%;
+    padding: 25px;
+}
+
+.add-btn{
+    margin-block: 16;
+    width: 100%;
+    background-color: #52c41a;
+    height: 50px;
+    font-size: medium;
+}
+
+.form-container{
+    width: 80%;
+    padding: 25px;
+}

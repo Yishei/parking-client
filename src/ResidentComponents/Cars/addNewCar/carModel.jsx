@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal } from "antd";
 import AddCar from "./addCar";
-import cars from "../database.json";
-import "./carModel.css";
+import cars from "../../database.json";
 
 const CarModel = () => {
   const [data, setData] = useState(cars);
