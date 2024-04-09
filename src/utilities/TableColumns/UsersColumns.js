@@ -28,7 +28,7 @@ const UserColumns = () => {
       key: "email",
     },
     {
-      title: "Phone Number (Main)",
+      title: "Phone Number",
       dataIndex: "phone_number_main",
       key: "phone_number_main",
       render: (text) => {

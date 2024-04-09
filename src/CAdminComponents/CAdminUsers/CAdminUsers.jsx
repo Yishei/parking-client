@@ -9,7 +9,7 @@ import Columns from "../../utilities/TableColumns/UsersColumns";
 import urls from "../../utilities/urls.json";
 import { apiService } from "../../utilities/apiService";
 import SidePanel from "../../AppComponents/adminComponents/SidePanel";
-import ModalUsers from "../../AppComponents/Modals/ModalUsers";
+import ModalUsers from "./CAdminUsersModel";
 import "./CAdminUsers.css";
 
 const TableUsers = () => {
@@ -96,7 +96,7 @@ const TableUsers = () => {
             pagination={{
               defaultPageSize: 5,
               showSizeChanger: true,
-              pageSizeOptions: ["5", "10", "15"],
+              pageSizeOptions: ["5", "10", "15", "20"],
               position: "bottomCenter",
             }}
             locale={{

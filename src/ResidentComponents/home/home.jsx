@@ -12,44 +12,62 @@ const Home = () => {
 
   return (
     <div className="home-main-container">
-      {info.map((item) => (
-        <div>
-          <Card title="User Details">
+      {info.map((item, index) => (
+        <div key={index} className="inner-home-container">
+          <Card title="User Details" className="card-container">
             <Card.Grid>
-              <div>Name:</div>
-              <div>{item.name}</div>
+              <div className="data-container">
+                <div className="data-title">Name:</div>
+                <div>{item.name}</div>
+              </div>
             </Card.Grid>
             <Card.Grid>
-              <div>Address:</div>
-              <div>{item.address}</div>
+              <div className="data-container">
+                <div className="data-title">Address:</div>
+                <div>{item.address}</div>
+              </div>
             </Card.Grid>
             <Card.Grid>
-              <div>City:</div>
-              <div>{item.city}</div>
+              <div className="data-container">
+                <div className="data-title">City:</div>
+                <div>{item.city}</div>
+              </div>
             </Card.Grid>
             <Card.Grid>
-              <div>State:</div>
-              <div>{item.state}</div>
+              <div className="data-container">
+                <div className="data-title">State:</div>
+                <div>{item.state}</div>
+              </div>
             </Card.Grid>
             <Card.Grid>
-              <div>Zip Code:</div>
-              <div>{item.zip_code}</div>
+              <div className="data-container">
+                <div className="data-title">Zip Code:</div>
+                <div>{item.zip_code}</div>
+              </div>
             </Card.Grid>
             <Card.Grid>
-              <div>Plate Number:</div>
-              <div>{item.plate_number}</div>
+              <div className="data-container">
+                <div className="data-title">Plate Number:</div>
+                <div>{item.plate_number}</div>
+              </div>
             </Card.Grid>
             <Card.Grid>
-              <div>Car Color:</div>
-              <div>{item.car_color}</div>
+              <div className="data-container">
+                <div className="data-title">Car Color:</div>
+                <div>{item.car_color}</div>
+              </div>
             </Card.Grid>
             <Card.Grid>
-              <div>Car Make:</div>
-              <div>{item.car_make}</div>
+              <div className="data-container">
+                <div className="data-title">Car Make:</div>
+                <div>{item.car_make}</div>
+              </div>
             </Card.Grid>
             <Card.Grid>
-              <div>Car Model:</div>
-              <div>{item.car_model}</div>
+              <div className="data-container">
+                <div className="data-title">Car Model:</div>
+                <div>{item.car_model}</div>
+              </div>
             </Card.Grid>
           </Card>
         </div>

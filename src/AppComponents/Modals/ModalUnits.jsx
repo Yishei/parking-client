@@ -225,7 +225,6 @@ const ModalUnits = (props) => {
       );
       cars
         .then((data) => {
-          console.log(data, "data");
           setCarList(data);
         })
         .catch((err) => {

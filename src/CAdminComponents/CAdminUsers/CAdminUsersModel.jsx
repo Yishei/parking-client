@@ -270,17 +270,17 @@ const ModalUsers = (props) => {
           }}
         >
           <Row gutter={16} key={"1"}>
-            <Col span={12}>
-              <Form.Item name="user_id" label="User ID">
+            {/* <Col span={12}>
+              <Form.Item name="user_id" label="User ID:">
                 <Input
                   bordered={false}
                   placeholder="This will be auto generated"
                   disabled
                 />
               </Form.Item>
-            </Col>
+            </Col> */}
             <Col span={12}>
-              <Form.Item name="is_active" label="Is Active">
+              <Form.Item name="is_active" label="Is Active:">
                 <Switch
                   disabled={true}
                   checkedChildren="Active"
@@ -297,7 +297,7 @@ const ModalUsers = (props) => {
             <Col span={12}>
               <Form.Item
                 name="username"
-                label="User Name"
+                label="User Name:"
                 rules={[
                   {
                     required: true,
@@ -317,7 +317,7 @@ const ModalUsers = (props) => {
             <Col span={12}>
               <Form.Item
                 name="email"
-                label="Email"
+                label="Email:"
                 rules={[
                   {
                     required: true,
@@ -358,7 +358,7 @@ const ModalUsers = (props) => {
             <Col span={12}>
               <Form.Item
                 name="phone_number_main"
-                label="Phone Number (Main)"
+                label="Phone Number:"
                 rules={[
                   {
                     required: true,
@@ -392,7 +392,7 @@ const ModalUsers = (props) => {
             <Col span={12}>
               <Form.Item
                 name="phone_number_2"
-                label="Phone Number (Secondary)"
+                label="Secondary Phone Number:"
                 rules={[
                   {
                     validator: validatePhoneNumber,
@@ -425,7 +425,7 @@ const ModalUsers = (props) => {
             <Col span={24}>
               <Form.Item
                 name="user_role"
-                label="User Role"
+                label="User Role:"
                 rules={[
                   {
                     required: true,
